@@ -1,5 +1,7 @@
 dist/
 node_modules/
 
+src/app/.next
+
 # Firebase cache
 .firebase/

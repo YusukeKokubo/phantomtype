@@ -7,21 +7,24 @@ import * as crypto from 'crypto'
 import * as os from 'os'
 import * as fs from 'fs'
 import * as Storage from '@google-cloud/storage'
-import next from 'next'
+import parse from 'date-fns/parse'
+import ja from 'date-fns/locale/ja'
+import { firebaseConfig } from 'firebase-functions';
+// import next from 'next'
 
-const dev = process.env.NODE_ENV !== 'production'
-const app = next({ 
-  dev: false, 
-  conf: { distDir: `${path.relative(process.cwd(), __dirname)}/next` } 
-})
-const handle = app.getRequestHandler()
+// const dev = process.env.NODE_ENV !== 'production'
+// const app = next({ 
+//   dev: false, 
+//   conf: { distDir: `${path.relative(process.cwd(), __dirname)}/next` } 
+// })
+// const handle = app.getRequestHandler()
 
-export const nextApp = functions.region('asia-northeast1').https.onRequest((req, res) => {
-  console.log('File: ' + req.originalUrl)
-  return app.prepare().then(() => handle(req, res))
-})
+// export const nextApp = functions.region('asia-northeast1').https.onRequest((req, res) => {
+//   console.log('File: ' + req.originalUrl)
+//   return app.prepare().then(() => handle(req, res))
+// })
 
-export const createExif = functions.region('asia-northeast1').storage.object().onFinalize(async (object) => {
+export const createExif = functions.storage.object().onFinalize(async (object) => {
     const filePath = object.name!
 
     const [city, filename] = filePath.split('/')
@@ -39,22 +42,28 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
     const bucket = storage.bucket(object.bucket)
     await bucket.file(filePath).download({destination: tempLocalFile});
 
+    // Make download url
+    const url = `https://firebasestorage.googleapis.com/v0/b/${object.bucket}/o/${encodeURIComponent(filePath)}?alt=media`;
+    console.debug(url)
+
     // Get Exif
     const spawn = require("child-process-promise").spawn;
     const result = await spawn('identify', ['-verbose', '-format', '%[EXIF:*]', tempLocalFile], {capture: ['stdout', 'stderr']});
-    console.log(result.stdout)
-    const exif = toJsonAsString(result.stdout)
-    console.debug(exif)
+    console.debug(result.stdout)
+    const exif = exifAsObject(result.stdout)
 
     // Save Exif
-    const metadata = JSON.parse(`{
-      "filePath": "${filePath}",
-      "filename": "${filename}",
-      "city": "${city}",
-      "exif": ${exif}
-    }`)
-    await admin.firestore().collection('pics').add(metadata);
-    console.log('Wrote to:', filePath, 'data:', metadata);
+    const metadata = {
+      filePath: filePath,
+      filename: filename,
+      url: url,
+      city: city,
+      exif: exif
+    }
+    console.debug({metadata: metadata})
+ 
+    await admin.firestore().collection('pics').doc(`${city}-${filename}`).set(metadata);
+    console.log('Wrote to:', filePath, 'data:', {metadata});
     fs.unlinkSync(tempLocalFile)
 
     console.log(`finished!`)
@@ -76,15 +85,21 @@ exports.deleteExif = functions.region('asia-northeast1').storage.object().onDele
       .catch((error) => console.error(error))
   })
 
-function toJsonAsString(src: string) {
+function exifAsObject(src: string) {
+  const exif: any = {}
   const lines = src.match(/[^\r\n]+/g)!;
-  const jsonString = `{
-      ${lines.map((line) => {
-          const trimed = line.split('exif:')[1] // remove 'exif:'
-          const v = trimed.split('=')
-          return `"${v[0]}": "${v[1]}"\n`
-      })}
-  }`
-  console.debug(jsonString)
-  return jsonString
+  console.log(lines)
+  lines.forEach((line) => {
+    const trimed = line.split('exif:')[1] // remove 'exif:'
+    const [key, value] = trimed.split('=')
+    const formatedValue = 
+      DateKeys.includes(key) ? 
+        admin.firestore.Timestamp.fromDate(
+          parse(value, 'yyyy:MM:dd HH:mm:ss', new Date(), {locale: ja})): 
+      value
+    exif[key] = formatedValue
+  })
+  console.debug({exif: exif})
+  return exif
 }
+const DateKeys = ['DateTime', 'DateTimeDigitized', 'DateTimeOriginal']
