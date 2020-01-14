@@ -5,3 +5,4 @@ src/app/.next
 
 # Firebase cache
 .firebase/
+.firebase-debug.log
