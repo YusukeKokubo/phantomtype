@@ -9,22 +9,22 @@ import * as fs from 'fs'
 import * as Storage from '@google-cloud/storage'
 import { convertToLocalTime } from 'date-fns-timezone'
 // import { firebaseConfig } from 'firebase-functions';
-// import next from 'next'
+import next from 'next'
 import sharp from 'sharp'
 const exifreader = require('exif-reader')
 import Fraction from 'fraction.js'
 
-// const dev = process.env.NODE_ENV !== 'production'
-// const app = next({ 
-//   dev: false, 
-//   conf: { distDir: `${path.relative(process.cwd(), __dirname)}/next` } 
-// })
-// const handle = app.getRequestHandler()
+const dev = process.env.NODE_ENV !== 'production'
+const app = next({ 
+  dev: dev, 
+  conf: { distDir: `${path.relative(process.cwd(), __dirname)}/next` } 
+})
+const handle = app.getRequestHandler()
 
-// export const nextApp = functions.region('asia-northeast1').https.onRequest((req, res) => {
-//   console.log('File: ' + req.originalUrl)
-//   return app.prepare().then(() => handle(req, res))
-// })
+export const nextApp = functions.region('asia-northeast1').https.onRequest((req, res) => {
+  console.log('File: ' + req.originalUrl)
+  return app.prepare().then(() => handle(req, res))
+})
 
 export const createExif = functions.region('asia-northeast1').storage.object().onFinalize(async (object) => {
     const filePath = object.name!
@@ -49,8 +49,8 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
 
     const exif = await sharp(tempLocalFile)
       .metadata()
-      .then((metadata) => {
-        const ex = exifreader(metadata.exif)
+      .then((meta: any) => {
+        const ex = exifreader(meta.exif)
         ex.exif.DateTimeOriginal = convertToLocalTime(ex.exif.DateTimeOriginal, {timeZone: 'Asia/Tokyo'})
         ex.exif.DateTimeDigitized = convertToLocalTime(ex.exif.DateTimeDigitized, {timeZone: 'Asia/Tokyo'})
         ex.image.ModifyDate = convertToLocalTime(ex.image.ModifyDate, {timeZone: 'Asia/Tokyo'})

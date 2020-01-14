@@ -4,7 +4,7 @@ import 'firebase/firestore'
 
 import App from '../components/App'
 import City from "../components/City";
-import '../styles.scss' // TODO: use scss as CSS-Modules or StyledComponent
+// import '../styles.scss' // TODO: use scss as CSS-Modules or StyledComponent
 
 const config = {
   apiKey: "AIzaSyA8wsdQlLLAjZepeaQfeM_l0pfBEaCOyEk",
