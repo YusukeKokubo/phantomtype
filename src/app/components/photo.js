@@ -4,7 +4,7 @@ function Photo({photo, src, align}) {
   const e = photo.Exif;
   return (
     <div className={`Photo ${align == 1 ? "Photo-right": null}`}>
-      <img className='Photo-img' src={src} />
+      <img className='Photo-img' src={src} style={{width: '500px'}} />
       <div className={`exif ${align == 1 ? "exif-right": null}`}>
         <span className="Place">{photo.place}</span>
         {/* <span>{e.Make} {e.Model}</span>

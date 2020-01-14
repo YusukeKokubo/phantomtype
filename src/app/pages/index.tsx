@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+// import React, { useState } from 'react'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+import { useCollection } from 'react-firebase-hooks/firestore'
 
 import App from '../components/App'
 import City from "../components/City";
@@ -17,19 +18,21 @@ const config = {
   measurementId: "G-TGRBP7DHKD"
 }
 if (!firebase.apps.length) {
+  console.log(firebase.apps.length)
   firebase.initializeApp(config)
 }
 
 export default () => {
-  const [pics, setPics] = useState([{}])
+  const [value, loading, error] = useCollection(
+    firebase.firestore().collection('pics'),
+    {
+      snapshotListenOptions: { includeMetadataChanges: true },
+    }
+  );
 
-  firebase.firestore().collection('pics')
-    .get()
-    .then((querySnapshot) => {
-      const ps = querySnapshot.docs.map((doc) => doc.data())
-      setPics(ps)
-    })
-  return view(pics)
+  console.log(value, loading, error)
+
+  return <p>{value && view(value.docs.map((doc) => doc.data() ))}</p>
 }
 
 const view = (pics: {}[]) =>
