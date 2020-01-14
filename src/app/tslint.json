@@ -3,6 +3,9 @@
   "rules": {
     "quotemark": [true, "single"],
     "no-submodule-imports": false,
-    "no-var-requires": false
+    "semicolon": [
+      false,
+      "always"
+    ]
   }
 }
