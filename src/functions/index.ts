@@ -8,9 +8,13 @@ import * as os from 'os'
 import * as fs from 'fs'
 import * as Storage from '@google-cloud/storage'
 import parse from 'date-fns/parse'
+import { parseFromTimeZone, formatToTimeZone, convertToLocalTime } from 'date-fns-timezone'
 import ja from 'date-fns/locale/ja'
 import { firebaseConfig } from 'firebase-functions';
 // import next from 'next'
+import sharp from 'sharp'
+const exifreader = require('exif-reader')
+import Fraction from 'fraction.js'
 
 // const dev = process.env.NODE_ENV !== 'production'
 // const app = next({ 
@@ -24,12 +28,11 @@ import { firebaseConfig } from 'firebase-functions';
 //   return app.prepare().then(() => handle(req, res))
 // })
 
-export const createExif = functions.storage.object().onFinalize(async (object) => {
+export const createExif = functions.region('asia-northeast1').storage.object().onFinalize(async (object) => {
     const filePath = object.name!
 
     const [city, filename] = filePath.split('/')
-    console.log(city)
-    console.log(filename)
+    console.debug(`${city}: ${filename}`)
     const randomFileName = crypto.randomBytes(20).toString('hex') + path.extname(filePath)
     const tempLocalFile = path.join(os.tmpdir(), randomFileName)
 
@@ -46,19 +49,34 @@ export const createExif = functions.storage.object().onFinalize(async (object) =
     const url = `https://firebasestorage.googleapis.com/v0/b/${object.bucket}/o/${encodeURIComponent(filePath)}?alt=media`;
     console.debug(url)
 
+    const exif = await sharp(tempLocalFile)
+      .metadata()
+      .then((metadata) => {
+        const ex = exifreader(metadata.exif)
+        ex.exif.DateTimeOriginal = convertToLocalTime(ex.exif.DateTimeOriginal, {timeZone: 'Asia/Tokyo'})
+        ex.exif.DateTimeDigitized = convertToLocalTime(ex.exif.DateTimeDigitized, {timeZone: 'Asia/Tokyo'})
+        ex.image.ModifyDate = convertToLocalTime(ex.image.ModifyDate, {timeZone: 'Asia/Tokyo'})
+        ex.exif.ExposureTime = new Fraction(ex.exif.ExposureTime).toFraction()
+        ex.exif.ApertureValue = new Fraction(ex.exif.ApertureValue).toFraction()
+        ex.exif.ShutterSpeedValue = new Fraction(ex.exif.ShutterSpeedValue).toFraction()
+        console.log("***********: " + typeof(new Fraction(ex.exif.ShutterSpeedValue).toFraction()))
+        return ex
+      })
+    console.debug(exif)
+
     // Get Exif
-    const spawn = require("child-process-promise").spawn;
-    const result = await spawn('identify', ['-verbose', '-format', '%[EXIF:*]', tempLocalFile], {capture: ['stdout', 'stderr']});
-    console.debug(result.stdout)
-    const exif = exifAsObject(result.stdout)
+    // const spawn = require("child-process-promise").spawn;
+    // const result = await spawn('identify', ['-verbose', '-format', '%[EXIF:*]', tempLocalFile], {capture: ['stdout', 'stderr']});
+    // console.debug(result.stdout)
+    // const exif = exifAsObject(result.stdout)
 
     // Save Exif
     const metadata = {
+      ...exif,
       filePath: filePath,
       filename: filename,
       url: url,
-      city: city,
-      exif: exif
+      city: city
     }
     console.debug({metadata: metadata})
  

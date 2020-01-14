@@ -2,6 +2,7 @@
   "extends": ["tslint:latest", "tslint-react"],
   "rules": {
     "quotemark": [true, "single"],
-    "no-submodule-imports": false
+    "no-submodule-imports": false,
+    "no-var-requires": false
   }
 }
