@@ -7,10 +7,8 @@ import * as crypto from 'crypto'
 import * as os from 'os'
 import * as fs from 'fs'
 import * as Storage from '@google-cloud/storage'
-import parse from 'date-fns/parse'
-import { parseFromTimeZone, formatToTimeZone, convertToLocalTime } from 'date-fns-timezone'
-import ja from 'date-fns/locale/ja'
-import { firebaseConfig } from 'firebase-functions';
+import { convertToLocalTime } from 'date-fns-timezone'
+// import { firebaseConfig } from 'firebase-functions';
 // import next from 'next'
 import sharp from 'sharp'
 const exifreader = require('exif-reader')
@@ -59,16 +57,9 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
         ex.exif.ExposureTime = new Fraction(ex.exif.ExposureTime).toFraction()
         ex.exif.ApertureValue = new Fraction(ex.exif.ApertureValue).toFraction()
         ex.exif.ShutterSpeedValue = new Fraction(ex.exif.ShutterSpeedValue).toFraction()
-        console.log("***********: " + typeof(new Fraction(ex.exif.ShutterSpeedValue).toFraction()))
         return ex
       })
     console.debug(exif)
-
-    // Get Exif
-    // const spawn = require("child-process-promise").spawn;
-    // const result = await spawn('identify', ['-verbose', '-format', '%[EXIF:*]', tempLocalFile], {capture: ['stdout', 'stderr']});
-    // console.debug(result.stdout)
-    // const exif = exifAsObject(result.stdout)
 
     // Save Exif
     const metadata = {
@@ -102,22 +93,3 @@ exports.deleteExif = functions.region('asia-northeast1').storage.object().onDele
       })
       .catch((error) => console.error(error))
   })
-
-function exifAsObject(src: string) {
-  const exif: any = {}
-  const lines = src.match(/[^\r\n]+/g)!;
-  console.log(lines)
-  lines.forEach((line) => {
-    const trimed = line.split('exif:')[1] // remove 'exif:'
-    const [key, value] = trimed.split('=')
-    const formatedValue = 
-      DateKeys.includes(key) ? 
-        admin.firestore.Timestamp.fromDate(
-          parse(value, 'yyyy:MM:dd HH:mm:ss', new Date(), {locale: ja})): 
-      value
-    exif[key] = formatedValue
-  })
-  console.debug({exif: exif})
-  return exif
-}
-const DateKeys = ['DateTime', 'DateTimeDigitized', 'DateTimeOriginal']
