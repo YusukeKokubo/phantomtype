@@ -35,9 +35,11 @@ export default () => {
   return <p>{value && view(value.docs.map((doc) => doc.data() ))}</p>
 }
 
+import { Splash } from './style';
+
 const view = (pics: {}[]) =>
   <App>
-    <section className="splash">
+    <Splash>
       <img className="splash-image"
            src="https://storage.googleapis.com/phantomtype-180814.appspot.com/splash/splash-1.jpg"/>
       <div className="title">
@@ -45,6 +47,6 @@ const view = (pics: {}[]) =>
         <h1 className='siteTitle'>PHANTOM TYPE</h1>
         <p className='description'>a Japan photo gallery.</p>
       </div>
-    </section>
+    </Splash>
     <City city='nagoya' description='hoge' photos={pics} />
   </App>

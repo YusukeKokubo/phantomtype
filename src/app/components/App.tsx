@@ -9,6 +9,14 @@ const App = ({ children }: { children?: any }) => (
       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
       <link rel="stylesheet" href="http://fonts.googleapis.com/earlyaccess/notosansjp.css"/>
     </head>
+    <style jsx global>{`
+      body {
+        font-family: 'Noto Sans JP', Helvetica, sans-serif;
+        font-size: 100%;
+        font-weight: 200;
+        background: #000;
+      }
+    `}</style>
     {/* <Header /> */}
     {children}
   </>

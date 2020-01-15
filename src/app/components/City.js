@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import Photo from "./photo";
 
+import { City as C } from '../pages/style'
+
 function byDateTime(a, b) {
   if (!a) return 1;
   if (!b) return -1;
@@ -11,7 +13,7 @@ function byDateTime(a, b) {
 
 function City({city, description, photos}) {
   return (
-    <section className={`City`} id={city}>
+    <C className={`City`} id={city}>
       <h2 className='cityName'>{city}</h2>
       <p className="description">{description}</p>
       {
@@ -20,7 +22,7 @@ function City({city, description, photos}) {
           return <Photo key={i} photo={p} src={src} align={i % 2} />;
         })
       }
-    </section>
+    </C>
   );
 }
 
