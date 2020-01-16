@@ -2,8 +2,6 @@ import React, { useState } from "react";
 
 import Photo from "./photo";
 
-import { City as C } from '../pages/style'
-
 function byDateTime(a, b) {
   if (!a) return 1;
   if (!b) return -1;
@@ -13,7 +11,7 @@ function byDateTime(a, b) {
 
 function City({city, description, photos}) {
   return (
-    <C className={`City`} id={city}>
+    <div className={`City`} id={city}>
       <h2 className='cityName'>{city}</h2>
       <p className="description">{description}</p>
       {
@@ -22,7 +20,30 @@ function City({city, description, photos}) {
           return <Photo key={i} photo={p} src={src} align={i % 2} />;
         })
       }
-    </C>
+<style jsx>{`
+.City{
+display: grid;
+grid-template-columns: 1fr;
+grid-gap: 60px;
+margin: 50px 1vw;
+}
+
+.cityName {
+  color: #fff;
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 200;
+  margin: 80px 0 0 0;
+  text-transform: uppercase;
+}
+.description {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 200;
+  color: #ddd;
+}
+`}</style>
+    </div>
   );
 }
 
