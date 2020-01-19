@@ -18,7 +18,7 @@
     margin: 0 15px;
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: flex-start;
     color: #ccc;
     font-size: 1.0rem;
     font-weight: 200;
