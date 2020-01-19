@@ -10,8 +10,7 @@
 }
 
 .Photo_image {
-    max-width: 540px;
-    max-height: 540px;
+    max-width: 55vw;
 }
 
 .exif {
@@ -20,10 +19,24 @@
     flex-direction: column;
     justify-content: flex-start;
     color: #ccc;
-    font-size: 1.0rem;
+    font-size: 1.5vw;
     font-weight: 200;
 }
 
 .exif_right {
     text-align: right;
+}
+
+@media (max-width: 600px){
+  .Photo {
+    flex-direction: column;
+    margin: 0;
+  }
+  .Photo_image {
+    max-width: 100%;
+  }
+  .exif {
+    margin: 5px 10px;
+    font-size: 1.0rem;
+  }
 }

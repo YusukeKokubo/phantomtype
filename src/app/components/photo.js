@@ -13,7 +13,7 @@ function Photo({photo, src, align}) {
   const e = photo
   return (
     <section className={`${css.Photo} ${align == 1 ? css.Photo_right: null}`}>
-      <img className={css.Photo_image} src={src} style={{width: '500px'}} />
+      <img className={css.Photo_image} src={src} />
       <div className={`${css.exif} ${align == 1 ? css.exif_right: null}`}>
         <span>{e.image.Make} {e.image.Model}</span>
         <span>{datetime(e.exif.DateTimeOriginal)}</span>

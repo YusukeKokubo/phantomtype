@@ -33,4 +33,7 @@
 .description {
       color: #fff;
       font-size: 2.0vw;
+      @media (max-width: 600px){
+        font-size: 5vw;
+      }
 }
