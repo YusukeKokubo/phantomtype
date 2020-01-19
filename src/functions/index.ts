@@ -45,8 +45,8 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
 
     // Make download url
     const url = `https://firebasestorage.googleapis.com/v0/b/${object.bucket}/o/${encodeURIComponent(filePath)}?alt=media`;
-    console.debug(url)
 
+    // Get Exif
     const exif = await sharp(tempLocalFile)
       .metadata()
       .then((meta: any) => {
