@@ -30,7 +30,7 @@ export default () => {
 
   console.log(value, loading, error)
 
-  return <p>{value && view(value.docs.map((doc) => doc.data() ))}</p>
+  return <>{value && view(value.docs.map((doc) => doc.data() ))}</>
 }
 
 const view = (pics: {}[]) =>
