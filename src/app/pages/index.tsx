@@ -4,6 +4,7 @@ import { useCollection } from 'react-firebase-hooks/firestore'
 
 import App from '../components/App'
 import City from "../components/City";
+import css from './index.module.css'
 
 const config = {
   apiKey: "AIzaSyA8wsdQlLLAjZepeaQfeM_l0pfBEaCOyEk",
@@ -34,52 +35,14 @@ export default () => {
 
 const view = (pics: {}[]) =>
   <App>
-    <section className="splash">
-      <img className="splash-image"
+    <section className={css.splash}>
+      <img className={css.splash_image}
            src="https://storage.googleapis.com/phantomtype-180814.appspot.com/splash/splash-1.jpg"/>
-      <div className="title">
-        <img src='/logomark-white.svg' className="logo" />
-        <h1 className='siteTitle'>PHANTOM TYPE</h1>
-        <p className='description'>a Japan photo gallery.</p>
+      <div className={css.title}>
+        <img src='/logomark-white.svg' className={css.logo} />
+        <h1 className={ css.siteTitle }>PHANTOM TYPE</h1>
+        <p className={ css.description }>a Japan photo gallery.</p>
       </div>
     </section>
-    <style jsx>{`
-.splash{
-  width: 100%;
-  height: 100vh;
-}
-
-.splash-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.title {
-    display: inline-flex;
-    flex-direction: column;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate3d(-50%, -60%, 0);
-    align-items: center;
-}
-
-svg.logo {
-      width: 25vw;
-}
-
-.siteTitle {
-      margin: 1vh 0;
-      color: #fff;
-      font-size: 5.52768vw;
-      font-weight: 200;
-}
-
-.description {
-      color: #fff;
-      font-size: 2.0vw;
-}
-    `}</style>
-    <City city='nagoya' description='hoge' photos={pics} />
+    <City city='nagoya' description='The Center of Japan' photos={pics} />
   </App>

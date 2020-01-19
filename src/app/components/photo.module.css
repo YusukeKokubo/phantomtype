@@ -1,0 +1,29 @@
+.Photo {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 0 5vw;
+}
+
+.Photo_right {
+  flex-direction: row-reverse;
+}
+
+.Photo_image {
+    max-width: 540px;
+    max-height: 540px;
+}
+
+.exif {
+    margin: 0 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    color: #ccc;
+    font-size: 1.0rem;
+    font-weight: 200;
+}
+
+.exif_right {
+    text-align: right;
+}
