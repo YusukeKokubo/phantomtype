@@ -14,7 +14,6 @@ function City({city, description, photos}) {
   return (
     <div className={css.City} id={city}>
       <h2 className={css.name}>{city}</h2>
-      <p className={css.description}>{description}</p>
       {
         photos.sort(byDateTime).map((p, i) => {
           const src = p.url;

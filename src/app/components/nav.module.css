@@ -1,0 +1,30 @@
+.selectcity {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    position: absolute;
+    left: 50%;
+    bottom: 10vh;
+    transform: translate3d(-50%, -60%, 0);
+}
+  
+.selectcity button {
+      font-weight: 200;
+      background-color: transparent;
+      color: #fff;
+      padding: 15px 3vw;
+      @media (max-width: 600px){
+        font-size: 4vw;
+        padding: 5px 2vw;
+      }
+      text-decoration: none;
+      border: #cccccc 1px solid;
+      text-transform: uppercase;
+  
+      cursor: pointer;
+}
+  
+.selectcity button:hover {
+    background-color: #000;
+}
