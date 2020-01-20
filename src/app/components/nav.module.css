@@ -10,11 +10,10 @@
 
 .fixedNav {
   width: 100%;
-  top: 5%;
   position: fixed;
   background-color: rgba(0, 0, 0, 0.4);
-  left: 70%;
-  transform: translate3d(-50%, -40%, 0);
+  display: flex;
+  justify-content: center;
 }
 
 .selectButton {
