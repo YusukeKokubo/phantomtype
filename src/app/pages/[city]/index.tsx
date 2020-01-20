@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 
 import City from "../../components/City";
 import App from '../../components/App'
+import { FixedNav } from '../../components/Nav'
 
 const config = {
   apiKey: "AIzaSyA8wsdQlLLAjZepeaQfeM_l0pfBEaCOyEk",
@@ -35,10 +36,11 @@ const CityPage: NextPage = () => {
   );
 
   console.log(value, loading, error)
-  const photos = value ? value.docs.map((doc) => doc.data()): []
+  const photos = value ? value.docs.map((doc) => doc.data()) : []
 
   return (
     <App>
+      <FixedNav />
       <City city={city} description='abc' photos={photos} />
     </App>
   )
