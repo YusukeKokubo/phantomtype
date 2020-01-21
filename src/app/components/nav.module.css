@@ -16,6 +16,10 @@
   justify-content: center;
 }
 
+.backToHomeButton {
+  width: 30px;
+}
+
 .selectButton {
   font-family: 'Noto Sans JP', Helvetica, sans-serif;
   font-size: 100%;
