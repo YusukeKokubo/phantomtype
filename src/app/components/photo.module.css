@@ -10,8 +10,7 @@
 }
 
 .Photo_image {
-  max-width: 55vw;
-  max-height: 40vh;
+  width: 55vw;
 }
 
 .exif {
@@ -34,7 +33,7 @@
     margin: 0;
   }
   .Photo_image {
-    max-width: 100%;
+    width: 100%;
   }
   .exif {
     margin: 5px 10px;
