@@ -9,6 +9,8 @@ import City from "../../components/city";
 import App from '../../components/App'
 import { FixedNav } from '../../components/Nav'
 
+import { Photo } from '../../../@types/Photo'
+
 const config = {
   apiKey: "AIzaSyA8wsdQlLLAjZepeaQfeM_l0pfBEaCOyEk",
   authDomain: "phantomtype.firebaseapp.com",
@@ -36,7 +38,7 @@ const CityPage: NextPage = () => {
   );
 
   console.log(value, loading, error)
-  const photos = value ? value.docs.map((doc) => doc.data()) : []
+  const photos = value ? value.docs.map((doc) => doc.data() as Photo) : []
 
   return (
     <App>

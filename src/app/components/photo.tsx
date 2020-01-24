@@ -2,14 +2,16 @@ import React from "react";
 import css from './photo.module.css'
 
 import { format } from 'date-fns'
+import { Photo } from "../../@types/Photo";
 
 function datetime(src: firebase.firestore.Timestamp) {
   const result = format(src.toDate(), 'yyyy/MM/dd (iii)')
   return result
 }
 
-function Photo({ photo, src, align }) {
+function PhotoView({ photo, src, align }: { photo: Photo, src: string, align: number }) {
   const e = photo
+  console.log(e)
   return (
     <section className={`${css.Photo} ${align == 1 ? css.Photo_right : null}`}>
       <img className={css.Photo_image} src={src} />
@@ -25,4 +27,4 @@ function Photo({ photo, src, align }) {
   )
 }
 
-export default Photo;
+export default PhotoView;

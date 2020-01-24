@@ -1,5 +1,7 @@
-import Photo from "./photo";
+import PhotoView from "./photo";
 import css from './city.module.css'
+
+import { Photo } from '../../@types/Photo'
 
 function byDateTime(a, b) {
   if (!a) return 1;
@@ -8,14 +10,14 @@ function byDateTime(a, b) {
   return 1
 }
 
-function City({ city, photos }) {
+function City({ city, photos }: { city: string | string[], photos: Photo[] }) {
   return (
-    <div className={css.City} id={city}>
+    <div className={css.City}>
       <h2 className={css.name}>{city}</h2>
       {
         photos.sort(byDateTime).map((p, i) => {
           const src = p.url;
-          return <Photo key={i} photo={p} src={src} align={i % 2} />;
+          return <PhotoView key={i} photo={p} src={src} align={i % 2} />;
         })
       }
     </div>
