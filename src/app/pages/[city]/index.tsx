@@ -5,21 +5,21 @@ import { useCollection } from 'react-firebase-hooks/firestore'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 
-import City from "../../components/city";
 import App from '../../components/App'
+import City from '../../components/city';
 import { FixedNav } from '../../components/Nav'
 
 import { Photo } from '../../../@types/Photo'
 
 const config = {
-  apiKey: "AIzaSyA8wsdQlLLAjZepeaQfeM_l0pfBEaCOyEk",
-  authDomain: "phantomtype.firebaseapp.com",
-  databaseURL: "https://phantomtype.firebaseio.com",
-  projectId: "phantomtype",
-  storageBucket: "phantomtype.appspot.com",
-  messagingSenderId: "787190095643",
-  appId: "1:787190095643:web:2ea9b8a2fb64946b27bdbe",
-  measurementId: "G-TGRBP7DHKD"
+  apiKey: 'AIzaSyA8wsdQlLLAjZepeaQfeM_l0pfBEaCOyEk',
+  authDomain: 'phantomtype.firebaseapp.com',
+  databaseURL: 'https://phantomtype.firebaseio.com',
+  projectId: 'phantomtype',
+  storageBucket: 'phantomtype.appspot.com',
+  messagingSenderId: '787190095643',
+  appId: '1:787190095643:web:2ea9b8a2fb64946b27bdbe',
+  measurementId: 'G-TGRBP7DHKD',
 }
 if (!firebase.apps.length) {
   firebase.initializeApp(config)
@@ -34,7 +34,7 @@ const CityPage: NextPage = () => {
     firebase.firestore().collection('pics').where('city', '==', city || ''),
     {
       snapshotListenOptions: { includeMetadataChanges: true },
-    }
+    },
   );
 
   console.log(value, loading, error)
@@ -48,4 +48,3 @@ const CityPage: NextPage = () => {
   )
 };
 export default CityPage;
-

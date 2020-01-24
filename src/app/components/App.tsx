@@ -1,4 +1,3 @@
-// import Header from './Header'
 import Head from 'next/head'
 
 const App = ({ children }: { children?: any }) => (
@@ -7,10 +6,10 @@ const App = ({ children }: { children?: any }) => (
       <title>PHANTOM TYPE</title>
       <meta charSet='utf-8' />
       <meta name='viewport' content='initial-scale=1.0, width=device-width' key='viewport' />
-      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
-      <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/notosansjp.css" />
+      <link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css' />
+      <link rel='stylesheet' href='https://fonts.googleapis.com/earlyaccess/notosansjp.css' />
     </Head>
-    <style jsx global>{`
+    <style jsx={true} global={true}>{`
       body {
         font-family: 'Noto Sans JP', Helvetica, sans-serif;
         font-size: 100%;

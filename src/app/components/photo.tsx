@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 import css from './photo.module.css'
 
 import { format } from 'date-fns'
-import { Photo } from "../../@types/Photo";
+import { Photo } from '../../@types/Photo';
 
 function datetime(src: firebase.firestore.Timestamp) {
   const result = format(src.toDate(), 'yyyy/MM/dd (iii)')

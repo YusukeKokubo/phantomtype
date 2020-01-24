@@ -1,5 +1,5 @@
-import PhotoView from "./photo";
 import css from './city.module.css'
+import PhotoView from './photo';
 
 import { Photo } from '../../@types/Photo'
 
