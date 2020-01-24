@@ -19,12 +19,17 @@
   flex-direction: column;
   justify-content: flex-start;
   color: #ccc;
-  font-size: 1.65vw;
+  font-size: 1.60vw;
   font-weight: 200;
 }
 
 .exif_right {
   text-align: right;
+}
+
+.datetime {
+  margin-bottom: 5px;
+  font-size: 1.85vw;
 }
 
 @media (max-width: 600px) {

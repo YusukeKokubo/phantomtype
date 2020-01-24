@@ -1,7 +1,7 @@
-.City{
+.City {
   display: grid;
   grid-template-columns: 1fr;
-  grid-gap: 60px;
+  grid-gap: 80px;
   margin: 50px 1vw;
 }
 
@@ -12,11 +12,4 @@
   font-weight: 200;
   margin: 80px 0 0 0;
   text-transform: uppercase;
-}
-
-.description {
-  text-align: center;
-  font-size: 1.6rem;
-  font-weight: 200;
-  color: #ddd;
 }
