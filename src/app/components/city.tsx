@@ -3,11 +3,12 @@ import css from './city.module.css'
 
 import { Photo } from '../../@types/Photo'
 
-function byDateTime(a, b) {
-  if (!a) return 1;
-  if (!b) return -1;
-  return a.exif.DateTimeOriginal < b.exif.DateTimeOriginal ? 1 : -1;
-  return 1
+const shuffle = ([...array]) => {
+  for (let i = array.length - 1; i >= 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
 
 function City({ city, photos }: { city: string | string[], photos: Photo[] }) {
@@ -15,7 +16,7 @@ function City({ city, photos }: { city: string | string[], photos: Photo[] }) {
     <div className={css.City}>
       <h2 className={css.name}>{city}</h2>
       {
-        photos.sort(byDateTime).map((p, i) => {
+        shuffle(photos).map((p, i) => {
           const src = p.url;
           return <PhotoView key={i} photo={p} src={src} align={i % 2} />;
         })
