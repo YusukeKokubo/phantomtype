@@ -3,13 +3,12 @@ import css from './photo.module.css'
 
 import { format } from 'date-fns'
 
-function datetime(src) {
+function datetime(src: firebase.firestore.Timestamp) {
   const result = format(src.toDate(), 'yyyy/MM/dd (iii)')
   return result
 }
 
 function Photo({ photo, src, align }) {
-  console.log(photo)
   const e = photo
   return (
     <section className={`${css.Photo} ${align == 1 ? css.Photo_right : null}`}>

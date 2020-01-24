@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 import Photo from "./photo";
 import css from './city.module.css'
 
@@ -10,7 +8,7 @@ function byDateTime(a, b) {
   return 1
 }
 
-function City({city, description, photos}) {
+function City({ city, photos }) {
   return (
     <div className={css.City} id={city}>
       <h2 className={css.name}>{city}</h2>
@@ -25,4 +23,3 @@ function City({city, description, photos}) {
 }
 
 export default City
-

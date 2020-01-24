@@ -5,7 +5,7 @@ import { useCollection } from 'react-firebase-hooks/firestore'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 
-import City from "../../components/City";
+import City from "../../components/city";
 import App from '../../components/App'
 import { FixedNav } from '../../components/Nav'
 
@@ -41,7 +41,7 @@ const CityPage: NextPage = () => {
   return (
     <App>
       <FixedNav />
-      <City city={city} description='abc' photos={photos} />
+      <City city={city} photos={photos} />
     </App>
   )
 };
