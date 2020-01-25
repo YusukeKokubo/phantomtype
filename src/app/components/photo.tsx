@@ -13,9 +13,9 @@ function PhotoView({ photo, src, align }: { photo: Photo, src: string, align: nu
   const e = photo
   console.log(e)
   return (
-    <section className={`${css.Photo} ${align == 1 ? css.Photo_right : null}`}>
+    <section className={`${css.Photo} ${align === 1 ? css.Photo_right : null}`}>
       <img className={css.Photo_image} src={src} />
-      <div className={`${css.exif} ${align == 1 ? css.exif_right : null}`}>
+      <div className={`${css.exif} ${align === 1 ? css.exif_right : null}`}>
         <span className={css.datetime}>{datetime(e.exif.DateTimeOriginal)}</span>
         <span>{e.image.Make} {e.image.Model}</span>
         <span>{e.exif.FocalLength} ({e.exif.FocalLengthIn35mmFormat})mm
