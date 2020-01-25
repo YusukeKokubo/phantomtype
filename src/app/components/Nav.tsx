@@ -4,10 +4,10 @@ import css from './nav.module.css'
 export default ({ }: {}) => {
     return (
         <section className={css.selectcity}>
-            <button className={css.selectButton} onClick={serverPush(Cities.kyoto)}>Kyoto</button>
-            <button className={css.selectButton} onClick={serverPush(Cities.kanazawa)}>Kanazawa</button>
-            <button className={css.selectButton} onClick={serverPush(Cities.nagoya)}>nagoya</button>
-            <button className={css.selectButton} onClick={serverPush(Cities.matsushima)}>matsushima</button>
+            <button className={css.selectButton} onClick={serverPush(Cities.Kyoto)}>Kyoto</button>
+            <button className={css.selectButton} onClick={serverPush(Cities.Kanazawa)}>Kanazawa</button>
+            <button className={css.selectButton} onClick={serverPush(Cities.Nagoya)}>nagoya</button>
+            <button className={css.selectButton} onClick={serverPush(Cities.Matsushima)}>matsushima</button>
         </section>
     )
 }
@@ -18,10 +18,10 @@ export const FixedNav = () => {
             <button className={css.selectButton} onClick={serverPush('')}>
                 <img src='/logomark-white.svg' className={css.backToHomeButton} />
             </button>
-            <button className={css.selectButton} onClick={serverPush(Cities.kyoto)}>Kyoto</button>
-            <button className={css.selectButton} onClick={serverPush(Cities.kanazawa)}>Kanazawa</button>
-            <button className={css.selectButton} onClick={serverPush(Cities.nagoya)}>nagoya</button>
-            <button className={css.selectButton} onClick={serverPush(Cities.matsushima)}>matsushima</button>
+            <button className={css.selectButton} onClick={serverPush(Cities.Kyoto)}>Kyoto</button>
+            <button className={css.selectButton} onClick={serverPush(Cities.Kanazawa)}>Kanazawa</button>
+            <button className={css.selectButton} onClick={serverPush(Cities.Nagoya)}>nagoya</button>
+            <button className={css.selectButton} onClick={serverPush(Cities.Matsushima)}>matsushima</button>
         </section>
     )
 }
@@ -31,8 +31,8 @@ const serverPush = (city: Cities | string) => () => {
 }
 
 enum Cities {
-    kyoto,
-    kanazawa,
-    nagoya,
-    matsushima,
+    Kyoto = 'kyoto',
+    Kanazawa = 'kanazawa',
+    Nagoya = 'nagoya',
+    Matsushima = 'matsushima',
 }
