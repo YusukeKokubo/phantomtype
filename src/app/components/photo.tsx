@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import { Photo } from '../../@types/Photo';
 
 function datetime(src: firebase.firestore.Timestamp) {
-  const result = format(src.toDate(), 'yyyy/MM/dd (iii)')
+  const result = format(src.toDate(), 'yyyy/MM/dd HH:mm:ss')
   return result
 }
 
