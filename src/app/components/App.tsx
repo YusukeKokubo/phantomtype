@@ -15,6 +15,7 @@ const App = ({ children }: { children?: any }) => (
         font-size: 100%;
         font-weight: 200;
         background: #000;
+        color: #fff;
       }
     `}</style>
     {children}
