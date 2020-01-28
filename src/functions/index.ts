@@ -65,6 +65,7 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
           .then((file) => {
             bucket.upload(filePath, { destination: tempLocalResizedFile }).then((res) => {
               console.log('resized: ' + res[0].name)
+              fs.unlinkSync(tempLocalResizedFile)
             }).catch((err) => {
               console.error(err)
             })
@@ -74,7 +75,6 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
       }
       return ex
     })
-  // console.debug(exif)
 
   // Save Exif
   const metadata = {
@@ -84,7 +84,6 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
     url: url,
     city: city
   }
-  // console.debug({ metadata: metadata })
 
   await admin.firestore().collection('pics').doc(`${city}-${filename}`).set(metadata);
   console.log('Wrote to:', filePath, 'data:', { metadata });
