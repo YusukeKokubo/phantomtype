@@ -12,6 +12,7 @@
 .Photo_image {
   width: 55vw;
   height: auto;
+  min-height: 400px;
 }
 
 .exif {
