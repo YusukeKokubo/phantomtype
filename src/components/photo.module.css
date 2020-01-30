@@ -1,7 +1,7 @@
 .Photo {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: stretch;
   margin: 0 5vw;
 }
 
@@ -13,6 +13,8 @@
   width: 55vw;
   height: auto;
   min-height: 400px;
+  max-height: 100vh;
+  object-fit: fill;
 }
 
 .exif {
@@ -41,6 +43,8 @@
   }
   .Photo_image {
     width: 100%;
+    height: auto;
+    min-height: 100px;
   }
   .exif {
     margin: 5px 10px;
