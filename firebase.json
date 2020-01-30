@@ -13,7 +13,8 @@
     "predeploy": [
       "npm run lint-app",
       "npm run typecheck-app",
-      "npm run build-app"
+      "npm run build-app",
+      "next export"
     ]
   }
 }
