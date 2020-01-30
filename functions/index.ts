@@ -8,23 +8,9 @@ import * as os from 'os'
 import * as fs from 'fs'
 import * as Storage from '@google-cloud/storage'
 import { convertToLocalTime } from 'date-fns-timezone'
-// import { firebaseConfig } from 'firebase-functions';
-import next from 'next'
 import sharp, { Metadata } from 'sharp'
 const exifreader = require('exif-reader')
 import Fraction from 'fraction.js'
-
-const dev = process.env.NODE_ENV !== 'production'
-const app = next({
-  dev: dev,
-  conf: { distDir: `${path.relative(process.cwd(), __dirname)}/next` }
-})
-const handle = app.getRequestHandler()
-
-export const nextApp = functions.https.onRequest((req, res) => {
-  console.log('File: ' + req.originalUrl)
-  return app.prepare().then(() => handle(req, res))
-})
 
 export const createExif = functions.region('asia-northeast1').storage.object().onFinalize(async (object) => {
   const filePath = object.name!
