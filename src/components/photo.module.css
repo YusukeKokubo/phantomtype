@@ -1,20 +1,26 @@
 .Photo {
-  display: flex;
-  flex-direction: row;
-  justify-content: stretch;
+  display: grid;
+  /* flex-direction: row; */
+  /* justify-content: stretch; */
   margin: 0 5vw;
+  grid-template-columns: 1fr 1fr;
 }
 
-.Photo_right {
-  flex-direction: row-reverse;
+.Photo_right .Photo_image {
+  /* flex-direction: row-reverse; */
+  grid-column: 2;
 }
 
 .Photo_image {
   width: 55vw;
   height: auto;
-  min-height: 400px;
-  max-height: 100vh;
+  min-height: 300px;
   object-fit: fill;
+}
+
+.Photo_right .exif {
+  grid-column: 1;
+  grid-row: 1;
 }
 
 .exif {
