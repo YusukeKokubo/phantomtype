@@ -18,6 +18,7 @@
     "lint-functions": "tslint --project functions",
     "copy-deps": "cpx \"*{package.json,package-lock.json,yarn.lock}\" \"dist/functions\" -C",
     "install-deps": "cd \"dist/functions\" && npm i",
+    "app-export": "npm run build-app && next export",
     "app-deploy": "firebase deploy --only hosting"
   },
   "dependencies": {
