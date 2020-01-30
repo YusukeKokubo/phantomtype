@@ -3,6 +3,8 @@ node_modules/
 *.js.map
 
 src/app/.next
+.next/
+out/
 
 # Firebase cache
 .firebase/

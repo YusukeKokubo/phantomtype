@@ -6,19 +6,20 @@
     "node": "10"
   },
   "scripts": {
-    "dev": "next src/app",
+    "dev": "next",
     "preserve": "npm run build-public && npm run build-functions && npm run build-app && npm run copy-deps && npm run install-deps",
     "serve": "cross-env NODE_ENV=production firebase serve",
     "deploy": "NODE_ENV=production firebase deploy",
     "clean": "rimraf \"dist/functions\" && rimraf \"dist/public\"",
-    "build-app": "next build \"src/app\"",
-    "build-public": "cpx \"src/public/**/*.*\" \"dist/public\" -C",
-    "build-functions": "tsc --project src/functions",
-    "lint-app": "tslint --project src/app",
-    "typecheck-app": "tsc --project src/app",
-    "lint-functions": "tslint --project src/functions",
+    "build-app": "next build",
+    "build-public": "cpx \"public/**/*.*\" \"dist/public\" -C",
+    "build-functions": "tsc --project functions",
+    "lint-app": "tslint --project src",
+    "typecheck-app": "tsc --project src",
+    "lint-functions": "tslint --project functions",
     "copy-deps": "cpx \"*{package.json,package-lock.json,yarn.lock}\" \"dist/functions\" -C",
-    "install-deps": "cd \"dist/functions\" && npm i"
+    "install-deps": "cd \"dist/functions\" && npm i",
+    "export": "npm run build-app && next export"
   },
   "dependencies": {
     "@google-cloud/storage": "^4.2.0",
