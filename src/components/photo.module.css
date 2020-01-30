@@ -1,13 +1,10 @@
 .Photo {
   display: grid;
-  /* flex-direction: row; */
-  /* justify-content: stretch; */
   margin: 0 5vw;
   grid-template-columns: 1fr 1fr;
 }
 
 .Photo_right .Photo_image {
-  /* flex-direction: row-reverse; */
   grid-column: 2;
 }
 
@@ -44,16 +41,25 @@
 
 @media (max-width: 600px) {
   .Photo {
-    flex-direction: column;
     margin: 0;
+    grid-template-columns: 1fr;
+    grid-column: 1;
   }
   .Photo_image {
     width: 100%;
     height: auto;
-    min-height: 100px;
+    min-height: 200px;
   }
   .exif {
     margin: 5px 10px;
     font-size: 1.0rem;
+    grid-row: 2;
+  }
+  .datetime {
+    font-size: 1.2rem;
+  }
+  .Photo_right .exif {
+    grid-column: 2;
+    grid-row: 2;
   }
 }
