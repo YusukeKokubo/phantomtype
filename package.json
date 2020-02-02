@@ -19,7 +19,8 @@
     "copy-deps": "cpx \"*{package.json,package-lock.json,yarn.lock}\" \"dist/functions\" -C",
     "install-deps": "cd \"dist/functions\" && npm i",
     "app-export": "npm run build-app && next export",
-    "app-deploy": "firebase deploy --only hosting"
+    "app-deploy": "firebase deploy --only hosting",
+    "func-deploy": "npm run build-functions && firebase deploy --only functions"
   },
   "dependencies": {
     "@google-cloud/storage": "^4.2.0",
