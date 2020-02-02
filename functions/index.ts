@@ -25,42 +25,57 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
     return null
   }
 
+  if (object.contentType?.startsWith('image/webp')) {
+    console.error('This is a webp.')
+    return null
+  }
+
+  if (filePath.includes('-comp.jpeg')) {
+    console.error('This is a compressed image.')
+    return null
+  }
+
   const storage = new Storage.Storage()
   const bucket = storage.bucket(object.bucket)
   await bucket.file(filePath).download({ destination: tempLocalFile });
 
   // Make download url
-  const url = `https://firebasestorage.googleapis.com/v0/b/${object.bucket}/o/${encodeURIComponent(filePath)}?alt=media`;
+  const baseUrl = `https://firebasestorage.googleapis.com/v0/b/${object.bucket}/o`
+  const url = `${baseUrl}/${encodeURIComponent(filePath)}?alt=media`;
 
   // Get Exif
-  const exif = await sharp(tempLocalFile)
+  const { exif, meta } = await sharp(tempLocalFile)
     .metadata()
-    .then((meta: Metadata) => {
-      const ex = exifreader(meta.exif)
+    .then((m: Metadata) => {
+      const ex = exifreader(m.exif)
       ex.exif.DateTimeOriginal = convertToLocalTime(ex.exif.DateTimeOriginal, { timeZone: 'Asia/Tokyo' })
       ex.exif.DateTimeDigitized = convertToLocalTime(ex.exif.DateTimeDigitized, { timeZone: 'Asia/Tokyo' })
       ex.image.ModifyDate = convertToLocalTime(ex.image.ModifyDate, { timeZone: 'Asia/Tokyo' })
       ex.exif.ExposureTime = new Fraction(ex.exif.ExposureTime).toFraction()
       ex.exif.ApertureValue = new Fraction(ex.exif.ApertureValue).toFraction()
       ex.exif.ShutterSpeedValue = new Fraction(ex.exif.ShutterSpeedValue).toFraction()
-      if (meta.size && meta.size > 1048576) {
-        const tempLocalResizedFile = path.join(os.tmpdir(), "resized", randomFileName)
-        const resized = sharp(tempLocalFile)
-          .resize({ width: meta.width! / 2 })
-          .toFile(tempLocalResizedFile)
-          .then((file) => {
-            bucket.upload(filePath, { destination: tempLocalResizedFile }).then((res) => {
-              console.log('resized: ' + res[0].name)
-              fs.unlinkSync(tempLocalResizedFile)
-            }).catch((err) => {
-              console.error(err)
-            })
-          }).catch((err) => {
-            console.error(err)
-          })
-      }
-      return ex
+      console.log('width: ', m.width)
+      console.log('height: ', m.height)
+      return { exif: ex, meta: m }
     })
+
+  // Webp
+  const tempLocalWebpFile = path.join(os.tmpdir(), "webp" + randomFileName)
+  const webpFilePath = path.join(city, path.basename(filename, path.extname(filename)) + '.webp')
+  await sharp(tempLocalFile).webp({ quality: 50 }).toFile(tempLocalWebpFile)
+  await bucket.upload(tempLocalWebpFile, { destination: webpFilePath, metadata: { contentType: 'image/webp' }, public: true })
+  fs.unlinkSync(tempLocalWebpFile)
+  const webpUrl = `${baseUrl}/${encodeURIComponent(webpFilePath)}?alt=media`
+  console.log("webp: ", webpFilePath)
+
+  // Compress
+  const tempLocalCompFile = path.join(os.tmpdir(), "comp" + randomFileName)
+  const compFilePath = path.join(city, path.basename(filename, path.extname(filename)) + '-comp.jpeg')
+  await sharp(tempLocalFile).jpeg({ quality: 50 }).toFile(tempLocalCompFile)
+  await bucket.upload(tempLocalCompFile, { destination: compFilePath, metadata: { contentType: 'image/jpeg' }, public: true })
+  fs.unlinkSync(tempLocalCompFile)
+  const compUrl = `${baseUrl}/${encodeURIComponent(compFilePath)}?alt=media`
+  console.log("jpeg: ", compFilePath)
 
   // Save Exif
   const metadata = {
@@ -68,11 +83,13 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
     filePath: filePath,
     filename: filename,
     url: url,
+    webp: webpUrl,
+    compressed: compUrl,
     city: city
   }
 
   await admin.firestore().collection('pics').doc(`${city}-${filename}`).set(metadata);
-  console.log('Wrote to:', filePath, 'data:', { metadata });
+  console.log('Wrote to:', filePath);
   fs.unlinkSync(tempLocalFile)
 
   console.log(`finished!`)
