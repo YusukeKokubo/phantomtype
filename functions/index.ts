@@ -35,6 +35,11 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
     return null
   }
 
+  if (filePath.includes('-resized.jpeg')) {
+    console.error('This is a resized image.')
+    return null
+  }
+
   const storage = new Storage.Storage()
   const bucket = storage.bucket(object.bucket)
   await bucket.file(filePath).download({ destination: tempLocalFile });
@@ -70,12 +75,21 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
 
   // Compress
   const tempLocalCompFile = path.join(os.tmpdir(), "comp" + randomFileName)
-  const compFilePath = path.join(city, path.basename(filename, path.extname(filename)) + '-comp.jpeg')
+  const compFilePath = path.join(city, path.basename(filename, path.extname(filename)) + '-comp.jpg')
   await sharp(tempLocalFile).jpeg({ quality: 50 }).toFile(tempLocalCompFile)
-  await bucket.upload(tempLocalCompFile, { destination: compFilePath, metadata: { contentType: 'image/jpeg' }, public: true })
+  await bucket.upload(tempLocalCompFile, { destination: compFilePath, metadata: { contentType: 'image/jpg' }, public: true })
   fs.unlinkSync(tempLocalCompFile)
   const compUrl = `${baseUrl}/${encodeURIComponent(compFilePath)}?alt=media`
   console.log("jpeg: ", compFilePath)
+
+  // Resize
+  const tempLocalResizeFile = path.join(os.tmpdir(), "resize" + randomFileName)
+  const resizeFilePath = path.join(city, path.basename(filename, path.extname(filename)) + '-resized' + path.extname(filename))
+  await sharp(tempLocalFile).resize({ width: meta.width / 2 }).toFile(tempLocalResizeFile)
+  await bucket.upload(tempLocalResizeFile, { destination: resizeFilePath, metadata: { contentType: object.contentType }, public: true })
+  fs.unlinkSync(tempLocalResizeFile)
+  const resizedUrl = `${baseUrl}/${encodeURIComponent(resizeFilePath)}?alt=media`
+  console.log("resized: ", resizeFilePath)
 
   // Save Exif
   const metadata = {
@@ -85,6 +99,7 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
     url: url,
     webp: webpUrl,
     compressed: compUrl,
+    resizedUrl: resizedUrl,
     city: city
   }
 
