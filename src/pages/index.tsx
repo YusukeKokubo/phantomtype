@@ -5,7 +5,10 @@ import css from './index.module.css'
 export default () => (
   <App>
     <section className={css.splash}>
-      <img className={css.splash_image} src='https://firebasestorage.googleapis.com/v0/b/phantomtype.appspot.com/o/kyoto%2FDSCF8041.jpg?alt=media' />
+      <picture>
+        <source type='webp' srcSet={'https://firebasestorage.googleapis.com/v0/b/phantomtype.appspot.com/o/kyoto%2FDSCF8041.webp?alt=media'} />
+        <img className={css.splash_image} src='https://firebasestorage.googleapis.com/v0/b/phantomtype.appspot.com/o/kyoto%2FDSCF8041-comp.jpg?alt=media' />
+      </picture>
       <div className={css.title}>
         <img src='/logomark-white.svg' className={css.logo} />
         <h1 className={css.siteTitle}>PHANTOM TYPE</h1>

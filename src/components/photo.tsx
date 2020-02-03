@@ -10,12 +10,15 @@ function datetime(src: firebase.firestore.Timestamp) {
   return result
 }
 
-function PhotoView({ photo, src, align }: { photo: Photo, src: string, align: number }) {
+function PhotoView({ photo, align }: { photo: Photo, align: number }) {
   const e = photo
   console.log(e)
   return (
     <section className={`${css.Photo} ${align === 1 ? css.Photo_right : null}`}>
-      <LazyLoadImage src={src} className={css.Photo_image} />
+      <picture>
+        <source type='image/webp' srcSet={e.urls.webp} />
+        <LazyLoadImage src={e.urls.lowQuality} className={css.Photo_image} />
+      </picture>
       <div className={`${css.exif} ${align === 1 ? css.exif_right : null}`}>
         <span className={css.datetime}>{datetime(e.exif.DateTimeOriginal)}</span>
         <span>{e.image.Make} {e.image.Model}</span>

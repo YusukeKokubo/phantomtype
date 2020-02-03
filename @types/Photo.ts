@@ -3,6 +3,11 @@ export type Photo = {
   filePath: string
   filename: string
   url: string
+  urls: {
+    webp: string
+    lowQuality: string
+    resized: string
+  }
   exif: Exif
   image: Image
   thumbnail: {}

@@ -46,8 +46,7 @@ function City({ city }: { city: string }) {
       <h2 className={css.name}>{city}</h2>
       {
         shuffle(photos).map((p, i) => {
-          const src = p.url;
-          return <PhotoView key={i} photo={p} src={src} align={i % 2} />;
+          return <PhotoView key={i} photo={p} align={i % 2} />;
         })
       }
     </div>
