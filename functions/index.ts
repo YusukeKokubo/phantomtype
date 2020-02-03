@@ -30,12 +30,12 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
     return null
   }
 
-  if (filePath.includes('-comp.jpeg')) {
+  if (filePath.includes('-comp')) {
     console.error('This is a compressed image.')
     return null
   }
 
-  if (filePath.includes('-resized.jpeg')) {
+  if (filePath.includes('-resized')) {
     console.error('This is a resized image.')
     return null
   }
