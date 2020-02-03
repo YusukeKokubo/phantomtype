@@ -67,7 +67,7 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
   // Webp
   const tempLocalWebpFile = path.join(os.tmpdir(), "webp" + randomFileName)
   const webpFilePath = path.join(city, path.basename(filename, path.extname(filename)) + '.webp')
-  await sharp(tempLocalFile).webp({ quality: 50 }).toFile(tempLocalWebpFile)
+  await sharp(tempLocalFile).webp({ quality: 30 }).toFile(tempLocalWebpFile)
   await bucket.upload(tempLocalWebpFile, { destination: webpFilePath, metadata: { contentType: 'image/webp' }, public: true })
   fs.unlinkSync(tempLocalWebpFile)
   const webpUrl = `${baseUrl}/${encodeURIComponent(webpFilePath)}?alt=media`
@@ -76,7 +76,7 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
   // Compress
   const tempLocalCompFile = path.join(os.tmpdir(), "comp" + randomFileName)
   const compFilePath = path.join(city, path.basename(filename, path.extname(filename)) + '-comp.jpg')
-  await sharp(tempLocalFile).jpeg({ quality: 50 }).toFile(tempLocalCompFile)
+  await sharp(tempLocalFile).jpeg({ quality: 30 }).toFile(tempLocalCompFile)
   await bucket.upload(tempLocalCompFile, { destination: compFilePath, metadata: { contentType: 'image/jpg' }, public: true })
   fs.unlinkSync(tempLocalCompFile)
   const compUrl = `${baseUrl}/${encodeURIComponent(compFilePath)}?alt=media`
