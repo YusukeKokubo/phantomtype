@@ -97,9 +97,11 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
     filePath: filePath,
     filename: filename,
     url: url,
-    webp: webpUrl,
-    compressed: compUrl,
-    resizedUrl: resizedUrl,
+    urls: {
+      webp: webpUrl,
+      lowQuality: compUrl,
+      resized: resizedUrl,
+    },
     city: city
   }
 
