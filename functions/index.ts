@@ -85,7 +85,7 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
   // Resize
   const tempLocalResizeFile = path.join(os.tmpdir(), "resize" + randomFileName)
   const resizeFilePath = path.join(city, path.basename(filename, path.extname(filename)) + '-resized' + path.extname(filename))
-  await sharp(tempLocalFile).resize({ width: meta.width / 2 }).toFile(tempLocalResizeFile)
+  await sharp(tempLocalFile).resize({ width: Math.ceil(meta.width / 2) }).toFile(tempLocalResizeFile)
   await bucket.upload(tempLocalResizeFile, { destination: resizeFilePath, metadata: { contentType: object.contentType }, public: true })
   fs.unlinkSync(tempLocalResizeFile)
   const resizedUrl = `${baseUrl}/${encodeURIComponent(resizeFilePath)}?alt=media`
