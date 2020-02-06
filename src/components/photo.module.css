@@ -42,8 +42,7 @@
 @media (max-width: 600px) {
   .Photo {
     margin: 0;
-    grid-template-columns: 1fr;
-    grid-column: 1;
+    display: inline;
   }
   .Photo_image {
     width: 100%;
@@ -57,9 +56,5 @@
   }
   .datetime {
     font-size: 1.2rem;
-  }
-  .Photo_right .exif {
-    grid-column: 2;
-    grid-row: 2;
   }
 }
