@@ -16,6 +16,6 @@
     "jsx-no-multiline-js": false,
     "no-console": false,
     "object-literal-sort-keys": false,
-    "jsx-no-lambda"
+    "jsx-no-lambda": false
   }
 }
