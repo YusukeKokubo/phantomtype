@@ -1,4 +1,5 @@
 import { red } from '@material-ui/core/colors';
+import { makeStyles } from '@material-ui/core/styles'
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Cookies from 'js-cookie';
@@ -27,6 +28,17 @@ function onLike(fb: firebase.app.App, photo: Photo) {
   return null
 }
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    '&:hover': {
+      cursor: "pointer",
+      color: red[600]
+    },
+
+    color: "#fff"
+  }
+}))
+
 function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, align: number }) {
   const e = photo
   console.log(e)
@@ -52,14 +64,13 @@ function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, a
           <span>
             {liked ?
               <>
-                <Favorite className={css.icon} style={{ fontSize: 25, color: red[900] }} />
+                <Favorite className={css.icon} style={{ fontSize: "2.0vw", color: red[600] }} />
                 <span className={css.like}>{photo.like} likes</span>
               </>
               :
               <FavoriteBorder
                 onClick={() => onLike(fb, photo)}
-                className={css.icon}
-                style={{ fontSize: 25, color: red[900] }}
+                className={`${useStyles().root}`}
               />
             }
           </span>
