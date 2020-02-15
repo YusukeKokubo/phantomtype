@@ -28,17 +28,37 @@ function onLike(fb: firebase.app.App, photo: Photo) {
   return null
 }
 
+function onUnLike(fb: firebase.app.App, photo: Photo) {
+  const id = `${photo.city}-${photo.filename}`
+  fb.firestore().collection('pics').doc(id).set({
+    ...photo,
+    like: (photo.like || 0) - 1,
+  }).then(() => {
+    Cookies.set(id, '0')
+    console.log('UnLiked: ', id)
+  })
+  return null
+}
+
 const useStyles = makeStyles(() => ({
-  root: {
+  YetLiked: {
+    margin: '-3px 2px',
+    'font-size': '2.0vw',
+    color: '#fff',
     '&:hover': {
       cursor: 'pointer',
       color: red[600],
     },
-
-    margin: '-3px 2px',
-    color: '#fff',
-    'font-size': '2.0vw',
   },
+  Liked: {
+    margin: '-3px 2px',
+    'font-size': '2.0vw',
+    color: red[600],
+    '&:hover': {
+      cursor: 'pointer',
+      color: '#fff',
+    },
+  }
 }))
 
 function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, align: number }) {
@@ -65,11 +85,14 @@ function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, a
         <div className={css.social}>
           <span>
             {liked ?
-              <Favorite className={css.icon} style={{ fontSize: '2.0vw', color: red[600] }} />
+              <Favorite
+                onClick={() => onUnLike(fb, photo)}
+                className={useStyles().Liked}
+              />
               :
               <FavoriteBorder
                 onClick={() => onLike(fb, photo)}
-                className={`${useStyles().root}`}
+                className={useStyles().YetLiked}
               />
             }
           </span>
