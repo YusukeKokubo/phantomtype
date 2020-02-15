@@ -1,11 +1,11 @@
 .Photo {
-  display: grid;
+  display: flex;
   margin: 0 5vw;
-  grid-template-columns: 1fr 1fr;
+  flex-direction: row;
 }
 
-.Photo_right .Photo_image {
-  grid-column: 2;
+.Photo_right {
+  flex-direction: row-reverse;
 }
 
 .Photo_image {
@@ -15,19 +15,19 @@
   object-fit: fill;
 }
 
-.Photo_right .exif {
-  grid-column: 1;
-  grid-row: 1;
-}
-
-.exif {
+.information {
   margin: 0 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
   color: #ccc;
   font-size: 1.60vw;
   font-weight: 200;
+  display: flex;
+  flex-direction: column;
+}
+
+.exif {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .exif_right {
@@ -37,6 +37,18 @@
 .datetime {
   margin-bottom: 5px;
   font-size: 1.85vw;
+}
+
+.social {
+  margin: 10px 0;
+}
+
+.icon {
+  margin: -3px 0;
+}
+
+.like {
+  font-size: 25px;
 }
 
 @media (max-width: 600px) {
