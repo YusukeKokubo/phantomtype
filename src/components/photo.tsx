@@ -20,30 +20,32 @@ function onLike(fb: firebase.app.App, photo: Photo) {
   const id = `${photo.city}-${photo.filename}`
   fb.firestore().collection('pics').doc(id).set({
     ...photo,
-    like: (photo.like || 0) + 1
+    like: (photo.like || 0) + 1,
   }).then(() => {
-    Cookies.set(id, "1")
+    Cookies.set(id, '1')
     console.log('Liked: ', id)
   })
   return null
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     '&:hover': {
-      cursor: "pointer",
-      color: red[600]
+      cursor: 'pointer',
+      color: red[600],
     },
 
-    color: "#fff"
-  }
+    margin: '-3px 2px',
+    color: '#fff',
+    'font-size': '2.0vw',
+  },
 }))
 
 function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, align: number }) {
   const e = photo
   console.log(e)
   const id = `${photo.city}-${photo.filename}`
-  const liked = Cookies.get(id) == "1"
+  const liked = Cookies.get(id) === '1'
 
   return (
     <section className={`${css.Photo} ${align === 1 ? css.Photo_right : null}`}>
@@ -63,10 +65,7 @@ function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, a
         <div className={css.social}>
           <span>
             {liked ?
-              <>
-                <Favorite className={css.icon} style={{ fontSize: "2.0vw", color: red[600] }} />
-                <span className={css.like}>{photo.like} likes</span>
-              </>
+              <Favorite className={css.icon} style={{ fontSize: '2.0vw', color: red[600] }} />
               :
               <FavoriteBorder
                 onClick={() => onLike(fb, photo)}
@@ -74,6 +73,7 @@ function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, a
               />
             }
           </span>
+          <span className={css.like}>{photo.like || 0} like(s)</span>
         </div>
       </div>
     </section>
