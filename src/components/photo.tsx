@@ -58,7 +58,7 @@ const useStyles = makeStyles(() => ({
       cursor: 'pointer',
       color: '#fff',
     },
-  }
+  },
 }))
 
 function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, align: number }) {
