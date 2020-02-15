@@ -11,6 +11,7 @@ export type Photo = {
   exif: Exif
   image: Image
   thumbnail: {}
+  like: number
 }
 
 export type Exif = {

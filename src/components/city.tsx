@@ -22,10 +22,10 @@ if (!firebase.apps.length) {
 }
 
 const shuffle = ([...array]) => {
-  for (let i = array.length - 1; i >= 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
+  // for (let i = array.length - 1; i >= 0; i--) {
+  //   const j = Math.floor(Math.random() * (i + 1));
+  //   [array[i], array[j]] = [array[j], array[i]];
+  // }
   return array;
 }
 
@@ -46,7 +46,7 @@ function City({ city }: { city: string }) {
       <h2 className={css.name}>{city}</h2>
       {
         shuffle(photos).map((p, i) => {
-          return <PhotoView key={i} photo={p} align={i % 2} />;
+          return <PhotoView fb={firebase.app()} key={i} photo={p} align={i % 2} />;
         })
       }
     </div>

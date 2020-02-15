@@ -13,9 +13,19 @@ function datetime(src: firebase.firestore.Timestamp) {
   return result
 }
 
-function PhotoView({ photo, align }: { photo: Photo, align: number }) {
+function onLike(fb: firebase.app.App, photo: Photo) {
+  const id = `${photo.city}-${photo.filename}`
+  fb.firestore().collection('pics').doc(id).set({
+    ...photo,
+    like: (photo.like || 0) + 1
+  })
+  return null
+}
+
+function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, align: number }) {
   const e = photo
   console.log(e)
+
   return (
     <section className={`${css.Photo} ${align === 1 ? css.Photo_right : null}`}>
       <picture>
@@ -33,8 +43,12 @@ function PhotoView({ photo, align }: { photo: Photo, align: number }) {
         </div>
         <div className={css.social}>
           <span>
-            <FavoriteBorder className={css.icon} style={{ fontSize: 25, color: red[900] }} />
-            <span className={css.like}>100</span>
+            <FavoriteBorder
+              onClick={() => onLike(fb, photo)}
+              className={css.icon}
+              style={{ fontSize: 25, color: red[900] }}
+            />
+            <span className={css.like}>{photo.like}</span>
           </span>
         </div>
       </div>

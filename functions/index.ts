@@ -91,9 +91,12 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
   const resizedUrl = `${baseUrl}/${encodeURIComponent(resizeFilePath)}?alt=media`
   console.log("resized: ", resizeFilePath)
 
+  const id = `${city}-${filename}`
+
   // Save Exif
   const metadata = {
     ...exif,
+    id: id,
     filePath: filePath,
     filename: filename,
     url: url,
@@ -105,7 +108,7 @@ export const createExif = functions.region('asia-northeast1').storage.object().o
     city: city
   }
 
-  await admin.firestore().collection('pics').doc(`${city}-${filename}`).set(metadata);
+  await admin.firestore().collection('pics').doc(id).set(metadata);
   console.log('Wrote to:', filePath);
   fs.unlinkSync(tempLocalFile)
 
