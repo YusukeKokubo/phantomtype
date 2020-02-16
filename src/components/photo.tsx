@@ -1,5 +1,5 @@
 import { red } from '@material-ui/core/colors';
-import { makeStyles } from '@material-ui/core/styles'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Cookies from 'js-cookie';
@@ -40,7 +40,7 @@ function onUnLike(fb: firebase.app.App, photo: Photo) {
   return null
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(() => createStyles({
   YetLiked: {
     margin: '-3px 2px',
     'font-size': '2.0vw',
