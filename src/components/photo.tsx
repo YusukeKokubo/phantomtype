@@ -49,6 +49,9 @@ const useStyles = makeStyles(() => ({
       cursor: 'pointer',
       color: red[600],
     },
+    '@media (max-width: 600px)': {
+      'font-size': '1.0rem',
+    },
   },
   Liked: {
     margin: '-3px 2px',
@@ -57,6 +60,9 @@ const useStyles = makeStyles(() => ({
     '&:hover': {
       cursor: 'pointer',
       color: '#fff',
+    },
+    '@media (max-width: 600px)': {
+      'font-size': '1.0rem',
     },
   },
 }))

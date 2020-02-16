@@ -43,11 +43,6 @@
   margin: 10px 0;
 }
 
-.icon {
-  margin: -3px 0;
-  font-size: 2.0vw;
-}
-
 .like {
   font-size: 2.0vw;
 }
@@ -63,11 +58,17 @@
     min-height: 200px;
   }
   .exif {
-    margin: 5px 10px;
+    margin: 5px 0;
     font-size: 1.0rem;
     grid-row: 2;
   }
   .datetime {
     font-size: 1.2rem;
+  }
+  .social {
+    margin: 0;
+  }
+  .like {
+    font-size: 1.0rem;
   }
 }
