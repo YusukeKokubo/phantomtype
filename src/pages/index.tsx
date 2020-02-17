@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   TwitterLink: {
     color: theme.palette.text.primary,
+    fontWeight: 'normal',
     textDecoration: 'none',
     margin: '0 5px',
   },
