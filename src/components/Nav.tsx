@@ -45,40 +45,22 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
 }))
 
-export default ({ }: {}) => {
+export default ({ fixed }: { fixed: boolean }) => {
     const classes = useStyles()
     return (
-        <section className={classes.SelectCity}>
-            <button onClick={serverPush(Cities.Kyoto)}>Kyoto</button>
-            <button onClick={serverPush(Cities.Kanazawa)}>Kanazawa</button>
-            <button onClick={serverPush(Cities.Nagoya)}>nagoya</button>
-            <button onClick={serverPush(Cities.Matsushima)}>matsushima</button>
-        </section>
-    )
-}
-
-export const FixedNav = () => {
-    const classes = useStyles()
-    return (
-        <section className={classes.FixedNav}>
-            <button onClick={serverPush('')}>
+        <section className={fixed ? classes.FixedNav : classes.SelectCity}>
+            {fixed ? <button onClick={push('')}>
                 <img src='/logomark-white.svg' />
-            </button>
-            <button onClick={serverPush(Cities.Kyoto)}>Kyoto</button>
-            <button onClick={serverPush(Cities.Kanazawa)}>Kanazawa</button>
-            <button onClick={serverPush(Cities.Nagoya)}>nagoya</button>
-            <button onClick={serverPush(Cities.Matsushima)}>matsushima</button>
+            </button> : null}
+            {City.map((city) => (
+                <button onClick={push(city)}>{city}</button>
+            ))}
         </section>
     )
 }
 
-const serverPush = (city: Cities | string) => () => {
+const push = (city: string) => () => {
     Router.push(`/${city}`)
 }
 
-enum Cities {
-    Kyoto = 'kyoto',
-    Kanazawa = 'kanazawa',
-    Nagoya = 'nagoya',
-    Matsushima = 'matsushima',
-}
+const City = ['kyoto', 'kanazawa', 'nagoya', 'matsushima']

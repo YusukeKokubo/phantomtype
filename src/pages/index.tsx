@@ -59,7 +59,7 @@ export default () => {
           </p>
         </div>
       </section>
-      <Nav />
+      <Nav fixed={false} />
     </>
   )
 }
