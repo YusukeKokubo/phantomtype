@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     transform: 'translate3d(-50%, -60%, 0)',
     alignItems: 'center',
     '& img': {
-      width: '20vw'
+      width: '20vw',
     },
     '& h1': {
       fontWeight: 'lighter',
