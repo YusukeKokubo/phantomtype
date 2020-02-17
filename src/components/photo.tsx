@@ -1,5 +1,5 @@
 import { red } from '@material-ui/core/colors';
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Cookies from 'js-cookie';
@@ -40,11 +40,33 @@ function onUnLike(fb: firebase.app.App, photo: Photo) {
   return null
 }
 
-const useStyles = makeStyles(() => createStyles({
+const useStyles = makeStyles(({ palette }: Theme) => createStyles({
+  Photo: {
+    display: 'flex',
+    margin: '0 5vw',
+    flexDirection: 'row',
+  },
+  PhotoRight: {
+    flexDirection: 'row-reverse',
+  },
+  Img: {
+    width: '55vw',
+    height: 'auto',
+    minHeight: '300px',
+    objectFit: 'fill',
+  },
+  Information: {
+    margin: '0 15px',
+    color: '#ccc',
+    fontSize: '1.60vw',
+    fontWeight: 200,
+    display: 'flex',
+    flexDirection: 'column',
+  },
   YetLiked: {
     margin: '-3px 2px',
-    'font-size': '2.0vw',
-    color: '#fff',
+    fontSize: '2.0vw',
+    color: palette.text.primary,
     '&:hover': {
       cursor: 'pointer',
       color: red[600],
@@ -55,7 +77,7 @@ const useStyles = makeStyles(() => createStyles({
   },
   Liked: {
     margin: '-3px 2px',
-    'font-size': '2.0vw',
+    fontSize: '2.0vw',
     color: red[600],
     '&:hover': {
       cursor: 'pointer',

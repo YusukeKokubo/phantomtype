@@ -17,6 +17,8 @@
     "no-console": false,
     "object-literal-sort-keys": false,
     "jsx-no-lambda": false,
-    "object-literal-key-quotes": false
+    "object-literal-key-quotes": false,
+    "jsx-wrap-multiline": false,
+    "jsx-alignment": false
   }
 }
