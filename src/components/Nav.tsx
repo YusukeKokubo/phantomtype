@@ -1,4 +1,4 @@
-import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
+import { Button, ButtonGroup, createStyles, makeStyles, Theme } from '@material-ui/core'
 import Router from 'next/router'
 
 const buttonStyle = (theme: Theme) => createStyles({
@@ -48,9 +48,11 @@ export default ({ fixed }: { fixed: boolean }) => {
             {fixed ? <Button onClick={push('')}>
                 <img src='/logomark-white.svg' />
             </Button> : null}
-            {Cities.map((city) => (
-                <Button onClick={push(city)}>{city}</Button>
-            ))}
+            <ButtonGroup variant='text' color='primary' aria-label='text primary button group'>
+                {Cities.map((city) => (
+                    <Button onClick={push(city)}>{city}</Button>
+                ))}
+            </ButtonGroup>
         </section>
     )
 }
