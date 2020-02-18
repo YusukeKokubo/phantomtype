@@ -9,6 +9,7 @@ module.exports = {
       '/nagoya': { page: '/nagoya' },
       '/matsushima': { page: '/matsushima' },
       '/kanazawa': { page: '/kanazawa' },
+      '/pic/[id]': { page: '/pic/[id]' }
     }
   },
   exportTrailingSlash: true

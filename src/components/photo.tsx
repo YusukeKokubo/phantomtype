@@ -10,6 +10,7 @@ import css from './photo.module.css'
 
 import { format } from 'date-fns'
 import { Photo } from '../../@types/Photo';
+import Router from 'next/router'
 
 function datetime(src: firebase.firestore.Timestamp) {
   const result = format(src.toDate(), 'yyyy/MM/dd HH:mm:ss')
@@ -99,7 +100,9 @@ function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, a
     <section className={`${css.Photo} ${align === 1 ? css.Photo_right : null}`}>
       <picture>
         <source type='image/webp' srcSet={e.urls.webp} />
-        <LazyLoadImage src={e.urls.lowQuality} className={css.Photo_image} />
+        <LazyLoadImage src={e.urls.lowQuality} onClick={() => {
+          Router.push(`/pic/${encodeURIComponent(id)}`)
+        }} className={css.Photo_image} />
       </picture>
       <div className={`${css.information} ${align === 1 ? css.exif_right : null}`}>
         <div className={`${css.exif} ${align === 1 ? css.exif_right : null}`}>
