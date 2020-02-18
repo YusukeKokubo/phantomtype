@@ -4,13 +4,15 @@ import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Cookies from 'js-cookie';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import css from './photo.module.css'
 
 import { format } from 'date-fns'
-import { Photo } from '../../@types/Photo';
 import Router from 'next/router'
+import { Photo } from '../../@types/Photo';
+import PhotoDetail from './photoDetail';
+import { Button } from '@material-ui/core';
 
 function datetime(src: firebase.firestore.Timestamp) {
   const result = format(src.toDate(), 'yyyy/MM/dd HH:mm:ss')
@@ -88,6 +90,15 @@ const useStyles = makeStyles(({ palette }: Theme) => createStyles({
       'font-size': '1.0rem',
     },
   },
+  Modal: {
+    width: '100vw',
+    height: '100vh',
+    top: 0,
+    left: 0,
+    position: 'fixed',
+    backgroundColor: palette.background.default,
+    padding: '3vh 5vw',
+  },
 }))
 
 function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, align: number }) {
@@ -95,13 +106,23 @@ function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, a
   console.log(e)
   const id = `${photo.city}-${photo.filename}`
   const liked = Cookies.get(id) === '1'
+  const [detail, setDetail] = useState(false)
+  const cs = useStyles()
 
   return (
     <section className={`${css.Photo} ${align === 1 ? css.Photo_right : null}`}>
+      {detail ? <div className={cs.Modal}>
+        <Button onClick={() => {
+          setDetail(false)
+          Router.back()
+        }}>Back</Button>
+        <PhotoDetail photo={photo} />
+      </div> : null}
       <picture>
         <source type='image/webp' srcSet={e.urls.webp} />
         <LazyLoadImage src={e.urls.lowQuality} onClick={() => {
-          Router.push(`/pic/${encodeURIComponent(id)}`)
+          setDetail(true)
+          Router.push(`/${e.city}`, `/pic/${encodeURIComponent(id)}`)
         }} className={css.Photo_image} />
       </picture>
       <div className={`${css.information} ${align === 1 ? css.exif_right : null}`}>
@@ -118,12 +139,12 @@ function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, a
             {liked ?
               <Favorite
                 onClick={() => onUnLike(fb, photo)}
-                className={useStyles().Liked}
+                className={cs.Liked}
               />
               :
               <FavoriteBorder
                 onClick={() => onLike(fb, photo)}
-                className={useStyles().YetLiked}
+                className={cs.YetLiked}
               />
             }
           </span>

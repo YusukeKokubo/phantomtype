@@ -7,13 +7,13 @@ import { Photo } from '../../@types/Photo';
 const useStyles = makeStyles(({ palette }: Theme) => createStyles({
   root: {
     width: '90vw',
-    margin: '7vh 5vw',
+    maxHeight: '90vh',
   },
 }))
 
 function PhotoDetail({ photo }: { photo: Photo }) {
   const e = photo
-  console.log(e)
+  console.log(e.filePath)
   const classes = useStyles()
 
   return (
