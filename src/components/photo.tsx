@@ -8,11 +8,11 @@ import React, { useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import css from './photo.module.css'
 
+import { Button } from '@material-ui/core';
 import { format } from 'date-fns'
 import Router from 'next/router'
 import { Photo } from '../../@types/Photo';
 import PhotoDetail from './photoDetail';
-import { Button } from '@material-ui/core';
 
 function datetime(src: firebase.firestore.Timestamp) {
   const result = format(src.toDate(), 'yyyy/MM/dd HH:mm:ss')
@@ -91,13 +91,14 @@ const useStyles = makeStyles(({ palette }: Theme) => createStyles({
     },
   },
   Modal: {
-    width: '100vw',
-    height: '100vh',
+    width: '100%',
+    height: '100%',
     top: 0,
     left: 0,
     position: 'fixed',
     backgroundColor: palette.background.default,
     padding: '3vh 5vw',
+    overflow: 'scroll',
   },
 }))
 

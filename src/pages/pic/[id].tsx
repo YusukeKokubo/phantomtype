@@ -7,6 +7,7 @@ import PhotoDetail from '../../components/photoDetail'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
+import { makeStyles, Theme, createStyles } from '@material-ui/core'
 
 const config = {
   apiKey: 'AIzaSyA8wsdQlLLAjZepeaQfeM_l0pfBEaCOyEk',
@@ -22,9 +23,17 @@ if (!firebase.apps.length) {
   firebase.initializeApp(config)
 }
 
+const useStyles = makeStyles(({ palette }: Theme) => createStyles({
+  root: {
+    padding: '3vh 5vw',
+    margin: '3vh 0',
+  },
+}))
+
 const Picture: NextPage = () => {
   const router = useRouter()
   const { id }: any = router.query
+  const classes = useStyles()
 
   console.log(id)
 
@@ -34,7 +43,9 @@ const Picture: NextPage = () => {
   return (
     <>
       <Nav fixed={true} />
-      {loading ? null : <PhotoDetail photo={value} />}
+      <section className={classes.root}>
+        {loading ? null : <PhotoDetail photo={value} />}
+      </section>
     </>
   )
 };
