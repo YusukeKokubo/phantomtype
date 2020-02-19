@@ -123,7 +123,7 @@ function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, a
         <source type='image/webp' srcSet={e.urls.webp} />
         <LazyLoadImage src={e.urls.lowQuality} onClick={() => {
           setDetail(true)
-          Router.push(`/${e.city}`, `/pic/${encodeURIComponent(id)}`)
+          Router.push(`/${e.city}`, `/pic?id=${encodeURIComponent(id)}`)
         }} className={css.Photo_image} />
       </picture>
       <div className={`${css.information} ${align === 1 ? css.exif_right : null}`}>

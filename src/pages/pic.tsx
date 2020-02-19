@@ -1,13 +1,13 @@
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 
-import Nav from '../../components/Nav'
-import PhotoDetail from '../../components/photoDetail'
+import Nav from '../components/Nav'
+import PhotoDetail from '../components/photoDetail'
 
+import { createStyles, makeStyles } from '@material-ui/core'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
 
 const config = {
   apiKey: 'AIzaSyA8wsdQlLLAjZepeaQfeM_l0pfBEaCOyEk',
@@ -23,7 +23,7 @@ if (!firebase.apps.length) {
   firebase.initializeApp(config)
 }
 
-const useStyles = makeStyles(({ palette }: Theme) => createStyles({
+const useStyles = makeStyles(() => createStyles({
   root: {
     padding: '3vh 5vw',
     margin: '3vh 0',
@@ -42,6 +42,7 @@ const Picture: NextPage = () => {
   );
   return (
     <>
+      {error ? <div>{error.message}</div> : null}
       <Nav fixed={true} />
       <section className={classes.root}>
         {loading ? null : <PhotoDetail photo={value} />}
