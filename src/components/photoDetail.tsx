@@ -1,17 +1,17 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
 
+import { Table, TableBody, TableCell, TableContainer, TableRow } from '@material-ui/core';
 import format from 'date-fns/format';
 import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Photo } from '../../@types/Photo';
-import { TableContainer, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
 
 function datetime(src: firebase.firestore.Timestamp) {
   const result = format(src.toDate(), 'yyyy/MM/dd HH:mm:ss')
   return result
 }
 
-const useStyles = makeStyles(({ palette }: Theme) => createStyles({
+const useStyles = makeStyles(() => createStyles({
   root: {
     width: '90vw',
     maxHeight: '90vh',
