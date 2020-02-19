@@ -1,8 +1,4 @@
-import { red } from '@material-ui/core/colors';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import Favorite from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
-import Cookies from 'js-cookie';
 
 import React, { useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
@@ -12,35 +8,12 @@ import { Button } from '@material-ui/core';
 import { format } from 'date-fns'
 import Router from 'next/router'
 import { Photo } from '../../@types/Photo';
+import LikeView from './like';
 import PhotoDetail from './photoDetail';
 
 function datetime(src: firebase.firestore.Timestamp) {
   const result = format(src.toDate(), 'yyyy/MM/dd HH:mm:ss')
   return result
-}
-
-function onLike(fb: firebase.app.App, photo: Photo) {
-  const id = `${photo.city}-${photo.filename}`
-  fb.firestore().collection('pics').doc(id).set({
-    ...photo,
-    like: (photo.like || 0) + 1,
-  }).then(() => {
-    Cookies.set(id, '1')
-    console.log('Liked: ', id)
-  })
-  return null
-}
-
-function onUnLike(fb: firebase.app.App, photo: Photo) {
-  const id = `${photo.city}-${photo.filename}`
-  fb.firestore().collection('pics').doc(id).set({
-    ...photo,
-    like: (photo.like || 0) - 1,
-  }).then(() => {
-    Cookies.set(id, '0')
-    console.log('UnLiked: ', id)
-  })
-  return null
 }
 
 const useStyles = makeStyles(({ palette }: Theme) => createStyles({
@@ -66,30 +39,6 @@ const useStyles = makeStyles(({ palette }: Theme) => createStyles({
     display: 'flex',
     flexDirection: 'column',
   },
-  YetLiked: {
-    margin: '-3px 2px',
-    fontSize: '2.0vw',
-    color: palette.text.primary,
-    '&:hover': {
-      cursor: 'pointer',
-      color: red[600],
-    },
-    '@media (max-width: 600px)': {
-      'font-size': '1.0rem',
-    },
-  },
-  Liked: {
-    margin: '-3px 2px',
-    fontSize: '2.0vw',
-    color: red[600],
-    '&:hover': {
-      cursor: 'pointer',
-      color: '#fff',
-    },
-    '@media (max-width: 600px)': {
-      'font-size': '1.0rem',
-    },
-  },
   Modal: {
     width: '100%',
     height: '100%',
@@ -106,7 +55,6 @@ function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, a
   const e = photo
   console.log(e)
   const id = `${photo.city}-${photo.filename}`
-  const liked = Cookies.get(id) === '1'
   const [detail, setDetail] = useState(false)
   const cs = useStyles()
 
@@ -136,20 +84,7 @@ function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, a
           <span>{e.exif.LensMake} {e.exif.LensModel}</span>
         </div>
         <div className={css.social}>
-          <span>
-            {liked ?
-              <Favorite
-                onClick={() => onUnLike(fb, photo)}
-                className={cs.Liked}
-              />
-              :
-              <FavoriteBorder
-                onClick={() => onLike(fb, photo)}
-                className={cs.YetLiked}
-              />
-            }
-          </span>
-          <span className={css.like}>{photo.like || 0} like(s)</span>
+          <LikeView fb={fb} photo={photo} />
         </div>
       </div>
     </section>
