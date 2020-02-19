@@ -45,7 +45,7 @@ const Picture: NextPage = () => {
       {error ? <div>{error.message}</div> : null}
       <Nav fixed={true} />
       <section className={classes.root}>
-        {loading ? null : <PhotoDetail photo={value} />}
+        {loading ? null : <PhotoDetail fb={firebase.app()} photo={value} />}
       </section>
     </>
   )

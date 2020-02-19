@@ -65,7 +65,7 @@ function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, a
           setDetail(false)
           Router.back()
         }}>Back</Button>
-        <PhotoDetail photo={photo} />
+        <PhotoDetail fb={fb} photo={photo} />
       </div> : null}
       <picture>
         <source type='image/webp' srcSet={e.urls.webp} />

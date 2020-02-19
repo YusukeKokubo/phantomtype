@@ -31,7 +31,7 @@ export const IconStyle = makeStyles(({ palette }: Theme) => createStyles({
     },
   },
   LikeText: {
-    fontSize: '2.0vw',
+    fontSize: '1.0rem',
   },
 }))
 

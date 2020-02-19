@@ -5,6 +5,7 @@ import format from 'date-fns/format';
 import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Photo } from '../../@types/Photo';
+import LikeView from './like';
 
 function datetime(src: firebase.firestore.Timestamp) {
   const result = format(src.toDate(), 'yyyy/MM/dd HH:mm:ss')
@@ -14,7 +15,11 @@ function datetime(src: firebase.firestore.Timestamp) {
 const useStyles = makeStyles(() => createStyles({
   root: {
     width: '90vw',
-    maxHeight: '90vh',
+  },
+  Information: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 0.4fr',
+    gridGap: 30,
   },
   Exif: {
     '& td': {
@@ -24,7 +29,7 @@ const useStyles = makeStyles(() => createStyles({
   },
 }))
 
-function PhotoDetail({ photo }: { photo: Photo }) {
+function PhotoDetail({ fb, photo }: { fb: firebase.app.App, photo: Photo }) {
   const e = photo
   console.log(e.filePath)
   const classes = useStyles()
@@ -35,7 +40,7 @@ function PhotoDetail({ photo }: { photo: Photo }) {
         <source type='image/webp' srcSet={e.urls.webp} />
         <LazyLoadImage className={classes.root} src={e.urls.lowQuality} />
       </picture>
-      <div>
+      <div className={classes.Information}>
         <TableContainer>
           <Table size='small' aria-label='a dense table' className={classes.Exif}>
             <TableBody>
@@ -74,6 +79,9 @@ function PhotoDetail({ photo }: { photo: Photo }) {
             </TableBody>
           </Table>
         </TableContainer>
+        <div>
+          <LikeView fb={fb} photo={photo} />
+        </div>
       </div>
     </section>
   )
