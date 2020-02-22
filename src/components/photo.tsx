@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import css from './photo.module.css'
 
-import { Button } from '@material-ui/core';
+import { Button, Paper } from '@material-ui/core';
 import { format } from 'date-fns'
 import Router from 'next/router'
 import { Photo } from '../../@types/Photo';
