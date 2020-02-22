@@ -39,8 +39,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
             width: 38,
         },
         '& button': buttonStyle(theme).root,
-        '& span': {
-            lineHeight: 2.0,
+    },
+    NavTitle: {
+        lineHeight: 2.0,
+        '@media (max-width: 600px)': {
+            display: 'none',
         },
     },
     CitySelect: {
@@ -66,7 +69,7 @@ export default ({ fixed, city }: { fixed: boolean, city?: string }) => {
                         <Button onClick={push('')}>
                             <img src='/logomark-white.svg' />
                         </Button>
-                        <span>PHANTOM TYPE.</span>
+                        <span className={classes.NavTitle}>PHANTOM TYPE.</span>
                     </div>
                     <FormControl className={classes.CitySelect}>
                         <Select
