@@ -24,7 +24,7 @@ export const IconStyle = makeStyles(({ palette }: Theme) => createStyles({
     color: red[600],
     '&:hover': {
       cursor: 'pointer',
-      color: '#fff',
+      color: red[600],
     },
     '@media (max-width: 600px)': {
       'font-size': '1.0rem',
