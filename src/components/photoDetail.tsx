@@ -18,8 +18,8 @@ const useStyles = makeStyles(() => createStyles({
   },
   Information: {
     display: 'grid',
-    gridTemplateColumns: '1fr 0.4fr',
-    gridGap: 30,
+    gridTemplateColumns: '1fr',
+    gridGap: 20,
   },
   Exif: {
     '& td': {
@@ -41,6 +41,9 @@ function PhotoDetail({ fb, photo }: { fb: firebase.app.App, photo: Photo }) {
         <LazyLoadImage className={classes.root} src={e.urls.lowQuality} />
       </picture>
       <div className={classes.Information}>
+        <div>
+          <LikeView fb={fb} photo={photo} />
+        </div>
         <TableContainer>
           <Table size='small' aria-label='a dense table' className={classes.Exif}>
             <TableBody>
@@ -79,9 +82,6 @@ function PhotoDetail({ fb, photo }: { fb: firebase.app.App, photo: Photo }) {
             </TableBody>
           </Table>
         </TableContainer>
-        <div>
-          <LikeView fb={fb} photo={photo} />
-        </div>
       </div>
     </section>
   )
