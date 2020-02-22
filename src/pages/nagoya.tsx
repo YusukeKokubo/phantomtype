@@ -6,7 +6,7 @@ import Nav from '../components/Nav'
 const Kyoto: NextPage = () => {
   return (
     <>
-      <Nav fixed={true} />
+      <Nav fixed={true} city='nagoya' />
       <City city='nagoya' />
     </>
   )
