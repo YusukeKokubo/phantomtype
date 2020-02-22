@@ -13,19 +13,19 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     objectFit: 'cover',
   },
   Title: {
-    display: 'inline-flex',
-    flexDirection: 'column',
     position: 'absolute',
+    width: '70vw',
     top: '50%',
     left: '50%',
-    transform: 'translate3d(-50%, -60%, 0)',
-    alignItems: 'center',
+    transform: 'translate3d(-50%, -40%, 0)',
     '& img': {
-      width: '20vw',
+      width: '65px',
+      margin: '0 30px',
     },
     '& h1': {
       fontWeight: 'lighter',
-      fontSize: 'larger',
+      fontSize: 'xxx-large',
+      lineHeight: '1.2',
     },
     '& p': {
       fontWeight: 'lighter',
@@ -50,8 +50,7 @@ export default () => {
           <img className={classes.SplashImage} src='https://firebasestorage.googleapis.com/v0/b/phantomtype.appspot.com/o/kyoto%2FDSCF8041-comp.jpg?alt=media' />
         </picture>
         <div className={classes.Title}>
-          <img src='/logomark-white.svg' />
-          <h1>PHANTOM TYPE</h1>
+          <h1>PHANTOM TYPE<img src='/logomark-white.svg' /></h1>
           <p>a Japan photo gallery by
             <a target='_blank'
               className={classes.TwitterLink}
