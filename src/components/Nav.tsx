@@ -50,7 +50,7 @@ export default ({ fixed }: { fixed: boolean }) => {
             </Button> : null}
             <ButtonGroup variant='text' color='primary' aria-label='text primary button group'>
                 {Cities.map((city) => (
-                    <Button onClick={push(city)}>{city}</Button>
+                    <Button onClick={push(city)} key={city}>{city}</Button>
                 ))}
             </ButtonGroup>
         </section>
