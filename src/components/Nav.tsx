@@ -20,11 +20,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     SelectCity: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'center',
-        position: 'absolute',
-        left: '50%',
-        bottom: '10vh',
-        transform: 'translate3d(-50%, -60%, 0)',
+        justifyContent: 'flex-end',
         '& button': buttonStyle(theme).root,
     },
     FixedNav: {

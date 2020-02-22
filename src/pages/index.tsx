@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   Title: {
     position: 'absolute',
     width: '70vw',
-    top: '50%',
+    top: '65%',
     left: '50%',
     transform: 'translate3d(-50%, -40%, 0)',
     '& img': {
@@ -26,11 +26,15 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
       fontWeight: 'lighter',
       fontSize: 'xxx-large',
       lineHeight: '1.2',
+      margin: '10px 0',
     },
     '& p': {
       fontWeight: 'lighter',
       fontSize: 'smaller',
     },
+  },
+  Nav: {
+    margin: '10vh 0',
   },
   TwitterLink: {
     color: theme.palette.text.primary,
@@ -56,9 +60,11 @@ export default () => {
               className={classes.TwitterLink}
               href='https://twitter.com/yusuke_kokubo'>@yusuke_kokubo</a>
           </p>
+          <div className={classes.Nav}>
+            <Nav fixed={false} />
+          </div>
         </div>
       </section>
-      <Nav fixed={false} />
     </>
   )
 }
