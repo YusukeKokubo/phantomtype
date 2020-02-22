@@ -3,23 +3,9 @@ import PhotoView from './photo';
 
 import { Photo } from '../../@types/Photo'
 
-import firebase from 'firebase/app'
 import 'firebase/firestore'
 import { useCollection } from 'react-firebase-hooks/firestore'
-
-const config = {
-  apiKey: 'AIzaSyA8wsdQlLLAjZepeaQfeM_l0pfBEaCOyEk',
-  authDomain: 'phantomtype.firebaseapp.com',
-  databaseURL: 'https://phantomtype.firebaseio.com',
-  projectId: 'phantomtype',
-  storageBucket: 'phantomtype.appspot.com',
-  messagingSenderId: '787190095643',
-  appId: '1:787190095643:web:2ea9b8a2fb64946b27bdbe',
-  measurementId: 'G-TGRBP7DHKD',
-}
-if (!firebase.apps.length) {
-  firebase.initializeApp(config)
-}
+import firebase from '../firebase'
 
 const shuffle = ([...array]) => {
   // for (let i = array.length - 1; i >= 0; i--) {
