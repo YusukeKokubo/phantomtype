@@ -25,7 +25,7 @@ const NavStyles = makeStyles((theme: Theme) => createStyles({
     },
 }))
 
-const FixedNavStyle = makeStyles((theme: Theme) => createStyles({
+const FixedNavStyle = makeStyles((_: Theme) => createStyles({
     FixedNav: {
         display: 'flex',
         top: 0,
