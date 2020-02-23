@@ -1,7 +1,7 @@
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 
-import Nav from '../components/Nav'
+import { Nav } from '../components/Nav'
 import PhotoDetail from '../components/photoDetail'
 
 import { createStyles, makeStyles } from '@material-ui/core'
@@ -30,7 +30,7 @@ const Picture: NextPage = () => {
   return (
     <>
       {error ? <div>{error.message}</div> : null}
-      <Nav fixed={true} />
+      <Nav />
       <section className={classes.root}>
         {loading ? null : <PhotoDetail fb={firebase.app()} photo={value} />}
       </section>
