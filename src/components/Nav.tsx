@@ -8,7 +8,7 @@ const buttonStyle = (theme: Theme) => createStyles({
         background: theme.palette.background.default,
         backgroundColor: 'transparent',
         textTransform: 'uppercase',
-        padding: '15px 2vw',
+        minWidth: 120,
 
         '&:hover': {
             backgroundColor: theme.palette.background.default,
@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         '& img': {
             width: 38,
         },
-        '& button': buttonStyle(theme).root,
     },
     NavTitle: {
         lineHeight: 2.0,
@@ -80,11 +79,9 @@ export default ({ fixed, city }: { fixed: boolean, city?: string }) => {
                     </FormControl>
                 </>
                 :
-                // <ButtonGroup variant='text' color='primary' aria-label='text primary button group'>
                 Cities.map((c) => (
-                    <Button onClick={push(c)} key={c}>{c}</Button>
+                    <Button variant='outlined' onClick={push(c)} key={c}>{c}</Button>
                 ))
-                // </ButtonGroup>
             }
         </section>
     )
