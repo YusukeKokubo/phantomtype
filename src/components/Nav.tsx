@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, createStyles, FormControl, makeStyles, MenuItem, Select, Theme } from '@material-ui/core'
+import { Button, createStyles, FormControl, makeStyles, MenuItem, Select, Theme } from '@material-ui/core'
 import Router from 'next/router'
 
 const buttonStyle = (theme: Theme) => createStyles({
@@ -18,9 +18,9 @@ const buttonStyle = (theme: Theme) => createStyles({
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     SelectCity: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, 100px)',
+        gridGap: 30,
         '& button': buttonStyle(theme).root,
     },
     FixedNav: {
@@ -80,11 +80,11 @@ export default ({ fixed, city }: { fixed: boolean, city?: string }) => {
                     </FormControl>
                 </>
                 :
-                <ButtonGroup variant='text' color='primary' aria-label='text primary button group'>
-                    {Cities.map((c) => (
-                        <Button onClick={push(c)} key={c}>{c}</Button>
-                    ))}
-                </ButtonGroup>
+                // <ButtonGroup variant='text' color='primary' aria-label='text primary button group'>
+                Cities.map((c) => (
+                    <Button onClick={push(c)} key={c}>{c}</Button>
+                ))
+                // </ButtonGroup>
             }
         </section>
     )
