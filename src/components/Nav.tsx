@@ -74,7 +74,7 @@ export const FixedNav = ({ city }: { city: string }) => {
                     onChange={(e) => { push(e.target.value as string)() }}
                 >
                     {Cities.map((c) => (
-                        <MenuItem className={classes.CityItem} value={c}>{c}</MenuItem>
+                        <MenuItem key={c} className={classes.CityItem} value={c}>{c}</MenuItem>
                     ))}
                 </Select>
             </FormControl>
