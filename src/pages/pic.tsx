@@ -7,6 +7,7 @@ import PhotoDetail from '../components/photoDetail'
 import { createStyles, makeStyles } from '@material-ui/core'
 
 import 'firebase/firestore'
+import Head from 'next/head'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
 import firebase from '../firebase'
 
@@ -29,6 +30,9 @@ const Picture: NextPage = () => {
   );
   return (
     <>
+      <Head>
+        <meta property='og:image' content={value && value.urls.resized} />
+      </Head>
       {error ? <div>{error.message}</div> : null}
       <Nav />
       <section className={classes.root}>
