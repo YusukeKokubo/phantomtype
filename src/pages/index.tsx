@@ -1,6 +1,6 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
-import Nav from '../components/Nav'
+import { Nav } from '../components/Nav'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   Splash: {
@@ -61,7 +61,7 @@ export default () => {
               href='https://twitter.com/yusuke_kokubo'>@yusuke_kokubo</a>
           </p>
           <div className={classes.Nav}>
-            <Nav fixed={false} />
+            <Nav />
           </div>
         </div>
       </section>

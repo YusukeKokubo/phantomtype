@@ -1,12 +1,12 @@
 import { NextPage } from 'next'
 
 import City from '../components/city';
-import Nav from '../components/Nav'
+import { FixedNav } from '../components/Nav'
 
 const Kyoto: NextPage = () => {
   return (
     <>
-      <Nav fixed={true} city='kyoto' />
+      <FixedNav city='kyoto' />
       <City city='kyoto' />
     </>
   )
