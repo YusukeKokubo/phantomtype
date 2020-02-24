@@ -33,6 +33,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' />
       <link rel='stylesheet' href='https://fonts.googleapis.com/earlyaccess/notosansjp.css' />
       <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons' />
+      <meta property='og:site_name' content='PHANTOM TYPE' />
+      <meta property='og:type' content='article' />
+      <meta property='twitter:card' content='summary_large_image' />
+      <meta property='twitter:site' content='@yusuke_kokubo' />
     </Head>
     <ThemeProvider theme={theme}>
       <CssBaseline />

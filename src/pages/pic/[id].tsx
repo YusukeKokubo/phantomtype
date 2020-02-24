@@ -27,12 +27,8 @@ const Picture: NextPage<{ value: Photo }> = ({ value }) => {
     <>
       <Head>
         <meta property='og:title' content={id} />
-        <meta property='og:site_name' content='PHANTOM TYPE' />
-        <meta property='og:type' content='article' />
         <meta property='og:description' content={`a picutre of ${value.city}`} />
         <meta property='og:image' content={value.urls.resized} />
-        <meta property='twitter:card' content='summary_large_image' />
-        <meta property='twitter:site' content='@yusuke_kokubo' />
       </Head>
       <FixedNav city={value.city} />
       <section className={classes.root}>

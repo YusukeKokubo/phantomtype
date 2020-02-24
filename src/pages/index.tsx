@@ -1,5 +1,6 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
+import Head from 'next/head'
 import { Nav } from '../components/Nav'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -48,6 +49,11 @@ export default () => {
   const classes = useStyles()
   return (
     <>
+      <Head>
+        <meta property='og:title' content='phantomtype' />
+        <meta property='og:description' content='Japan photo gallery' />
+        <meta property='og:image' content='https://firebasestorage.googleapis.com/v0/b/phantomtype.appspot.com/o/kyoto%2FDSCF8041-resized.jpg?alt=media' />
+      </Head>
       <section className={classes.Splash}>
         <picture>
           <source type='webp' srcSet={'https://firebasestorage.googleapis.com/v0/b/phantomtype.appspot.com/o/kyoto%2FDSCF8041.webp?alt=media'} />
