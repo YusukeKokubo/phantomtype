@@ -5,10 +5,10 @@ module.exports = {
   ) {
     return {
       '/': { page: '/' },
-      '/kyoto': { page: '/kyoto' },
-      '/nagoya': { page: '/nagoya' },
-      '/matsushima': { page: '/matsushima' },
-      '/kanazawa': { page: '/kanazawa' },
+      '/kyoto': { page: '/city/kyoto' },
+      '/nagoya': { page: '/city/nagoya' },
+      '/matsushima': { page: '/city/matsushima' },
+      '/kanazawa': { page: '/city/kanazawa' },
       '/pic/[id]': { page: '/pic/[id]' }
     }
   },

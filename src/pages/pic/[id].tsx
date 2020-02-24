@@ -22,7 +22,6 @@ const Picture: NextPage<{ value: Photo }> = ({ value }) => {
   const router = useRouter()
   const { id }: any = router.query
   const classes = useStyles()
-  console.log(value.urls)
 
   return (
     <>
