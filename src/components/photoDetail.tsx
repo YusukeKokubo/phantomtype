@@ -2,13 +2,15 @@ import { createStyles, makeStyles } from '@material-ui/core/styles'
 
 import { Table, TableBody, TableCell, TableContainer, TableRow } from '@material-ui/core';
 import format from 'date-fns/format';
+import firebase from 'firebase';
 import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Photo } from '../../@types/Photo';
 import LikeView from './like';
 
 function datetime(src: firebase.firestore.Timestamp) {
-  const result = format(src.toDate(), 'yyyy/MM/dd HH:mm:ss')
+  const wrap = new firebase.firestore.Timestamp(src.seconds, src.nanoseconds)
+  const result = format(wrap.toDate(), 'yyyy/MM/dd HH:mm:ss')
   return result
 }
 
@@ -31,7 +33,6 @@ const useStyles = makeStyles(() => createStyles({
 
 function PhotoDetail({ fb, photo }: { fb: firebase.app.App, photo: Photo }) {
   const e = photo
-  console.log(e.filePath)
   const classes = useStyles()
 
   return (
