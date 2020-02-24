@@ -22,23 +22,19 @@ const Picture: NextPage<{ value: Photo }> = ({ value }) => {
   const router = useRouter()
   const { id }: any = router.query
   const classes = useStyles()
+  console.log(value.urls)
 
-  // console.log(id)
-
-  // const [value, loading, error] = useDocumentData<Photo>(
-  //   firebase.firestore().collection('pics').doc(id || 'dummy'),
-  // );
   return (
     <>
       <Head>
         <meta property='og:title' content={id} />
         <meta property='og:site_name' content='PHANTOM TYPE' />
         <meta property='og:type' content='article' />
+        <meta property='og:description' content={`a picutre of ${value.city}`} />
         <meta property='og:image' content={value.urls.resized} />
         <meta property='twitter:card' content='summary_large_image' />
         <meta property='twitter:site' content='@yusuke_kokubo' />
       </Head>
-      {/* {error ? <div>{error.message}</div> : null} */}
       <FixedNav city={value.city} />
       <section className={classes.root}>
         {<PhotoDetail fb={firebase.app()} photo={value} />}
