@@ -1,16 +1,15 @@
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 
-import { Nav } from '../components/Nav'
-import PhotoDetail from '../components/photoDetail'
+import { FixedNav } from '../../components/Nav'
+import PhotoDetail from '../../components/photoDetail'
 
 import { createStyles, makeStyles } from '@material-ui/core'
 
 import 'firebase/firestore'
 import Head from 'next/head'
-import { useDocumentData } from 'react-firebase-hooks/firestore'
-import { Photo } from '../../@types/Photo'
-import firebase from '../firebase'
+import { Photo } from '../../../@types/Photo'
+import firebase from '../../firebase'
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -40,23 +39,20 @@ const Picture: NextPage<{ value: Photo }> = ({ value }) => {
         <meta property='twitter:site' content='@yusuke_kokubo' />
       </Head>
       {/* {error ? <div>{error.message}</div> : null} */}
-      <Nav />
+      <FixedNav city={value.city} />
       <section className={classes.root}>
-        {<PhotoDetail fb={firebase.app()} photo={value!} />}
+        {<PhotoDetail fb={firebase.app()} photo={value} />}
       </section>
     </>
   )
 };
 Picture.getInitialProps = async (context) => {
   const { id } = context.query
-  console.log('ooh')
-  console.log(id as string)
-  console.log(context.pathname)
 
-  const [v, loading, error] = useDocumentData<Photo>(
-    firebase.firestore().collection('pics').doc(id as string),
-  );
-  const value = v!
+  // const [v, loading, error] = useDocumentData<Photo>(
+  // );
+  const docRef = firebase.firestore().collection('pics').doc(id as string)
+  const value = (await docRef.get()).data() as Photo
   return { value }
 }
 export default Picture;

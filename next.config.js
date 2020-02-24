@@ -9,7 +9,7 @@ module.exports = {
       '/nagoya': { page: '/nagoya' },
       '/matsushima': { page: '/matsushima' },
       '/kanazawa': { page: '/kanazawa' },
-      '/pic': { page: '/pic', query: { id: '[id]' } }
+      '/pic/[id]': { page: '/pic/[id]' }
     }
   },
   exportTrailingSlash: true
