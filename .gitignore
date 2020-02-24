@@ -9,3 +9,5 @@ out/
 # Firebase cache
 .firebase/
 .firebase-debug.log
+
+.now
