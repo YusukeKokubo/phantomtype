@@ -1,4 +1,5 @@
 import { Button, createStyles, FormControl, makeStyles, MenuItem, Select, Theme } from '@material-ui/core'
+import Link from 'next/link'
 import Router from 'next/router'
 
 const buttonStyle = (theme: Theme) => createStyles({
@@ -25,7 +26,7 @@ const NavStyles = makeStyles((theme: Theme) => createStyles({
     },
 }))
 
-const FixedNavStyle = makeStyles((_: Theme) => createStyles({
+const FixedNavStyle = makeStyles(({ palette }: Theme) => createStyles({
     FixedNav: {
         display: 'flex',
         top: 0,
@@ -38,8 +39,12 @@ const FixedNavStyle = makeStyles((_: Theme) => createStyles({
             width: 38,
         },
     },
+    LogoLink: {
+        textDecoration: 'none',
+    },
     NavTitle: {
         lineHeight: 2.0,
+        color: palette.text.primary,
         '@media (max-width: 600px)': {
             display: 'none',
         },
@@ -62,10 +67,12 @@ export const FixedNav = ({ city }: { city: string }) => {
     return (
         <section className={classes.FixedNav}>
             <div>
-                <Button onClick={push('')}>
-                    <img src='/logomark-white.svg' />
-                </Button>
-                <span className={classes.NavTitle}>PHANTOM TYPE.</span>
+                <Link href='/'>
+                    <a className={classes.LogoLink}>
+                        <img src='/logomark-white.svg' />
+                        <span className={classes.NavTitle}>PHANTOM TYPE.</span>
+                    </a>
+                </Link>
             </div>
             <FormControl className={classes.CitySelect}>
                 <Select
@@ -95,7 +102,7 @@ export const Nav = () => {
 
 const push = (city: string) => () => {
     console.log(city)
-    Router.push(`/${city}`)
+    Router.push('/[city]', `/${city}`)
 }
 
 const Cities = ['kyoto', 'kanazawa', 'nagoya', 'matsushima']
