@@ -18,14 +18,14 @@ function datetime(src: firebase.firestore.Timestamp) {
 const useStyles = makeStyles(({ palette }: Theme) => createStyles({
   Photo: {
     display: 'flex',
-    margin: '0 5vw',
     flexDirection: 'row',
+    backgroundColor: palette.background.paper,
   },
   PhotoRight: {
     flexDirection: 'row-reverse',
   },
   Img: {
-    width: '55vw',
+    width: '70vw',
     height: 'auto',
     minHeight: '300px',
     objectFit: 'fill',
@@ -77,10 +77,10 @@ function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, a
         <div className={`${css.exif} ${align === 1 ? css.exif_right : null}`}>
           <span className={css.datetime}>{datetime(e.exif.DateTimeOriginal)}</span>
           <span>{e.image.Make} {e.image.Model}</span>
-          <span>{e.exif.FocalLength} ({e.exif.FocalLengthIn35mmFormat})mm
-          / F{e.exif.FNumber} / {e.exif.ExposureTime}S</span>
+          <span>{e.exif.LensModel}</span>
+          <span style={{ marginTop: 5 }}>{e.exif.FocalLength} ({e.exif.FocalLengthIn35mmFormat})mm
+          | F{e.exif.FNumber} | {e.exif.ExposureTime}S</span>
           <span>ISO {e.exif.ISO}</span>
-          <span>{e.exif.LensMake} {e.exif.LensModel}</span>
         </div>
         <div className={css.social}>
           <LikeView fb={fb} photo={photo} />

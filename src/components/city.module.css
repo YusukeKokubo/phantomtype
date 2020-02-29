@@ -2,7 +2,6 @@
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 80px;
-  margin: 50px 1vw;
 }
 
 .name {
