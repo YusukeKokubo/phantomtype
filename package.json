@@ -9,7 +9,6 @@
     "dev": "next",
     "preserve": "npm run && npm run build-functions && npm run build-app && npm run copy-deps && npm run install-deps",
     "serve": "cross-env NODE_ENV=production firebase serve",
-    "deploy": "NODE_ENV=production firebase deploy",
     "clean": "rimraf \"dist/functions\" && rimraf \"out\"",
     "build-app": "next build",
     "build-functions": "tsc --project functions",
@@ -19,7 +18,7 @@
     "copy-deps": "cpx \"*{package.json,package-lock.json,yarn.lock}\" \"dist/functions\" -C",
     "install-deps": "cd \"dist/functions\" && npm i",
     "app-export": "npm run build-app && next export",
-    "app-deploy": "firebase deploy --only hosting",
+    "app-deploy": "now",
     "func-deploy": "npm run build-functions && firebase deploy --only functions"
   },
   "dependencies": {
