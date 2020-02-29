@@ -6,7 +6,6 @@ import css from './photo.module.css'
 
 import { Button } from '@material-ui/core';
 import { format } from 'date-fns'
-import Router from 'next/router'
 import { Photo } from '../../@types/Photo';
 import LikeView from './like';
 import PhotoDetail from './photoDetail';
