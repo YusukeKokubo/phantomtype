@@ -18,7 +18,7 @@
     "copy-deps": "cpx \"*{package.json,package-lock.json,yarn.lock}\" \"dist/functions\" -C",
     "install-deps": "cd \"dist/functions\" && npm i",
     "app-export": "npm run build-app && next export",
-    "app-deploy": "now",
+    "app-deploy": "now --prod",
     "func-deploy": "npm run build-functions && firebase deploy --only functions"
   },
   "dependencies": {
