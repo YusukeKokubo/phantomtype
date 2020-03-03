@@ -39,7 +39,7 @@ function PhotoDetail({ fb, photo }: { fb: firebase.app.App, photo: Photo }) {
     <section>
       <picture>
         <source type='image/webp' srcSet={e.urls.webp} />
-        <LazyLoadImage className={classes.root} src={e.urls.lowQuality} />
+        <LazyLoadImage className={classes.root} src={e.urls.lowQuality} alt={e.city} />
       </picture>
       <div className={classes.Information}>
         <div>

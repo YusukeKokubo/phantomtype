@@ -68,7 +68,7 @@ function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, a
       </div> : null}
       <picture>
         <source type='image/webp' srcSet={e.urls.webp} />
-        <LazyLoadImage src={e.urls.lowQuality} onClick={() => {
+        <LazyLoadImage src={e.urls.lowQuality} alt={e.city} onClick={() => {
           setDetail(true)
           history.pushState(`/${e.city}`, '', `/pic/${encodeURIComponent(id)}`)
         }} className={css.Photo_image} />

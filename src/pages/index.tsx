@@ -52,18 +52,19 @@ export default () => {
       <Head>
         <meta property='og:title' content='phantomtype' />
         <meta property='og:description' content='Japan photo gallery' />
-        <meta property='og:image' content='https://firebasestorage.googleapis.com/v0/b/phantomtype.appspot.com/o/kyoto%2FDSCF8041-resized.jpg?alt=media' />
+        <meta property='og:image' content='/kyoto.jpg' />
       </Head>
       <section className={classes.Splash}>
         <picture>
-          <source type='webp' srcSet={'https://firebasestorage.googleapis.com/v0/b/phantomtype.appspot.com/o/kyoto%2FDSCF8041.webp?alt=media'} />
-          <img className={classes.SplashImage} src='https://firebasestorage.googleapis.com/v0/b/phantomtype.appspot.com/o/kyoto%2FDSCF8041-comp.jpg?alt=media' />
+          <source type='webp' srcSet='/kyoto.webp' />
+          <img alt='logo' className={classes.SplashImage} src='/kyoto.jpg' />
         </picture>
         <div className={classes.Title}>
           <h1>PHANTOM TYPE<img src='/logomark-white.svg' /></h1>
           <p>a Japan photo gallery by
             <a target='_blank'
               className={classes.TwitterLink}
+              rel='noopener'
               href='https://twitter.com/yusuke_kokubo'>@yusuke_kokubo</a>
           </p>
           <div className={classes.Nav}>

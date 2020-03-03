@@ -69,7 +69,7 @@ export const FixedNav = ({ city }: { city: string }) => {
             <div>
                 <Link href='/'>
                     <a className={classes.LogoLink}>
-                        <img src='/logomark-white.svg' />
+                        <img src='/logomark-white.svg' alt='link to top' />
                         <span className={classes.NavTitle}>PHANTOM TYPE.</span>
                     </a>
                 </Link>

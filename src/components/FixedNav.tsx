@@ -63,7 +63,7 @@ export const FixedNav = ({ city }: { city: string }) => {
         <section className={classes.FixedNav}>
             <div>
                 <Button onClick={push('')}>
-                    <img src='/logomark-white.svg' />
+                    <img src='/logomark-white.svg' alt='link to top' />
                 </Button>
                 <span className={classes.NavTitle}>PHANTOM TYPE.</span>
             </div>
