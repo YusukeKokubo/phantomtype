@@ -2,6 +2,11 @@
   "name": "phantomtype.com",
   "version": "1.0.0",
   "description": "phantomtype.com",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YusukeKokubo/bibonote"
+  },
   "engines": {
     "node": "10"
   },
