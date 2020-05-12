@@ -2,6 +2,7 @@ import React from 'react'
 import NextDocument from 'next/document'
 import { ServerStyleSheet as StyledComponentSheets } from 'styled-components'
 import { ServerStyleSheets as MaterialUiServerStyleSheets } from '@material-ui/styles'
+import { Html, Head, Main, NextScript } from 'next/document'
 
 // Magick from https://medium.com/@manakuro/ssr-with-next-js-styled-components-and-material-ui-b1e88ac11dfa
 export default class Document extends NextDocument {
@@ -34,5 +35,17 @@ export default class Document extends NextDocument {
     } finally {
       styledComponentSheet.seal()
     }
+  }
+
+  render() {
+    return (
+      <Html lang='en'>
+        <Head />
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    )
   }
 }

@@ -60,7 +60,7 @@ export default () => {
           <img alt='logo' className={classes.SplashImage} src='/kyoto.jpg' />
         </picture>
         <div className={classes.Title}>
-          <h1>PHANTOM TYPE<img src='/logomark-white.svg' /></h1>
+          <h1>PHANTOM TYPE<img src='/logomark-white.svg' alt='phantomtype logo' /></h1>
           <p>a Japan photo gallery by
             <a target='_blank'
               className={classes.TwitterLink}
