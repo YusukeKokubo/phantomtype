@@ -35,9 +35,6 @@ const FixedNavStyle = makeStyles(({ palette }: Theme) => createStyles({
         position: 'fixed',
         backgroundColor: 'rgba(0, 0, 0, 0.4)',
         justifyContent: 'space-between',
-        '& img': {
-            width: 38,
-        },
     },
     LogoLink: {
         textDecoration: 'none',
@@ -69,7 +66,7 @@ export const FixedNav = ({ city }: { city: string }) => {
             <div>
                 <Link href='/'>
                     <a className={classes.LogoLink}>
-                        <img src='/logomark-white.svg' alt='link to top' />
+                        <img className='inline w-8 mr-1' src='/logomark-white.svg' alt='link to top' />
                         <span className={classes.NavTitle}>PHANTOM TYPE.</span>
                     </a>
                 </Link>
