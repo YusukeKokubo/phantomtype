@@ -1,14 +1,14 @@
 import firebase from 'firebase/app'
 
 const config = {
-  apiKey: 'AIzaSyA8wsdQlLLAjZepeaQfeM_l0pfBEaCOyEk',
-  authDomain: 'phantomtype.firebaseapp.com',
-  databaseURL: 'https://phantomtype.firebaseio.com',
-  projectId: 'phantomtype',
-  storageBucket: 'phantomtype.appspot.com',
-  messagingSenderId: '787190095643',
-  appId: '1:787190095643:web:2ea9b8a2fb64946b27bdbe',
-  measurementId: 'G-TGRBP7DHKD',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 }
 if (!firebase.apps.length) {
   firebase.initializeApp(config)
