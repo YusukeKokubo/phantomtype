@@ -5,7 +5,7 @@
   ],
   "rules": {
     "quotemark": [
-      true,
+      false,
       "single"
     ],
     "no-submodule-imports": false,

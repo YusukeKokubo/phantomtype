@@ -4,7 +4,7 @@ import Head from 'next/head';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
-// import './tailwind.css'
+import './tailwind.css'
 
 const theme = createMuiTheme({
   palette: {
