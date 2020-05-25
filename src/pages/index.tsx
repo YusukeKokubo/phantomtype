@@ -15,20 +15,18 @@ export default () => {
       </picture>
       <section className='absolute w-full h-screen grid grid-rows-2'>
         <div />
-        <div className='mx-8'>
-          <div className=''>
-            <h1 className='font-light text-5xl leading-none'>PHANTOM TYPE
+        <div className='mx-8 lg:mx-16'>
+          <h1 className='font-light text-5xl leading-none'>PHANTOM TYPE
             <img className='inline w-16 m-8' src='/logomark-white.svg' alt='phantomtype logo' />
-            </h1>
-            <p className='font-light text-xl'>a Japan photo gallery by
+          </h1>
+          <p className='font-light text-xl'>a Japan photo gallery by
             <a target='_blank'
-                className='font-normal mx-1'
-                rel='noopener'
-                href='https://twitter.com/yusuke_kokubo'>@yusuke_kokubo</a>
-            </p>
-            <div className='mt-20'>
-              <Nav />
-            </div>
+              className='font-normal mx-1'
+              rel='noopener'
+              href='https://twitter.com/yusuke_kokubo'>@yusuke_kokubo</a>
+          </p>
+          <div className='mt-20'>
+            <Nav />
           </div>
         </div>
       </section>
