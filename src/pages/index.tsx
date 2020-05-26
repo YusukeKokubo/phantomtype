@@ -13,22 +13,27 @@ export default () => {
         <source type='webp' srcSet='/kyoto.webp' />
         <img alt='logo' className="object-cover w-full h-full absolute top-0" src='/kyoto.jpg' />
       </picture>
-      <section className='absolute w-full h-screen grid grid-rows-2'>
+      <section className='absolute w-full h-screen flex flex-col justify-around'>
         <div />
-        <div className='mx-8 lg:mx-16'>
-          <h1 className='font-light text-5xl leading-none'>PHANTOM TYPE
-            <img className='inline w-16 m-8' src='/logomark-white.svg' alt='phantomtype logo' />
-          </h1>
-          <p className='font-light text-xl'>a Japan photo gallery by
+        <div />
+        <div />
+        <div className='mx-8 lg:mx-16 grid grid-cols-1 gap-16'>
+          <div>
+            <h1 className='font-light text-5xl leading-none'>PHANTOM TYPE
+            <img className='inline w-16 mx-4' src='/logomark-white.svg' alt='phantomtype logo' />
+            </h1>
+            <p className='font-light text-xl'>a Japan photo gallery by
             <a target='_blank'
-              className='font-normal mx-1'
-              rel='noopener'
-              href='https://twitter.com/yusuke_kokubo'>@yusuke_kokubo</a>
-          </p>
-          <div className='mt-20'>
+                className='font-normal mx-1'
+                rel='noopener'
+                href='https://twitter.com/yusuke_kokubo'>@yusuke_kokubo</a>
+            </p>
+          </div>
+          <div className=''>
             <Nav />
           </div>
         </div>
+        <div />
       </section>
     </>
   )

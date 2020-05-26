@@ -20,8 +20,8 @@ const buttonStyle = (theme: Theme) => createStyles({
 const NavStyles = makeStyles((theme: Theme) => createStyles({
     SelectCity: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, 100px)',
-        gridGap: 30,
+        gridTemplateColumns: 'repeat(auto-fill, 120px)',
+        gridGap: 20,
         '& button': buttonStyle(theme).root,
     },
 }))
