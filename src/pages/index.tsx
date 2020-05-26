@@ -7,7 +7,7 @@ export default () => {
       <Head>
         <meta property='og:title' content='phantomtype' />
         <meta property='og:description' content='Japan photo gallery' />
-        <meta property='og:image' content='/kyoto.jpg' />
+        <meta property='og:image' content='https://phantomtype.com/kyoto.jpg' />
       </Head>
       <picture>
         <source type='webp' srcSet='/kyoto.webp' />
