@@ -34,10 +34,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       <meta name='description' content='Japan photo gallery' />
       <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,500&display=swap' />
       <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons' />
-      <meta property='og:site_name' content='PHANTOM TYPE' />
-      <meta property='og:type' content='article' />
-      <meta property='twitter:card' content='summary_large_image' />
-      <meta property='twitter:site' content='@yusuke_kokubo' />
+      <meta name='og:site_name' content='PHANTOM TYPE' />
+      <meta name='og:type' content='article' />
+      <meta name='twitter:title' content='PHANTOM TYPE' />
+      <meta name='twitter:description' content='a Japan photo gallery' />
+      <meta name='twitter:card' content='photo' />
+      <meta name='twitter:site' content='@yusuke_kokubo' />
     </Head>
     <ThemeProvider theme={theme}>
       <CssBaseline />

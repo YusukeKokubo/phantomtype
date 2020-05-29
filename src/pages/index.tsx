@@ -5,9 +5,10 @@ export default () => {
   return (
     <>
       <Head>
-        <meta property='og:title' content='phantomtype' />
+        <meta property='og:title' content='PHANTOM TYPE' />
         <meta property='og:description' content='Japan photo gallery' />
         <meta property='og:image' content='https://phantomtype.com/ogkyoto.jpg' />
+        <meta name='twitter:image' content='https://phantomtype.com/ogkyoto.jpg' />
       </Head>
       <picture>
         <source type='webp' srcSet='/kyoto.webp' />
