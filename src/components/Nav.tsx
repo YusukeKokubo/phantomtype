@@ -1,97 +1,36 @@
-import { Button, createStyles, FormControl, makeStyles, MenuItem, Select, Theme } from '@material-ui/core'
 import Link from 'next/link'
 import Router from 'next/router'
 
-const buttonStyle = (theme: Theme) => createStyles({
-    root: {
-        fontSize: 'medium',
-        color: theme.palette.text.primary,
-        background: theme.palette.background.default,
-        backgroundColor: 'transparent',
-        textTransform: 'uppercase',
-        minWidth: 120,
-
-        '&:hover': {
-            backgroundColor: theme.palette.background.default,
-        },
-    },
-})
-
-const NavStyles = makeStyles((theme: Theme) => createStyles({
-    SelectCity: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, 120px)',
-        gridGap: 20,
-        '& button': buttonStyle(theme).root,
-    },
-}))
-
-const FixedNavStyle = makeStyles(({ palette }: Theme) => createStyles({
-    FixedNav: {
-        display: 'flex',
-        top: 0,
-        padding: '0 5vw',
-        width: '100%',
-        position: 'fixed',
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
-        justifyContent: 'space-between',
-    },
-    LogoLink: {
-        textDecoration: 'none',
-    },
-    NavTitle: {
-        lineHeight: 2.0,
-        color: palette.text.primary,
-        '@media (max-width: 600px)': {
-            display: 'none',
-        },
-    },
-    CitySelect: {
-        minWidth: 140,
-        textTransform: 'uppercase',
-        '& *': {
-            fontSize: 'smaller',
-        },
-    },
-    CityItem: {
-        textTransform: 'uppercase',
-        fontSize: 'smaller',
-    },
-}))
-
 export const FixedNav = ({ city }: { city: string }) => {
-    const classes = FixedNavStyle()
     return (
-        <section className={classes.FixedNav}>
+        <section className='flex top-0 px-5 w-full fixed justify-between bg-black bg-opacity-50'>
             <div>
                 <Link href='/'>
-                    <a className={classes.LogoLink}>
+                    <a>
                         <img className='inline w-8 mr-1' src='/logomark-white.svg' alt='link to top' />
-                        <span className={classes.NavTitle}>PHANTOM TYPE.</span>
+                        <span className='hidden md:inline leading-loose'>PHANTOM TYPE.</span>
                     </a>
                 </Link>
             </div>
-            <FormControl className={classes.CitySelect}>
-                <Select
-                    value={city}
-                    displayEmpty={true}
-                    onChange={(e) => { push(e.target.value as string)() }}
-                >
+            <div className="relative">
+                <select onChange={(e: any) => { push(e.target.value as string)() }} className="bg-transparent w-full text-base appearance-none uppercase border-b border-gray-200 text-gray-500 py-3 px-4 pr-8 leading-tight focus:outline-none focus:bg-black focus:border-gray-500">
                     {Cities.map((c) => (
-                        <MenuItem key={c} className={classes.CityItem} value={c}>{c}</MenuItem>
+                        <option key={c} value={c} selected={city === c}>{c}</option>
                     ))}
-                </Select>
-            </FormControl>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                </div>
+            </div>
         </section>
     )
 }
 
 export const Nav = () => {
-    const classes = NavStyles()
     return (
-        <section className={classes.SelectCity}>
+        <section className='grid grid-cols-1 md:grid-cols-4 gap-2'>
             {Cities.map((c) => (
-                <Button variant='outlined' onClick={push(c)} key={c}>{c}</Button>
+                <button className='py-2 text-lg font-light uppercase rounded border border-gray-700 hover:bg-black' onClick={push(c)} key={c}>{c}</button>
             ))}
         </section>
     )
