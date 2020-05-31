@@ -1,5 +1,11 @@
 module.exports = {
-  theme: {},
+  theme: {
+    extend: {
+      width: {
+        '70v': '70vw'
+      }
+    }
+  },
   variants: {},
   plugins: [],
 };

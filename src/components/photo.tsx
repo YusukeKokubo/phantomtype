@@ -1,8 +1,5 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-
 import React, { useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import css from './photo.module.css'
 
 import firebase from '../firebase'
 
@@ -17,50 +14,14 @@ function datetime(src: firebase.firestore.Timestamp) {
   return result
 }
 
-const useStyles = makeStyles(({ palette }: Theme) => createStyles({
-  Photo: {
-    display: 'flex',
-    flexDirection: 'row',
-    backgroundColor: palette.background.paper,
-  },
-  PhotoRight: {
-    flexDirection: 'row-reverse',
-  },
-  Img: {
-    width: '70vw',
-    height: 'auto',
-    minHeight: '300px',
-    objectFit: 'fill',
-  },
-  Information: {
-    margin: '0 15px',
-    color: '#ccc',
-    fontSize: '1.60vw',
-    fontWeight: 200,
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  Modal: {
-    width: '100%',
-    height: '100%',
-    top: 0,
-    left: 0,
-    position: 'fixed',
-    backgroundColor: palette.background.default,
-    padding: '3vh 5vw',
-    overflow: 'scroll',
-  },
-}))
-
 function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, align: number }) {
   const e = photo
   const id = `${photo.city}-${photo.filename}`
   const [detail, setDetail] = useState(false)
-  const cs = useStyles()
 
   return (
-    <section className={`${css.Photo} ${align === 1 ? css.Photo_right : null}`}>
-      {detail ? <div className={cs.Modal}>
+    <section className={`flex flex-col ${align === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+      {detail ? <div className='w-full h-full fixed top-0 left-0 bg-black p-3 overflow-scroll'>
         <Button onClick={() => {
           setDetail(false)
           history.back()
@@ -72,18 +33,18 @@ function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, a
         <LazyLoadImage src={e.urls.lowQuality} alt={e.city} onClick={() => {
           setDetail(true)
           history.pushState(`/${e.city}`, '', `/pic/${encodeURIComponent(id)}`)
-        }} className={css.Photo_image} />
+        }} className='w-full md:w-70v h-auto' />
       </picture>
-      <div className={`${css.information} ${align === 1 ? css.exif_right : null}`}>
-        <div className={`${css.exif} ${align === 1 ? css.exif_right : null}`}>
-          <span className={css.datetime}>{datetime(e.exif.DateTimeOriginal)}</span>
+      <div className={`mx-3 text-base font-light flex flex-col ${align === 1 ? 'text-right' : null}`}>
+        <div className='flex flex-col justify-start'>
+          <span className='text-xl mb-2'>{datetime(e.exif.DateTimeOriginal)}</span>
           <span>{e.image.Make} {e.image.Model}</span>
           <span>{e.exif.LensModel}</span>
           <span style={{ marginTop: 5 }}>{e.exif.FocalLength} ({e.exif.FocalLengthIn35mmFormat})mm
           | F{e.exif.FNumber} | {e.exif.ExposureTime}S</span>
           <span>ISO {e.exif.ISO}</span>
         </div>
-        <div className={css.social}>
+        <div className='mt-2'>
           <LikeView fb={fb} photo={photo} />
         </div>
       </div>
