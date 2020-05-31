@@ -1,6 +1,3 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles'
-
-import { Table, TableBody, TableCell, TableContainer, TableRow } from '@material-ui/core';
 import format from 'date-fns/format';
 import firebase from 'firebase';
 import React from 'react';
@@ -14,75 +11,55 @@ function datetime(src: firebase.firestore.Timestamp) {
   return result
 }
 
-const useStyles = makeStyles(() => createStyles({
-  root: {
-    width: '90vw',
-  },
-  Information: {
-    display: 'grid',
-    gridTemplateColumns: '1fr',
-    gridGap: 20,
-  },
-  Exif: {
-    '& td': {
-      fontSize: 'small',
-      borderColor: '#222',
-    },
-  },
-}))
-
 function PhotoDetail({ fb, photo }: { fb: firebase.app.App, photo: Photo }) {
   const e = photo
-  const classes = useStyles()
 
   return (
     <section>
       <picture>
         <source type='image/webp' srcSet={e.urls.webp} />
-        <LazyLoadImage className={classes.root} src={e.urls.lowQuality} alt={e.city} />
+        <LazyLoadImage className='' src={e.urls.lowQuality} alt={e.city} />
       </picture>
-      <div className={classes.Information}>
+      <div className='grid grid-row-0 gap-2'>
         <div>
           <LikeView fb={fb} photo={photo} />
         </div>
-        <TableContainer>
-          <Table size='small' aria-label='a dense table' className={classes.Exif}>
-            <TableBody>
-              <TableRow>
-                <TableCell>DateTimeOriginal</TableCell>
-                <TableCell>{datetime(e.exif.DateTimeOriginal)}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Make  /Model</TableCell>
-                <TableCell>{e.image.Make} {e.image.Model}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>FocalLength(mm) / In35mm</TableCell>
-                <TableCell>{e.exif.FocalLength} / {e.exif.FocalLengthIn35mmFormat}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>FNumber</TableCell>
-                <TableCell>F{e.exif.FNumber}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>ExposureTime (S)</TableCell>
-                <TableCell>{e.exif.ExposureTime}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>ISO</TableCell>
-                <TableCell>{e.exif.ISO}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Lens</TableCell>
-                <TableCell>{e.exif.LensMake} {e.exif.LensModel}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Software</TableCell>
-                <TableCell>{e.image.Software}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <table className='text-base '>
+          <tbody>
+            <tr>
+              <th>DateTimeOriginal</th>
+              <td>{datetime(e.exif.DateTimeOriginal)}</td>
+            </tr>
+            <tr>
+              <th>Make / Model</th>
+              <td>{e.image.Make} {e.image.Model}</td>
+            </tr>
+            <tr>
+              <th>FocalLength(mm) / In35mm</th>
+              <td>{e.exif.FocalLength} / {e.exif.FocalLengthIn35mmFormat}</td>
+            </tr>
+            <tr>
+              <th>FNumber</th>
+              <td>F{e.exif.FNumber}</td>
+            </tr>
+            <tr>
+              <th>ExposureTime (S)</th>
+              <td>{e.exif.ExposureTime}</td>
+            </tr>
+            <tr>
+              <th>ISO</th>
+              <td>{e.exif.ISO}</td>
+            </tr>
+            <tr>
+              <th>Lens</th>
+              <td>{e.exif.LensMake} {e.exif.LensModel}</td>
+            </tr>
+            <tr>
+              <th>Software</th>
+              <td>{e.image.Software}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
   )

@@ -5,3 +5,10 @@
 
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+tr {
+  @apply border-b border-gray-800;
+}
+
+th {
+  @apply text-left;
+}

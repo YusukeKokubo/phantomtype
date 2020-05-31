@@ -3,22 +3,12 @@ import { NextPage } from 'next'
 import { FixedNav } from '../../components/Nav'
 import PhotoDetail from '../../components/photoDetail'
 
-import { createStyles, makeStyles } from '@material-ui/core'
-
 import 'firebase/firestore'
 import Head from 'next/head'
 import { Photo } from '../../../@types/Photo'
 import firebase from '../../firebase'
 
-const useStyles = makeStyles(() => createStyles({
-  root: {
-    padding: '3vh 5vw',
-    margin: '3vh 0',
-  },
-}))
-
 const Picture: NextPage<{ picData: any }> = ({ picData }) => {
-  const classes = useStyles()
   const pic = JSON.parse(picData) as Photo
   const id = `${pic.city}-${pic.filename}`
 
@@ -33,7 +23,7 @@ const Picture: NextPage<{ picData: any }> = ({ picData }) => {
         <meta name='twitter:image' content={pic.urls.resized} />
       </Head>
       <FixedNav city={pic.city} />
-      <section className={classes.root}>
+      <section className='px-1 md:px-4 mt-12'>
         {<PhotoDetail fb={firebase.app()} photo={pic} />}
       </section>
     </>
