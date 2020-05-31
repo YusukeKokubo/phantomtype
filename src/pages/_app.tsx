@@ -1,29 +1,7 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head';
 
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-
 import './tailwind.css'
-
-const theme = createMuiTheme({
-  palette: {
-    type: 'dark',
-    text: {
-      primary: '#faf8f7',
-    },
-    primary: {
-      main: '#000',
-    },
-    background: {
-      default: '#1c1a1a',
-    },
-  },
-  typography: {
-    fontFamily: 'Roboto, Noto Sans JP',
-    fontSize: 24,
-  },
-})
 
 function MyApp({ Component, pageProps }: AppProps) {
   return <>
@@ -41,10 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <meta name='twitter:card' content='photo' />
       <meta name='twitter:site' content='@yusuke_kokubo' />
     </Head>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <Component {...pageProps} />
   </>
 }
 

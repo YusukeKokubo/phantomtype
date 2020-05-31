@@ -11,7 +11,7 @@ import { shuffle } from '../../lib/shuffle'
 
 const CityPage: NextPage<{ city: string, picsData: any }> = ({ city, picsData }) => {
   const pics = JSON.parse(picsData) as Photo[]
-  console.log(pics.map(p => p.filename))
+  console.log(pics.map(p => p.exif.LensModel))
   return (
     <>
       <FixedNav city={city} />
