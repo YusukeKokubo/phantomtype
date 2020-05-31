@@ -34,6 +34,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "components/random.js"
+    "lib/random.js"
   ]
 }

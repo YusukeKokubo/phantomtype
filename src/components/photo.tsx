@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import css from './photo.module.css'
 
+import firebase from '../firebase'
+
 import { Button } from '@material-ui/core';
 import { format } from 'date-fns'
 import { Photo } from '../../@types/Photo';
@@ -11,7 +13,7 @@ import LikeView from './like';
 import PhotoDetail from './photoDetail';
 
 function datetime(src: firebase.firestore.Timestamp) {
-  const result = format(src.toDate(), 'yyyy/MM/dd HH:mm:ss')
+  const result = format(new firebase.firestore.Timestamp(src.seconds, src.nanoseconds).toDate(), 'yyyy/MM/dd HH:mm:ss')
   return result
 }
 
@@ -52,7 +54,6 @@ const useStyles = makeStyles(({ palette }: Theme) => createStyles({
 
 function PhotoView({ fb, photo, align }: { fb: firebase.app.App, photo: Photo, align: number }) {
   const e = photo
-  console.log(e)
   const id = `${photo.city}-${photo.filename}`
   const [detail, setDetail] = useState(false)
   const cs = useStyles()

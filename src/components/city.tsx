@@ -7,7 +7,7 @@ import 'firebase/firestore'
 import { useCollection } from 'react-firebase-hooks/firestore'
 import firebase from '../firebase'
 
-import './random'
+import '../lib/random'
 
 declare global {
   // tslint:disable-next-line: interface-name

@@ -1,5 +1,4 @@
 import { NextPage } from 'next'
-import { useRouter } from 'next/router'
 
 import { FixedNav } from '../../components/Nav'
 import PhotoDetail from '../../components/photoDetail'
@@ -18,35 +17,40 @@ const useStyles = makeStyles(() => createStyles({
   },
 }))
 
-const Picture: NextPage<{ value: Photo }> = ({ value }) => {
-  const router = useRouter()
-  const { id }: any = router.query
+const Picture: NextPage<{ picData: any }> = ({ picData }) => {
   const classes = useStyles()
+  const pic = JSON.parse(picData) as Photo
+  const id = `${pic.city}-${pic.filename}`
 
   return (
     <>
       <Head>
         <meta property='og:title' content={id} />
-        <meta property='og:description' content={`a picutre of ${value.city}`} />
-        <meta property='og:image' content={value.urls.resized} />
+        <meta property='og:description' content={`a picutre of ${pic.city}`} />
+        <meta property='og:image' content={pic.urls.resized} />
         <meta name='twitter:title' content={id} />
-        <meta name='twitter:description' content={`a picutre of ${value.city}`} />
-        <meta name='twitter:image' content={value.urls.resized} />
+        <meta name='twitter:description' content={`a picutre of ${pic.city}`} />
+        <meta name='twitter:image' content={pic.urls.resized} />
       </Head>
-      <FixedNav city={value.city} />
+      <FixedNav city={pic.city} />
       <section className={classes.root}>
-        {<PhotoDetail fb={firebase.app()} photo={value} />}
+        {<PhotoDetail fb={firebase.app()} photo={pic} />}
       </section>
     </>
   )
 };
-Picture.getInitialProps = async (context) => {
-  const { id } = context.query
-
-  // const [v, loading, error] = useDocumentData<Photo>(
-  // );
-  const docRef = firebase.firestore().collection('pics').doc(id as string)
-  const value = (await docRef.get()).data() as Photo
-  return { value }
+export async function getStaticPaths() {
+  const docRef = await firebase.firestore().collection('pics').get()
+  const value = await docRef.docs.map(d => d.data()) as Photo[]
+  const paths = value.map(v => (`/pic/${v.city}-${v.filename}`))
+  return {
+    paths,
+    fallback: false
+  }
+}
+export async function getStaticProps({ params }) {
+  const doc = await firebase.firestore().collection('pics').doc(params.id).get()
+  const pic = doc.data()
+  return { props: { picData: JSON.stringify(pic) } }
 }
 export default Picture;
