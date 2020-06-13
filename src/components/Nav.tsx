@@ -4,11 +4,11 @@ import Router from 'next/router'
 export const FixedNav = ({ city }: { city: string }) => {
     return (
         <section className='flex top-0 px-5 w-full fixed justify-between bg-black bg-opacity-50'>
-            <div>
+            <div className='mt-2'>
                 <Link href='/'>
                     <a>
-                        <img className='inline w-8 mr-1' src='/logomark-white.svg' alt='link to top' />
-                        <span className='hidden md:inline leading-loose'>PHANTOM TYPE.</span>
+                        <img className='inline align-baseline w-8 mr-1' src='/logomark-white.svg' alt='link to top' />
+                        <span className='hidden md:inline leading-loose text-2xl'>PHANTOM TYPE</span>
                     </a>
                 </Link>
             </div>
