@@ -1,7 +1,7 @@
 module.exports = {
   theme: {
     fontFamily: {
-      body: ['Roboto, Noto Sans JP']
+      body: ['Helvetica', 'Noto Sans JP'],
     },
     extend: {
       colors: {

@@ -10,7 +10,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       <meta charSet='utf-8' />
       <meta name='viewport' content='initial-scale=1.0, width=device-width' key='viewport' />
       <meta name='description' content='Japan photo gallery' />
-      <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,500&display=swap' />
       <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons' />
       <meta property='og:site_name' content='PHANTOM TYPE' />
       <meta property='og:type' content='article' />
