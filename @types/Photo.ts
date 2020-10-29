@@ -19,8 +19,8 @@ export type Exif = {
   BrightnessValue: number
   ColorSpace: number
   CustomRendered: number
-  DateTimeDigitized: firebase.firestore.Timestamp
-  DateTimeOriginal: firebase.firestore.Timestamp
+  DateTimeDigitized: firebase.default.firestore.Timestamp
+  DateTimeOriginal: firebase.default.firestore.Timestamp
   ExifVersion: object
   ExposureBiasValue: number
   ExposureMode: number
@@ -59,7 +59,7 @@ export type Image = {
   ImageWidth: number
   Make: string
   Model: string
-  ModifyDate: firebase.firestore.Timestamp
+  ModifyDate: firebase.default.firestore.Timestamp
   Orientation: number
   PhotometricInterpretation: number
   PrimaryChromaticities: number[]

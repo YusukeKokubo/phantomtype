@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { Nav } from '../components/Nav'
 
-export default () => {
+const Template = () => {
   return (
     <>
       <Head>
@@ -38,3 +38,4 @@ export default () => {
     </>
   )
 }
+export default Template

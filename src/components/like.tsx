@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import { Photo } from '../../@types/Photo';
 import { useState } from 'react';
 
-function onLike(fb: firebase.app.App, photo: Photo) {
+function onLike(fb: firebase.default.app.App, photo: Photo) {
   const id = `${photo.city}-${photo.filename}`
   const data = {
     like: (photo.like || 0) + 1,
@@ -14,7 +14,7 @@ function onLike(fb: firebase.app.App, photo: Photo) {
   return null
 }
 
-function onUnLike(fb: firebase.app.App, photo: Photo) {
+function onUnLike(fb: firebase.default.app.App, photo: Photo) {
   const id = `${photo.city}-${photo.filename}`
   const data = {
     like: (photo.like || 0) - 1,
@@ -26,7 +26,7 @@ function onUnLike(fb: firebase.app.App, photo: Photo) {
   return null
 }
 
-function LikeView({ fb, photo }: { fb: firebase.app.App, photo: Photo }) {
+function LikeView({ fb, photo }: { fb: firebase.default.app.App, photo: Photo }) {
   const id = `${photo.city}-${photo.filename}`
   const [liked, setLiked] = useState(Cookies.get(id) === '1')
   const [likedCount, setLikedCount] = useState(photo.like)
