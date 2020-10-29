@@ -1,7 +1,7 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head';
 
-import './tailwind.css'
+import '../css/tailwind.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return <>
