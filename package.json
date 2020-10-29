@@ -7,9 +7,6 @@
     "type": "git",
     "url": "https://github.com/YusukeKokubo/bibonote"
   },
-  "engines": {
-    "node": "10"
-  },
   "scripts": {
     "dev": "next",
     "preserve": "npm run && npm run build-functions && npm run build-app && npm run copy-deps && npm run install-deps",
