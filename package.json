@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "next",
-    "preserve": "npm run && npm run build-functions && npm run build-app && npm run copy-deps && npm run install-deps",
+    "preserve": "npm run && npm run build-app && npm run copy-deps && npm run install-deps",
     "serve": "cross-env NODE_ENV=production firebase serve",
     "clean": "rimraf \"dist/functions\" && rimraf \"out\"",
     "build-app": "next build",
@@ -26,7 +26,6 @@
   "dependencies": {
     "@google-cloud/storage": "^5.3.0",
     "@types/js-cookie": "^2.2.6",
-    "autoprefixer": "^10.0.1",
     "date-fns": "^2.16.1",
     "date-fns-timezone": "^0.1.4",
     "exif-reader": "^1.0.3",
@@ -36,7 +35,6 @@
     "fraction.js": "^4.0.12",
     "js-cookie": "^2.2.1",
     "next": "^10.0.0",
-    "postcss-import": "^13.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-firebase-hooks": "^2.2.0",
