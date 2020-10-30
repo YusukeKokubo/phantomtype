@@ -2,6 +2,7 @@ dist/
 node_modules/
 *.js.map
 .env
+.DS_store
 
 src/app/.next
 .next/
