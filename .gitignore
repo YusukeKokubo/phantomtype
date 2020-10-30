@@ -7,8 +7,9 @@ src/app/.next
 .next/
 out/
 
-# Firebase cache
-.firebase/
-.firebase-debug.log
-
 .now
+
+public/kyoto
+public/nagoya
+public/matsushima
+public/kanazawa
