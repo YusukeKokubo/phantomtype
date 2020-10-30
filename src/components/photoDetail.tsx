@@ -3,7 +3,6 @@ import firebase from 'firebase';
 import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Photo } from '../../@types/Photo';
-import LikeView from './like';
 
 function datetime(src: firebase.firestore.Timestamp) {
   const wrap = new firebase.firestore.Timestamp(src.seconds, src.nanoseconds)
@@ -11,7 +10,7 @@ function datetime(src: firebase.firestore.Timestamp) {
   return result
 }
 
-function PhotoDetail({ fb, photo }: { fb: firebase.app.App, photo: Photo }) {
+function PhotoDetail({ photo }: { photo: Photo }) {
   const e = photo
 
   return (
@@ -21,9 +20,6 @@ function PhotoDetail({ fb, photo }: { fb: firebase.app.App, photo: Photo }) {
         <LazyLoadImage className='' src={e.urls.lowQuality} alt={e.city} />
       </picture>
       <div className='grid grid-row-0 gap-2'>
-        <div>
-          <LikeView fb={fb} photo={photo} />
-        </div>
         <table className='text-base '>
           <tbody>
             <tr>

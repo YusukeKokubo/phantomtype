@@ -1,17 +1,17 @@
 export type Photo = {
-  city: string
-  filePath: string
+  city?: string
+  filePath?: string
   filename: string
   url: string
-  urls: {
+  urls?: {
     webp: string
     lowQuality: string
     resized: string
   }
-  exif: Exif
-  image: Image
-  thumbnail: {}
-  like: number
+  exif?: Exif
+  image?: Image
+  thumbnail?: {}
+  like?: number
 }
 
 export type Exif = {
