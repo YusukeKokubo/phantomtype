@@ -17,16 +17,17 @@ const CityPage: NextPage<{ city: string, picsData: any }> = ({ city, picsData })
         <h2 className='mt-16 text-4xl text-center uppercase'>{city}</h2>
         {pics.map((p, i) => {
           const align = i % 2
+          const e = p.exif
           return (
             <section key={p.filename} className={` flex flex-col ${align === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-              <Image src={p.url} unsized className='w-full md:w-70v h-auto min-h-300' />
+              <Image src={p.url} unsized alt={`a pic in ${city}`} className={'w-70v'} />
               <div className={`mx-3 text-base font-light flex flex-col ${align === 1 ? 'text-right' : null}`}>
                 <div className='flex flex-col justify-start'>
-                  <span className='text-xl mb-2'>{p.exif.DateTimeOriginal}</span>
-                  <span>{p.exif.Make} {p.exif.Model}</span>
-                  <span>{p.exif.LensModel.replace(/\0/g, '')}</span>
-                  <span className='mt-2'>{p.exif.FocalLength} ({p.exif.FocalLengthIn35mmFormat}) | {p.exif.FNumber} | {p.exif.ExposureTime}S</span>
-                  <span>ISO {p.exif.ISO}</span>
+                  <span className='text-xl mb-2'>{e.DateTimeOriginal}</span>
+                  <span>{e.Make} {e.Model}</span>
+                  <span>{e.LensModel.replace(/\0/g, '')}</span>
+                  <span className='mt-2'>{e.FocalLength} ({e.FocalLengthIn35mmFormat}) | {e.FNumber} | {e.ExposureTime}S</span>
+                  <span>ISO {e.ISO}</span>
                 </div>
               </div>
             </section>
@@ -52,6 +53,8 @@ export async function getStaticProps({ params }) {
       // console.debug(file)
       const tags = ExifReader.load(p)
       const dateTimeOriginal = tags['DateTimeOriginal'].description
+      const pixelXDimension = tags['PixelXDimension']?.value
+      const pixelYDimension = tags['PixelYDimension']?.value
       const make = tags['Make'].description
       const model = tags['Model'].description
       const lensMake = tags['LensMake']?.description || ''
@@ -68,6 +71,8 @@ export async function getStaticProps({ params }) {
           Make: make,
           Model: model,
           DateTimeOriginal: dateTimeOriginal,
+          PixelXDimension: pixelXDimension,
+          PixelYDimension: pixelYDimension,
           LensMake: lensMake,
           LensModel: lensModel,
           FocalLength: focalLength,
