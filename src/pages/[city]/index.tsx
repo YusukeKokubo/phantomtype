@@ -49,7 +49,7 @@ export async function getStaticProps({ params }) {
   const pics: Photo[] = await Promise.all(
     dir.filter(d => d.endsWith('.jpg')).map(async file => {
       const p = fs.readFileSync(`./public/${params.city}/${file}`)
-      console.log(file)
+      // console.debug(file)
       const tags = ExifReader.load(p)
       const dateTimeOriginal = tags['DateTimeOriginal'].description
       const make = tags['Make'].description
@@ -77,7 +77,7 @@ export async function getStaticProps({ params }) {
           ISO: iso
         },
       }
-      console.log(pic)
+      // console.log(pic)
       return pic
     })
   )

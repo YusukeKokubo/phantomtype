@@ -9,12 +9,12 @@
   },
   "scripts": {
     "dev": "next",
-    "build": "next build",
-    "start": "next start",
+    "build": "NODE_ENV=production next build",
+    "start": "NODE_ENV=production next run build && next start",
     "lint": "tslint --project src",
     "typecheck": "tsc --project src",
-    "export": "npm run build && next export",
-    "deploy": "now --prod"
+    "export": "NODE_ENV=production npm run build && next export",
+    "deploy": "NODE_ENV=production npm run build && now --prod"
   },
   "dependencies": {
     "date-fns": "^2.16.1",
