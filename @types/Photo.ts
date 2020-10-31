@@ -8,8 +8,8 @@ export type Exif = {
   Make: string
   Model: string
   DateTimeOriginal: string
-  PixelXDimension?: number
-  PixelYDimension?: number
+  PixelXDimension: number | null
+  PixelYDimension: number | null
   FNumber: string
   FocalLength: string
   FocalLengthIn35mmFormat: string

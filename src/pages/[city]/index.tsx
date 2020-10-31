@@ -53,8 +53,8 @@ export async function getStaticProps({ params }) {
       // console.debug(file)
       const tags = ExifReader.load(p)
       const dateTimeOriginal = tags['DateTimeOriginal'].description
-      const pixelXDimension = tags['PixelXDimension']?.value
-      const pixelYDimension = tags['PixelYDimension']?.value
+      const pixelXDimension = tags['PixelXDimension']?.value || null
+      const pixelYDimension = tags['PixelYDimension']?.value || null
       const make = tags['Make'].description
       const model = tags['Model'].description
       const lensMake = tags['LensMake']?.description || ''
