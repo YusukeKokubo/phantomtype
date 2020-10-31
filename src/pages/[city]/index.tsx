@@ -20,7 +20,7 @@ const CityPage: NextPage<{ city: string, picsData: any }> = ({ city, picsData })
           const e = p.exif
           return (
             <section key={p.filename} className={` flex flex-col ${align === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-              <Image src={p.url} unsized alt={`a pic in ${city}`} className={'w-70v'} />
+              <Image src={p.url} unsized alt={`a pic in ${city}`} className={'w-full md:w-70v'} />
               <div className={`mx-3 text-base font-light flex flex-col ${align === 1 ? 'text-right' : null}`}>
                 <div className='flex flex-col justify-start'>
                   <span className='text-xl mb-2'>{e.DateTimeOriginal}</span>
