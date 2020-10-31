@@ -19,6 +19,7 @@
     "jsx-no-lambda": false,
     "object-literal-key-quotes": false,
     "jsx-wrap-multiline": false,
-    "jsx-alignment": false
+    "jsx-alignment": false,
+    "no-string-literal": false
   }
 }

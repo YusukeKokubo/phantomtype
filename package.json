@@ -20,6 +20,7 @@
     "date-fns": "^2.16.1",
     "date-fns-timezone": "^0.1.4",
     "exif-reader": "^1.0.3",
+    "exifreader": "^3.12.3",
     "fraction.js": "^4.0.12",
     "next": "^10.0.0",
     "react": "^17.0.1",

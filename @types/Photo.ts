@@ -1,20 +1,24 @@
 export type Photo = {
-  city?: string
-  filePath?: string
   filename: string
   url: string
-  urls?: {
-    webp: string
-    lowQuality: string
-    resized: string
-  }
-  exif?: Exif
-  image?: Image
-  thumbnail?: {}
-  like?: number
+  exif: Exif
 }
 
 export type Exif = {
+  Make: string
+  Model: string
+  DateTimeOriginal: string
+  FNumber: string
+  FocalLength: string
+  FocalLengthIn35mmFormat: string
+  ISO: string
+  ExposureTime: string
+  LensMake: string
+  LensModel: string
+}
+
+// Just for memo
+export type ExifMemo = {
   ApertureValue: string
   BrightnessValue: number
   ColorSpace: number
@@ -51,25 +55,4 @@ export type Exif = {
   ShutterSpeedValue: string
   SubjectDistanceRange: number
   WhiteBalance: number
-}
-
-export type Image = {
-  ExifOffset: number
-  ImageHeight: number
-  ImageWidth: number
-  Make: string
-  Model: string
-  ModifyDate: string
-  Orientation: number
-  PhotometricInterpretation: number
-  PrimaryChromaticities: number[]
-  PrintIM: object
-  ResolutionUnit: number
-  SamplesPerPixel: number
-  Software: string
-  WhitePoint: number[]
-  XResolution: number
-  YCbCrCoefficients: number[]
-  YCbCrPositioning: number
-  YResolution: number
 }
