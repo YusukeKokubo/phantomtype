@@ -1,5 +1,5 @@
 import Head from 'next/head'
-// import Image from 'next/image'
+import Image from 'next/image'
 import { Nav } from '../components/Nav'
 
 const Template = () => {
@@ -11,8 +11,8 @@ const Template = () => {
         <meta property='og:image' content='https://phantomtype.com/ogkyoto.jpg' />
         <meta name='twitter:image' content='https://phantomtype.com/ogkyoto.jpg' />
       </Head>
-      {/* <Image className='object-cover w-screen h-screen absolute top-0' src={'/kyoto.jpg'} unsized /> */}
-      <img className='object-cover w-screen h-screen absolute top-0' src={'/kyoto.jpg'} />
+      <Image className='object-cover w-screen h-screen absolute top-0' alt='kyoto shimogamo' src={'/kyoto.jpg'} unsized />
+      {/* <img className='object-cover w-screen h-screen absolute top-0' alt='kyoto shimogamo' src={'/kyoto.jpg'} /> */}
       <section className='absolute w-screen h-screen flex flex-col-reverse justify-around'>
         <div className='mx-8 lg:mx-16 grid grid-cols-1 gap-16'>
           <div className='flex'>
