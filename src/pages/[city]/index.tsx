@@ -8,6 +8,10 @@ import React from 'react';
 import { FixedNav } from '../../components/Nav';
 import * as ExifReader from 'exifreader';
 
+function byDatetime(a: Photo, b: Photo): number {
+  return b.exif.DateTimeOriginal > a.exif.DateTimeOriginal ? 1 : -1
+}
+
 const CityPage: NextPage<{ city: string, picsData: any }> = ({ city, picsData }) => {
   const pics: Photo[] = picsData
   return (
@@ -15,15 +19,17 @@ const CityPage: NextPage<{ city: string, picsData: any }> = ({ city, picsData })
       <FixedNav city={city} />
       <div className='grid gap-16 grid-rows-1'>
         <h2 className='mt-16 text-4xl text-center uppercase'>{city}</h2>
-        {pics.map((p, i) => {
+        {pics.sort(byDatetime).map((p, i) => {
           const align = i % 2
+          const name = p.filename.substring(0, p.filename.indexOf('.'))
           const e = p.exif
           return (
             <section key={p.filename} className={` flex flex-col ${align === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-              <Image src={p.url} unsized alt={`a pic in ${city}`} className={'w-full md:w-70v'} />
+              <Image src={p.url} unsized alt={`${city} ${name}`} className={'w-full md:w-70v'} />
               <div className={`mx-3 text-base font-light flex flex-col ${align === 1 ? 'text-right' : null}`}>
                 <div className='flex flex-col justify-start'>
-                  <span className='text-xl mb-2'>{e.DateTimeOriginal}</span>
+                  <span className='text-xl mb-0'>{e.DateTimeOriginal}</span>
+                  <span className='text-xl mb-2'>{name}</span>
                   <span>{e.Make} {e.Model}</span>
                   <span>{e.LensModel.replace(/\0/g, '')}</span>
                   <span className='mt-2'>{e.FocalLength} ({e.FocalLengthIn35mmFormat}) | {e.FNumber} | {e.ExposureTime}S</span>
