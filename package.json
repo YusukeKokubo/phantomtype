@@ -14,7 +14,7 @@
     "lint": "tslint --project src",
     "typecheck": "tsc --project src",
     "export": "NODE_ENV=production npm run build && next export",
-    "deploy": "NODE_ENV=production npm run build && now --prod"
+    "deploy": "NODE_ENV=production npm run build && vercel --prod"
   },
   "dependencies": {
     "date-fns": "^2.16.1",
