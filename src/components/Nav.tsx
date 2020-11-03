@@ -13,9 +13,10 @@ export const FixedNav = ({ city }: { city: string }) => {
                 </Link>
             </div>
             <div className="relative">
-                <select onChange={(e: any) => { push(e.target.value as string)() }} className="bg-transparent w-full text-base appearance-none uppercase border-b border-gray-200 text-gray-500 py-3 px-4 pr-8 leading-tight focus:outline-none focus:bg-black focus:border-gray-500">
+                <label className='hidden' id='ChooseCity' htmlFor='ChooseCity'>Choose city</label>
+                <select id='ChooseCity' aria-labelledby='ChooseCity' onChange={(e: any) => { push(e.target.value as string)() }} value={city} className="bg-transparent w-full text-base appearance-none uppercase border-b border-gray-200 text-gray-500 py-3 px-4 pr-8 leading-tight focus:outline-none focus:bg-black focus:border-gray-500">
                     {Cities.map((c) => (
-                        <option key={c} value={c} selected={city === c}>{c}</option>
+                        <option key={c} value={c}>{c}</option>
                     ))}
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
