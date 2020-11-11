@@ -5,7 +5,7 @@
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YusukeKokubo/phantomtype-by-firebase"
+    "url": "https://github.com/YusukeKokubo/phantomtype"
   },
   "scripts": {
     "dev": "next",
@@ -18,21 +18,16 @@
   },
   "dependencies": {
     "date-fns": "^2.16.1",
-    "date-fns-timezone": "^0.1.4",
-    "exif-reader": "^1.0.3",
     "exifreader": "^3.12.3",
-    "fraction.js": "^4.0.12",
     "next": "^10.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "sharp": "^0.26.2",
     "tailwindcss": "^1.9.6"
   },
   "devDependencies": {
     "@types/node": "14.14.6",
     "@types/react": "^16.9.55",
     "@types/react-dom": "16.9.9",
-    "@types/sharp": "^0.26.0",
     "tslint": "^6.1.3",
     "tslint-react": "^5.0.0",
     "typescript": "^4.0.5"
