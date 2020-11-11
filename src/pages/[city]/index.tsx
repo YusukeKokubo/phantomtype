@@ -1,7 +1,7 @@
 import { NextPage } from 'next'
 import Image from 'next/image'
 
-import { Photo } from '../../../@types/Photo';
+import { Exif, Photo } from '../../../@types/Photo';
 
 import fs from "fs"
 import React from 'react';
@@ -10,6 +10,13 @@ import * as ExifReader from 'exifreader';
 
 function byDatetime(a: Photo, b: Photo): number {
   return b.exif.DateTimeOriginal > a.exif.DateTimeOriginal ? 1 : -1
+}
+
+function calcSize(exif: Exif): { width: number, height: number } {
+  const n = 6
+  const width = exif.ImageWidth > 1024 ? exif.ImageWidth / n : exif.ImageWidth
+  const height = exif.ImageLength > 1024 ? exif.ImageLength / n : exif.ImageLength
+  return { width, height }
 }
 
 const CityPage: NextPage<{ city: string, picsData: any }> = ({ city, picsData }) => {
@@ -23,12 +30,10 @@ const CityPage: NextPage<{ city: string, picsData: any }> = ({ city, picsData })
           const align = i % 2
           const name = p.filename.substring(0, p.filename.indexOf('.'))
           const e = p.exif
-          const n = 7
-          const width = (p.exif.ImageWidth || 2000) / n
-          const height = (p.exif.ImageLength || 2000) / n
+          const { width, height } = calcSize(e)
           return (
             <div key={p.filename} className={`flex flex-col ${align === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-              <Image src={p.url} width={width} height={height} alt={`${city} ${name}`} className='w-70v' />
+              <Image src={p.url} width={width} height={height} alt={`${city} ${name}`} />
               <div className={`mx-3 text-base font-light flex flex-col ${align === 1 ? 'text-right' : null}`}>
                 <div className='flex flex-col justify-start'>
                   <span className='text-xl mb-0'>{e.DateTimeOriginal}</span>
