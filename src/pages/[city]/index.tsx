@@ -23,9 +23,12 @@ const CityPage: NextPage<{ city: string, picsData: any }> = ({ city, picsData })
           const align = i % 2
           const name = p.filename.substring(0, p.filename.indexOf('.'))
           const e = p.exif
+          const n = 7
+          const width = (p.exif.ImageWidth || 2000) / n
+          const height = (p.exif.ImageLength || 2000) / n
           return (
-            <section key={p.filename} className={` flex flex-col ${align === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-              <Image src={p.url} unsized alt={`${city} ${name}`} className={'w-full md:w-70v'} />
+            <div key={p.filename} className={`flex flex-col ${align === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+              <Image src={p.url} width={width} height={height} alt={`${city} ${name}`} className='w-70v' />
               <div className={`mx-3 text-base font-light flex flex-col ${align === 1 ? 'text-right' : null}`}>
                 <div className='flex flex-col justify-start'>
                   <span className='text-xl mb-0'>{e.DateTimeOriginal}</span>
@@ -36,7 +39,7 @@ const CityPage: NextPage<{ city: string, picsData: any }> = ({ city, picsData })
                   <span>ISO {e.ISO}</span>
                 </div>
               </div>
-            </section>
+            </div>
           )
         })}
       </div>
@@ -57,28 +60,32 @@ export async function getStaticProps({ params }) {
     dir.filter(d => d.endsWith('.jpg')).map(async file => {
       const p = fs.readFileSync(`./public/${params.city}/${file}`)
       // console.debug(file)
-      const tags = ExifReader.load(p)
-      const dateTimeOriginal = tags['DateTimeOriginal'].description
-      const pixelXDimension = tags['PixelXDimension']?.value || null
-      const pixelYDimension = tags['PixelYDimension']?.value || null
-      const make = tags['Make'].description
-      const model = tags['Model'].description
-      const lensMake = tags['LensMake']?.description || ''
-      const lensModel = tags['LensModel']?.description || ''
-      const focalLength = tags['FocalLength'].description
-      const focalLengthIn35mm = tags['FocalLengthIn35mmFilm'].description
-      const fnumber = tags['FNumber'].description
-      const exposureTime = tags['ExposureTime'].description
-      const iso = tags['ISOSpeedRatings'].description
+      const tags = ExifReader.load(p, { expanded: true })
+      // console.log(tags)
+      const exif = tags.exif!
+      const tFile = tags.file!
+      if (!exif || !tFile) {
+        console.error('Image has not exif.')
+      }
+      const dateTimeOriginal = exif.DateTimeOriginal.description
+      const make = exif.Make.description
+      const model = exif.Model.description
+      const lensMake = exif['LensMake']?.description || ''
+      const lensModel = exif['LensModel']?.description || ''
+      const focalLength = exif.FocalLength.description
+      const focalLengthIn35mm = exif.FocalLengthIn35mmFilm.description
+      const fnumber = exif.FNumber.description
+      const exposureTime = exif.ExposureTime.description
+      const iso = exif.ISOSpeedRatings.description
       const pic: Photo = {
         filename: file,
         url: `/${params.city}/${file}`,
         exif: {
+          ImageWidth: tFile["Image Width"]?.value!,
+          ImageLength: tFile["Image Height"]?.value!,
           Make: make,
           Model: model,
           DateTimeOriginal: dateTimeOriginal,
-          PixelXDimension: pixelXDimension,
-          PixelYDimension: pixelYDimension,
           LensMake: lensMake,
           LensModel: lensModel,
           FocalLength: focalLength,

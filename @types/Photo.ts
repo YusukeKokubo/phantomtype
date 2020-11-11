@@ -5,11 +5,11 @@ export type Photo = {
 }
 
 export type Exif = {
+  ImageWidth: number
+  ImageLength: number
   Make: string
   Model: string
   DateTimeOriginal: string
-  PixelXDimension: number | null
-  PixelYDimension: number | null
   FNumber: string
   FocalLength: string
   FocalLengthIn35mmFormat: string
