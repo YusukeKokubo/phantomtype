@@ -14,9 +14,13 @@ function byDatetime(a: Photo, b: Photo): number {
 
 function calcSize(exif: Exif): { width: number, height: number } {
   const n = 6
-  const width = exif.ImageWidth > 1024 ? exif.ImageWidth / n : exif.ImageWidth
-  const height = exif.ImageLength > 1024 ? exif.ImageLength / n : exif.ImageLength
+  const width = exif.ImageWidth
+  const height = exif.ImageLength
+  if (exif.ImageWidth > 1024 && exif.ImageWidth > 1024) {
+  return { width: width / n, height: height / n }
+  } else {
   return { width, height }
+  }
 }
 
 const CityPage: NextPage<{ city: string, picsData: any }> = ({ city, picsData }) => {
