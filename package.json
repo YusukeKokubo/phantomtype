@@ -17,11 +17,11 @@
     "deploy": "NODE_ENV=production npm run build && vercel --prod"
   },
   "dependencies": {
-    "autoprefixer": "^10.0.2",
+    "autoprefixer": "^10.0.4",
     "date-fns": "^2.16.1",
     "exifreader": "^3.12.6",
     "next": "^10.0.3",
-    "postcss": "^8.1.10",
+    "postcss": "^8.1.14",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "tailwindcss": "^2.0.1",
