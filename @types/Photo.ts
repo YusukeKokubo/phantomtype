@@ -1,7 +1,8 @@
 export type Photo = {
   filename: string
+  location: string
   url: string
-  exif: Exif
+  exif: Exif | null
 }
 
 export type Exif = {
