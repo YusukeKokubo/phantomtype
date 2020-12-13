@@ -14,17 +14,22 @@ type PicsInLoc = {
 }
 
 function byDatetime(a: Photo, b: Photo): number {
-  return b.exif!.DateTimeOriginal > a.exif!.DateTimeOriginal ? 1 : -1
+  return b.exif!.DateTimeOriginal < a.exif!.DateTimeOriginal ? 1 : -1
 }
 
-function calcSize(exif: Exif): { width: number, height: number } {
-  const n = 6
+function calcSize(exif: Exif, length: number): { width: number, height: number } {
   const width = exif.ImageWidth
   const height = exif.ImageLength
-  if (exif.ImageWidth > 1024 && exif.ImageWidth > 1024) {
-    return { width: width / n, height: height / n }
+  const align = width > height ? 'horizon' : 'vertical'
+
+  if (align == 'horizon') {
+    const new_w = length
+    const new_h = (height * new_w) / width
+    return { width: new_w, height: new_h }
   } else {
-    return { width, height }
+    const new_h = length
+    const new_w = (width * new_h) / height
+    return { width: new_w, height: new_h }
   }
 }
 
@@ -33,9 +38,9 @@ const Pic: NextPage<{ city: string, pic: Photo, align: number }> = ({ city, pic,
   // const align = i % 2
   const name = p.filename.substring(0, p.filename.indexOf('.'))
   const e = p.exif!
-  const { width, height } = calcSize(e)
+  const { width, height } = calcSize(e, 1000)
   return (
-    <div key={p.filename} className={`my-6 flex flex-col ${align === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+    <div className={`my-6 flex flex-col ${align === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
       <Image src={p.url} width={width} height={height} alt={`${city} ${name}`} />
       <div className={`mx-3 text-base font-light flex flex-col ${align === 1 ? 'text-right' : null}`}>
         <div className='flex flex-col justify-start'>
@@ -59,7 +64,7 @@ const Location: NextPage<{ city: string, picsInLoc: PicsInLoc }> = ({ city, pics
       <h3 className='text-center text-3xl my-8 uppercase'>{loc}</h3>
       {
         pics.filter(p => p.exif).sort(byDatetime).map((p, i) => {
-          return <Pic city={city} pic={p} align={i % 2} />
+          return <Pic key={p.url} city={city} pic={p} align={i % 2} />
         })
       }
     </section>
@@ -74,7 +79,7 @@ const CityPage: NextPage<{ city: string, picsData: any }> = ({ city, picsData })
       <div className='grid gap-16 grid-rows-1'>
         <h2 className='mt-16 text-4xl text-center uppercase'>{city}</h2>
         {picsInLoc.map(p => {
-          return <Location city={city} picsInLoc={p} />
+          return <Location key={p.location} city={city} picsInLoc={p} />
         })}
       </div>
     </>
