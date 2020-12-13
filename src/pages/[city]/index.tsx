@@ -7,6 +7,7 @@ import fs from "fs"
 import React from 'react';
 import { FixedNav } from '../../components/Nav';
 import * as ExifReader from 'exifreader';
+import Head from 'next/head';
 
 type PicsInLoc = {
   location: string,
@@ -73,8 +74,15 @@ const Location: NextPage<{ city: string, picsInLoc: PicsInLoc }> = ({ city, pics
 
 const CityPage: NextPage<{ city: string, picsData: any }> = ({ city, picsData }) => {
   const picsInLoc: PicsInLoc[] = picsData
+  const ogp = `https://phantomtype.com${picsInLoc[0].pics[0].url}`
   return (
     <>
+      <Head>
+        <meta property='og:title' content='PHANTOM TYPE' />
+        <meta property='og:description' content='Japan photo gallery' />
+        <meta property='og:image' content={ogp} />
+        <meta name='twitter:image' content={ogp} />
+      </Head>
       <FixedNav city={city} />
       <div className='grid gap-16 grid-rows-1'>
         <h2 className='mt-16 text-4xl text-center uppercase'>{city}</h2>
