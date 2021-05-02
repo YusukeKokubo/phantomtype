@@ -1,5 +1,8 @@
 import Link from 'next/link'
 import Router from 'next/router'
+import { Listbox, Transition } from "@headlessui/react"
+import { ChevronDownIcon } from "@heroicons/react/solid"
+import { Fragment } from 'react'
 
 export const FixedNav = ({ city }: { city: string }) => {
     return (
@@ -12,16 +15,43 @@ export const FixedNav = ({ city }: { city: string }) => {
                     </a>
                 </Link>
             </div>
-            <div className="relative">
-                <label className='hidden' id='LabelChooseCity' htmlFor='ChooseCity'>Choose city</label>
-                <select id='ChooseCity' aria-labelledby='LabelChooseCity' onChange={(e: any) => { push(e.target.value as string)() }} value={city} className="bg-transparent w-full text-base appearance-none uppercase border-b border-gray-200 text-gray-500 py-3 px-4 pr-8 leading-tight focus:outline-none focus:bg-black focus:border-gray-500">
-                    {Cities.map((c) => (
-                        <option key={c} value={c}>{c}</option>
-                    ))}
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-                </div>
+            <div className='relative'>
+                <Listbox value={city} onChange={(v) => { console.log(v) }}>
+                    {({ open }) => (
+                        <div className="relative mt-1">
+                            <Listbox.Button className='relative w-full py-2 pl-3 pr-10 uppercase text-left text-gray-400 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500'>
+                                <span className="block truncate">{city}</span>
+                                <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                    <ChevronDownIcon
+                                        className="w-5 h-5 text-gray-400"
+                                        aria-hidden="true"
+                                    />
+                                </span>
+                            </Listbox.Button>
+                            <Transition
+                                show={open}
+                                as={Fragment}
+                                leave="transition ease-in duration-100"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                            >
+                                <Listbox.Options>
+                                    {({ selected, active }) => (
+                                        Cities.map((c) => (
+                                            <Listbox.Option
+                                                key={c}
+                                                value={c}
+                                                className='uppercase'
+                                            >
+                                                <Link href={`${c}`}>{c}</Link>
+                                            </Listbox.Option>
+                                        ))
+                                    )}
+                                </Listbox.Options>
+                            </Transition>
+                        </div>
+                    )}
+                </Listbox>
             </div>
         </section>
     )
