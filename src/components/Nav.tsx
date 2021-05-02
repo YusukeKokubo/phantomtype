@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Router from 'next/router'
 import { Listbox, Transition } from "@headlessui/react"
-import { ChevronDownIcon } from "@heroicons/react/solid"
+import { CheckIcon, ChevronDownIcon } from "@heroicons/react/solid"
 import { Fragment } from 'react'
 
 export const FixedNav = ({ city }: { city: string }) => {
@@ -15,11 +15,11 @@ export const FixedNav = ({ city }: { city: string }) => {
                     </a>
                 </Link>
             </div>
-            <div className='relative'>
+            <div className='relative w-40'>
                 <Listbox value={city} onChange={(v) => { console.log(v) }}>
                     {({ open }) => (
                         <div className="relative mt-1">
-                            <Listbox.Button className='relative w-full py-2 pl-3 pr-10 uppercase text-left text-gray-400 rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500'>
+                            <Listbox.Button className='relative w-full py-2 pl-3 pr-10 uppercase text-left text-gray-400 rounded-lg shadow-md cursor-default focus:outline-none'>
                                 <span className="block truncate">{city}</span>
                                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                     <ChevronDownIcon
@@ -35,25 +35,39 @@ export const FixedNav = ({ city }: { city: string }) => {
                                 leaveFrom="opacity-100"
                                 leaveTo="opacity-0"
                             >
-                                <Listbox.Options>
-                                    {({ selected, active }) => (
+                                <Listbox.Options className='absolute px-2 py-1 mt-1 bg-gray-500 bg-opacity-75 text-gray-100 rounded-md shadow-lg focus:outline-none'>
+                                    {
                                         Cities.map((c) => (
                                             <Listbox.Option
                                                 key={c}
                                                 value={c}
-                                                className='uppercase'
+                                                className='uppercase hover:bg-gray-400 px-2 py-1 pl-6'
                                             >
-                                                <Link href={`${c}`}>{c}</Link>
+                                                {({ selected }) => (
+                                                    <span
+                                                        className={`flex items-center`}
+                                                    >
+                                                        {selected ?
+                                                            <CheckIcon
+                                                                className="w-5 h-5 absolute left-2"
+                                                                aria-hidden="true"
+                                                            /> : <span />
+                                                        }
+                                                        <Link href={`${c}`}>
+                                                            {c}
+                                                        </Link>
+                                                    </span>
+                                                )}
                                             </Listbox.Option>
                                         ))
-                                    )}
+                                    }
                                 </Listbox.Options>
                             </Transition>
                         </div>
                     )}
                 </Listbox>
             </div>
-        </section>
+        </section >
     )
 }
 
