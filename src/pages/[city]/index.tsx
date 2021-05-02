@@ -84,7 +84,7 @@ const CityPage: NextPage<{ city: string, picsData: any }> = ({ city, picsData })
         <meta name='twitter:image' content={ogp} />
       </Head>
       <FixedNav city={city} />
-      <div className='grid gap-16 grid-rows-1'>
+      <div className='grid gap-16 grid-rows-1 z-0'>
         <h2 className='mt-16 text-4xl text-center uppercase'>{city}</h2>
         {picsInLoc.map(p => {
           return <Location key={p.location} city={city} picsInLoc={p} />
