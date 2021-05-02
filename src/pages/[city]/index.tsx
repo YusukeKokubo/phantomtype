@@ -116,29 +116,29 @@ const readExif = (filePath: string): Exif | null => {
     console.error('Image has not exif.')
     return null
   }
-  const dateTimeOriginal = exif.DateTimeOriginal.description
-  const make = exif.Make.description
-  const model = exif.Model.description
+  const dateTimeOriginal = exif.DateTimeOriginal?.description
+  const make = exif.Make?.description
+  const model = exif.Model?.description
   const lensMake = exif['LensMake']?.description || ''
   const lensModel = exif['LensModel']?.description || ''
-  const focalLength = exif.FocalLength.description
-  const focalLengthIn35mm = exif.FocalLengthIn35mmFilm.description
-  const fnumber = exif.FNumber.description
-  const exposureTime = exif.ExposureTime.description
-  const iso = exif.ISOSpeedRatings.description
+  const focalLength = exif.FocalLength?.description
+  const focalLengthIn35mm = exif.FocalLengthIn35mmFilm?.description
+  const fnumber = exif.FNumber?.description
+  const exposureTime = exif.ExposureTime?.description
+  const iso = exif.ISOSpeedRatings?.description
   return {
     ImageWidth: tFile["Image Width"]?.value!,
     ImageLength: tFile["Image Height"]?.value!,
-    Make: make,
-    Model: model,
-    DateTimeOriginal: dateTimeOriginal,
+    Make: make || '',
+    Model: model || '',
+    DateTimeOriginal: dateTimeOriginal || '',
     LensMake: lensMake,
     LensModel: lensModel,
-    FocalLength: focalLength,
-    FocalLengthIn35mmFormat: focalLengthIn35mm,
-    FNumber: fnumber,
-    ExposureTime: exposureTime,
-    ISO: iso
+    FocalLength: focalLength || '',
+    FocalLengthIn35mmFormat: focalLengthIn35mm || '',
+    FNumber: fnumber || '',
+    ExposureTime: exposureTime || '',
+    ISO: iso || ''
   }
 }
 
