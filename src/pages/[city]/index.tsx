@@ -41,16 +41,22 @@ const Pic: NextPage<{ city: string, pic: Photo, align: number }> = ({ city, pic,
   const e = p.exif!
   const { width, height } = calcSize(e, 1000)
   return (
-    <div className={`my-6 flex flex-col ${align === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-      <Image src={p.url} width={width} height={height} alt={`${city} ${name}`} />
-      <div className={`mx-3 text-base font-light flex flex-col ${align === 1 ? 'text-right' : null}`}>
+    <div className={`my-6 flex flex-col`}>
+      <Image src={p.url} width={width} height={height} layout='responsive' alt={`${city} ${name}`} />
+      <div className={`mx-3 text-xs font-light flex flex-col text-gray-400`}>
         <div className='flex flex-col justify-start'>
-          <span className='text-xl mb-0'>{e.DateTimeOriginal}</span>
-          {/* <span className='text-xl mb-2'>{name}</span> */}
-          <span>{e.Make} {e.Model}</span>
-          <span>{e.LensModel.replace(/\0/g, '')}</span>
-          <span className='mt-2'>{e.FocalLength} ({e.FocalLengthIn35mmFormat}) | {e.FNumber} | {e.ExposureTime}S</span>
-          <span>ISO {e.ISO}</span>
+          <span className='mb-0'>{e.DateTimeOriginal}</span>
+          <div className='flex gap-2'>
+            <span>{e.Make} {e.Model} {e.LensModel.replace(/\0/g, '')}</span>
+            <span>{e.LensModel.replace(/\0/g, '')}</span>
+          </div>
+          <div className='flex gap-2'>
+            <span>{e.FocalLength}</span>
+            <span>({e.FocalLengthIn35mmFormat}mm)</span>
+            <span>{e.FNumber}</span>
+            <span>{e.ExposureTime}S</span>
+            <span>ISO {e.ISO}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -63,11 +69,13 @@ const Location: NextPage<{ city: string, picsInLoc: PicsInLoc }> = ({ city, pics
   return (
     <section className='my-8'>
       <h3 className='text-center text-3xl my-8 uppercase'>{loc}</h3>
-      {
-        pics.filter(p => p.exif).sort(byDatetime).map((p, i) => {
-          return <Pic key={p.url} city={city} pic={p} align={i % 2} />
-        })
-      }
+      <div className='grid grid-cols-1 md:grid-cols-3'>
+        {
+          pics.filter(p => p.exif).sort(byDatetime).map((p, i) => {
+            return <Pic key={p.url} city={city} pic={p} align={i % 2} />
+          })
+        }
+      </div>
     </section>
   )
 }
