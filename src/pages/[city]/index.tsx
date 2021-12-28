@@ -69,7 +69,7 @@ const Location: NextPage<{ city: string, picsInLoc: PicsInLoc }> = ({ city, pics
   return (
     <section className='my-8'>
       <h3 className='text-center text-3xl my-8 uppercase'>{loc}</h3>
-      <div className='grid grid-cols-1 md:grid-cols-3'>
+      <div className='grid grid-cols-1 md:grid-cols-2'>
         {
           pics.filter(p => p.exif).sort(byDatetime).map((p, i) => {
             return <Pic key={p.url} city={city} pic={p} align={i % 2} />
