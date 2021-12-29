@@ -5,7 +5,7 @@ import { Exif, Photo } from '../../../@types/Photo';
 
 import fs from "fs"
 import React from 'react';
-import { FixedNav } from '../../components/Nav';
+import { FixedNav, Nav } from '../../components/Nav';
 import * as ExifReader from 'exifreader';
 import Head from 'next/head';
 
@@ -97,6 +97,9 @@ const CityPage: NextPage<{ city: string, picsData: any }> = ({ city, picsData })
         {picsInLoc.map(p => {
           return <Location key={p.location} city={city} picsInLoc={p} />
         })}
+        <div className='my-8'>
+          <Nav />
+        </div>
       </div>
     </>
   )
