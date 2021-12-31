@@ -17,8 +17,7 @@ const Template = () => {
         <div className='mx-8 lg:mx-16 grid grid-cols-1 gap-16'>
           <div className='flex'>
             <div>
-              <h1 className='font-light text-5xl leading-none'>PHANTOM TYPE
-            </h1>
+              <h1 className='font-light text-5xl leading-none'>PHANTOM TYPE</h1>
               <p className='font-light text-xl mt-2'>Japan Pics by
                 <a target='_blank'
                   className='font-normal mx-1'
