@@ -41,9 +41,9 @@ const Pic: NextPage<{ city: string, pic: Photo, align: number }> = ({ city, pic,
   const e = p.exif!
   const { width, height } = calcSize(e, 1000)
   return (
-    <div className={`my-6 flex flex-col`}>
-      <Image src={p.url} width={width} height={height} alt={`${city} ${name}`} />
-      <div className={`mx-3 text-xs font-light flex flex-col text-gray-400`}>
+    <div className='relative h-max'>
+      <Image src={p.url} width={width} height={height} alt={`${city} ${name}`} priority={true} />
+      <div className={`p-2 text-xs font-light text-white absolute bottom-0 bg-gray-500/50` }>
         <div className='flex flex-col justify-start'>
           <span className='mb-0'>{e.DateTimeOriginal}</span>
           <div className='flex gap-2'>
