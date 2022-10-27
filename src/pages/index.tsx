@@ -11,7 +11,7 @@ const Template = () => {
         <meta property='og:image' content='https://phantomtype.com/ogkyoto.jpg' />
         <meta name='twitter:image' content='https://phantomtype.com/ogkyoto.jpg' />
       </Head>
-      <Image className='object-cover w-screen h-screen absolute top-0' alt='kyoto shimogamo' src={'/kyoto.jpg'} layout='fill' priority={true} />
+      <Image className='object-cover w-screen h-screen absolute top-0' fill={true} alt='kyoto shimogamo' src={'/kyoto.jpg'} priority={true} />
       {/* <img className='object-cover w-screen h-screen absolute top-0' alt='kyoto shimogamo' src={'/kyoto.jpg'} /> */}
       <section className='absolute w-screen h-screen flex flex-col-reverse justify-around'>
         <div className='mx-8 lg:mx-16 grid grid-cols-1 gap-16'>

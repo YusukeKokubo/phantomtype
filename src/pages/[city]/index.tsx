@@ -42,7 +42,7 @@ const Pic: NextPage<{ city: string, pic: Photo, align: number }> = ({ city, pic,
   const { width, height } = calcSize(e, 1000)
   return (
     <div className={`my-6 flex flex-col`}>
-      <Image src={p.url} width={width} height={height} layout='responsive' alt={`${city} ${name}`} />
+      <Image src={p.url} width={width} height={height} alt={`${city} ${name}`} />
       <div className={`mx-3 text-xs font-light flex flex-col text-gray-400`}>
         <div className='flex flex-col justify-start'>
           <span className='mb-0'>{e.DateTimeOriginal}</span>

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Router from 'next/router'
 import { Listbox, Transition } from "@headlessui/react"
-import { CheckIcon, ChevronDownIcon } from "@heroicons/react/solid"
+import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/solid"
 import { Fragment } from 'react'
 
 export const FixedNav = ({ city }: { city: string }) => {
@@ -9,10 +9,8 @@ export const FixedNav = ({ city }: { city: string }) => {
         <section className='flex top-0 px-5 w-full fixed justify-between bg-black bg-opacity-50 z-50'>
             <div className='mt-2'>
                 <Link href='/'>
-                    <a>
                         <img className='inline align-baseline w-8 mr-1' src='/logomark-white.svg' alt='link to top' />
                         <span className='hidden md:inline leading-loose text-2xl'>PHANTOM TYPE</span>
-                    </a>
                 </Link>
             </div>
             <div className='relative w-40'>
