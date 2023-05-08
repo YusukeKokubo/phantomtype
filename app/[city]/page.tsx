@@ -162,7 +162,7 @@ const readExif = (filePath: string): Exif | null => {
   }
 }
 
-export async function getProjects({ params }) {
+async function getProjects({ params }) {
   const dirs = readDir(`public/${params.city}`)
   const pics: PicsInLoc[] = dirs.map((dir) => {
     const path = `public/${params.city}/${dir}`
