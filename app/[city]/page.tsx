@@ -1,4 +1,3 @@
-import { NextPage } from "next"
 import Image from "next/image"
 
 import { Exif, Photo } from "../../@types/Photo"
@@ -103,7 +102,7 @@ async function CityPage({ params }: { params: { city: string } }) {
               {p.pics
                 .filter((p) => p.exif)
                 .sort(byDatetime)
-                .map((p, i) => {
+                .map((p) => {
                   return <Pic city={city} pic={p} />
                 })}
             </div>
