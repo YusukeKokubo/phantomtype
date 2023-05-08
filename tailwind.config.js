@@ -1,5 +1,6 @@
 module.exports = {
   purge: ['./src/**/*.tsx', './src/**/*.js'],
+  content: ['./app/**/*.tsx'],
   theme: {
     fontFamily: {
       body: ['Helvetica', 'Noto Sans JP'],
