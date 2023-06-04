@@ -5,7 +5,7 @@ import { Exif, Photo, City } from "../../@types/Photo"
 import React from "react"
 import { FixedNav, Nav } from "../components/Nav"
 import Head from "next/head"
-import { Metadata, ResolvingMetadata } from "next"
+import { Metadata } from "next"
 
 function byDatetime(a: Photo, b: Photo): number {
   return b.exif!.DateTimeOriginal < a.exif!.DateTimeOriginal ? 1 : -1
@@ -68,11 +68,7 @@ function Pic(params: { city: string; pic: Photo }) {
   )
 }
 
-export async function generateMetadata(
-  { params },
-  parent?: ResolvingMetadata
-): Promise<Metadata> {
-  const previousImages = (parent && (await parent).openGraph?.images) || []
+export async function generateMetadata({ params }): Promise<Metadata> {
   const cities: City[] = await getProjects()
   const cityPics = cities.find((p) => p.city == params.city)
   if (!cityPics) {
@@ -85,7 +81,7 @@ export async function generateMetadata(
   return {
     title: `PHANTOM TYPE - ${params.city.toUpperCase()}`,
     openGraph: {
-      images: [ogp, ...previousImages],
+      images: [ogp],
     },
   }
 }
@@ -148,7 +144,7 @@ async function getProjects() {
       console.error(e)
       return {}
     })
-  console.debug(pics)
+  // console.debug(pics)
   return pics
 }
 
