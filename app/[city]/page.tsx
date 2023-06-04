@@ -69,7 +69,17 @@ function Pic(params: { city: string; pic: Photo }) {
 
 async function CityPage({ params }: { params: { city: string } }) {
   const cityName = params.city
-  const cities: City[] = await getProjects()
+  // const cities: City[] = await getProjects()
+
+  const url = `${process.env.NEXT_PUBLIC_HOST}/pics.json`
+  const cities: City[] = await fetch(url)
+    .then((res) => res.json())
+    .catch((e) => {
+      console.error(e)
+      return {}
+    })
+  console.debug(cities)
+
   const cityPics = cities.find((p) => p.city == cityName)
   if (!cityPics) {
     console.error(`city [${cityName}] not found`)
@@ -115,17 +125,19 @@ export async function generateStaticParams() {
   return ["kyoto", "nagoya", "kanazawa", "matsushima"]
 }
 
-async function getProjects() {
-  const url = `${process.env.NEXT_PUBLIC_HOST}/pics.json`
+// server componentsがうまく動かないのでやめた
+//
+// async function getProjects() {
+//   const url = `${process.env.NEXT_PUBLIC_HOST}/pics.json`
 
-  const pics = await fetch(url)
-    .then((res) => res.json())
-    .catch((e) => {
-      console.error(e)
-      return {}
-    })
-  console.debug(pics)
-  return pics
-}
+//   const pics = await fetch(url)
+//     .then((res) => res.json())
+//     .catch((e) => {
+//       console.error(e)
+//       return {}
+//     })
+//   console.debug(pics)
+//   return pics
+// }
 
 export default CityPage
