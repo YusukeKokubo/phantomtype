@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image"
 
 import { Exif, Photo, City } from "../../@types/Photo"
@@ -69,16 +71,7 @@ function Pic(params: { city: string; pic: Photo }) {
 
 async function CityPage({ params }: { params: { city: string } }) {
   const cityName = params.city
-  // const cities: City[] = await getProjects()
-
-  const url = `${process.env.NEXT_PUBLIC_HOST}/pics.json`
-  const cities: City[] = await fetch(url)
-    .then((res) => res.json())
-    .catch((e) => {
-      console.error(e)
-      return {}
-    })
-  console.debug(cities)
+  const cities: City[] = await getProjects()
 
   const cityPics = cities.find((p) => p.city == cityName)
   if (!cityPics) {
@@ -125,19 +118,17 @@ export async function generateStaticParams() {
   return ["kyoto", "nagoya", "kanazawa", "matsushima"]
 }
 
-// server componentsがうまく動かないのでやめた
-//
-// async function getProjects() {
-//   const url = `${process.env.NEXT_PUBLIC_HOST}/pics.json`
+async function getProjects() {
+  const url = `${process.env.NEXT_PUBLIC_HOST}/pics.json`
 
-//   const pics = await fetch(url)
-//     .then((res) => res.json())
-//     .catch((e) => {
-//       console.error(e)
-//       return {}
-//     })
-//   console.debug(pics)
-//   return pics
-// }
+  const pics = await fetch(url)
+    .then((res) => res.json())
+    .catch((e) => {
+      console.error(e)
+      return {}
+    })
+  console.debug(pics)
+  return pics
+}
 
 export default CityPage
