@@ -76,7 +76,7 @@ async function CityPage({ params }: { params: { city: string } }) {
     return <></>
   }
 
-  const ogp = `https://phantomtype.com${cityPics.locations[0].pics[0].url}`
+  const ogp = `${process.env.NEXT_PUBLIC_HOST}/${cityPics.locations[0].pics[0].url}`
   return (
     <>
       <Head>

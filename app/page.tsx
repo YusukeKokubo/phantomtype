@@ -3,19 +3,14 @@ import Image from "next/image"
 import { Nav } from "./components/Nav"
 
 const Template = () => {
+  const ogpContent = `${process.env.NEXT_PUBLIC_HOST}/ogkyoto.jpg`
   return (
     <>
       <Head>
         <meta property="og:title" content="PHANTOM TYPE" />
         <meta property="og:description" content="Japan photo gallery" />
-        <meta
-          property="og:image"
-          content="https://phantomtype.com/ogkyoto.jpg"
-        />
-        <meta
-          name="twitter:image"
-          content="https://phantomtype.com/ogkyoto.jpg"
-        />
+        <meta property="og:image" content={ogpContent} />
+        <meta name="twitter:image" content={ogpContent} />
       </Head>
       <div className="absolute w-screen h-screen top-0">
         <Image
@@ -26,7 +21,6 @@ const Template = () => {
           priority={true}
         />
       </div>
-      {/* <img className='object-cover w-screen h-screen absolute top-0' alt='kyoto shimogamo' src={'/kyoto.jpg'} /> */}
       <section className="absolute w-screen h-screen flex flex-col-reverse justify-around">
         <div className="mx-8 lg:mx-16 grid grid-cols-1 gap-16">
           <div className="flex">
