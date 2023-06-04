@@ -77,11 +77,12 @@ function Pic(params: { city: string; pic: Photo }) {
 
 async function CityPage({ params }: { params: { city: string } }) {
   const city = params.city
-  const picsInLoc: PicsInLoc[] = await getProjects({
+  const picsInLoc: PicsInLoc = await getProjects({
     params: { city },
   })
 
-  const ogp = `https://phantomtype.com${picsInLoc[0].pics[0].url}`
+  const ogp = `https://phantomtype.com${picsInLoc.pics[0].url}`
+  const pics = picsInLoc.pics
   return (
     <>
       <Head>
@@ -93,21 +94,19 @@ async function CityPage({ params }: { params: { city: string } }) {
       <FixedNav city={city} />
       <div className="grid gap-16 grid-rows-1 z-0">
         <h2 className="mt-16 text-4xl text-center uppercase">{city}</h2>
-        {picsInLoc.map((p) => (
-          <section className="my-8 mx-1">
-            <h3 className="text-center text-3xl my-8 uppercase">
-              {p.location}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
-              {p.pics
-                .filter((p) => p.exif)
-                .sort(byDatetime)
-                .map((p) => {
-                  return <Pic city={city} pic={p} />
-                })}
-            </div>
-          </section>
-        ))}
+        <section className="my-8 mx-1">
+          <h3 className="text-center text-3xl my-8 uppercase">
+            {picsInLoc.location}
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+            {pics
+              .filter((p) => p.exif)
+              .sort(byDatetime)
+              .map((p) => {
+                return <Pic city={city} pic={p} />
+              })}
+          </div>
+        </section>
         <div className="my-8">
           <Nav />
         </div>
@@ -117,7 +116,7 @@ async function CityPage({ params }: { params: { city: string } }) {
 }
 
 export async function generateStaticParams() {
-  return ["kyoto", "/nagoya", "/kanazawa", "/matsushima"]
+  return ["kyoto", "nagoya", "kanazawa", "matsushima"]
 }
 
 const readDir = (dirPath: string) => {
@@ -162,26 +161,39 @@ const readExif = (filePath: string): Exif | null => {
 }
 
 async function getProjects({ params }) {
-  const dirs = readDir(`public/${params.city}`)
-  const pics: PicsInLoc[] = dirs.map((dir) => {
-    const path = `public/${params.city}/${dir}`
-    const files = fs.readdirSync(path)
-    const picInLoc = files
-      .filter((file) => file.toLowerCase().endsWith(".jpg"))
-      .map((filePath) => {
-        const exif = readExif(`${path}/${filePath}`)
-        const pic: Photo = {
-          filename: filePath,
-          location: dir,
-          url: `/${params.city}/${dir}/${filePath}`,
-          exif: exif,
-        }
-        // console.log(pic)
-        return pic
-      })
-    return { location: dir, pics: picInLoc }
-  })
-  // console.log(pics)
+  // const dirs = readDir(`public/${params.city}`)
+  // const pics: PicsInLoc[] = dirs.map((dir) => {
+  //   const path = `public/${params.city}/${dir}`
+  //   const files = fs.readdirSync(path)
+  //   const picInLoc = files
+  //     .filter((file) => file.toLowerCase().endsWith(".jpg"))
+  //     .map((filePath) => {
+  //       const exif = readExif(`${path}/${filePath}`)
+  //       const pic: Photo = {
+  //         filename: filePath,
+  //         location: dir,
+  //         url: `/${params.city}/${dir}/${filePath}`,
+  //         exif: exif,
+  //       }
+  //       console.log(pic)
+  //       return pic
+  //     })
+  //   return { location: dir, pics: picInLoc }
+  // })
+  // // console.log(pics)
+  // return pics
+
+  // サーバーのホスト名、プロトコルをNextRouterから取得する
+  const url = `${process.env.NEXT_PUBLIC_HOST}/${params.city}.json`
+
+  // kyoto.jsonを読み込んで返す
+  const pics = await fetch(url)
+    .then((res) => res.json())
+    .catch((e) => {
+      console.error(e)
+      return {}
+    })
+  console.log(pics)
   return pics
 }
 

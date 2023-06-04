@@ -42,5 +42,11 @@
     "**/*.tsx",
     "lib/random.js",
     ".next/types/**/*.ts"
-  ]
+  ],
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
 }

@@ -1,5 +1,6 @@
 export type Photo = {
   filename: string
+  city: string
   location: string
   url: string
   exif: Exif | null
