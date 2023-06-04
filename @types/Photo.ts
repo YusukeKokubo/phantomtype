@@ -6,7 +6,7 @@ export type Photo = {
   exif: Exif | null
 }
 
-export type PicsInLoc = {
+export type City = {
   city: string
   locations: Location[]
 }

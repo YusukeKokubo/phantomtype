@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-import { Exif, Photo, PicsInLoc } from "../../@types/Photo"
+import { Exif, Photo, City } from "../../@types/Photo"
 
 import React from "react"
 import { FixedNav, Nav } from "../components/Nav"
@@ -68,15 +68,15 @@ function Pic(params: { city: string; pic: Photo }) {
 }
 
 async function CityPage({ params }: { params: { city: string } }) {
-  const city = params.city
-  const picsInLoc: PicsInLoc[] = await getProjects()
-  const picsInCity = picsInLoc.find((p) => p.city == city)
-  if (!picsInCity) {
-    console.error(`city [${city}] not found`)
+  const cityName = params.city
+  const cities: City[] = await getProjects()
+  const cityPics = cities.find((p) => p.city == cityName)
+  if (!cityPics) {
+    console.error(`city [${cityName}] not found`)
     return <></>
   }
 
-  const ogp = `https://phantomtype.com${picsInCity.locations[0].pics[0].url}`
+  const ogp = `https://phantomtype.com${cityPics.locations[0].pics[0].url}`
   return (
     <>
       <Head>
@@ -85,10 +85,10 @@ async function CityPage({ params }: { params: { city: string } }) {
         <meta property="og:image" content={ogp} />
         <meta name="twitter:image" content={ogp} />
       </Head>
-      <FixedNav city={city} />
+      <FixedNav city={cityName} />
       <div className="grid gap-16 grid-rows-1 z-0">
-        <h2 className="mt-16 text-4xl text-center uppercase">{city}</h2>
-        {picsInCity.locations.map((loc) => (
+        <h2 className="mt-16 text-4xl text-center uppercase">{cityName}</h2>
+        {cityPics.locations.map((loc) => (
           <section className="my-8 mx-1">
             <h3 className="text-center text-3xl my-8 uppercase">
               {loc.location}
@@ -98,7 +98,7 @@ async function CityPage({ params }: { params: { city: string } }) {
                 .filter((p) => p.exif)
                 .sort(byDatetime)
                 .map((p) => {
-                  return <Pic city={city} pic={p} />
+                  return <Pic city={cityName} pic={p} />
                 })}
             </div>
           </section>
