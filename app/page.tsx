@@ -13,6 +13,11 @@ export const metadata: Metadata = {
       },
     ],
   },
+  twitter: {
+    card: "summary_large_image",
+    creator: "@yusuke_kokubo",
+    images: `${process.env.NEXT_PUBLIC_HOST}/ogkyoto.jpg`,
+  },
 }
 
 const Template = () => {

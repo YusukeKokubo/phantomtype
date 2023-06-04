@@ -83,6 +83,11 @@ export async function generateMetadata({ params }): Promise<Metadata> {
     openGraph: {
       images: [ogp],
     },
+    twitter: {
+      card: "summary_large_image",
+      creator: "@yusuke_kokubo",
+      images: ogp,
+    },
   }
 }
 

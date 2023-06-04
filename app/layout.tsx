@@ -23,9 +23,6 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-      </head>
       <body className={`bg-black text-white font-body ${inter.className}`}>
         {children}
       </body>
