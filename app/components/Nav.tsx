@@ -82,11 +82,11 @@ export const Nav = () => {
     <section className="grid grid-cols-1 md:grid-cols-4 gap-2">
       {Cities.map((c) => (
         <Link
-          className="py-2 text-lg text-center font-light uppercase rounded border border-gray-700 hover:bg-black"
+          className="py-2 text-lg text-center font-light uppercase hover:bg-black hover:bg-opacity-50"
           href={`/${c}`}
           key={c}
         >
-          {c}
+          <span className="border-b px-2">{c}</span>
         </Link>
       ))}
     </section>
