@@ -4,7 +4,6 @@ import { Exif, Photo, City } from "../../@types/Photo"
 
 import React from "react"
 import { FixedNav, Nav } from "../components/Nav"
-import Head from "next/head"
 import { Metadata } from "next"
 
 function byDatetime(a: Photo, b: Photo): number {
@@ -76,7 +75,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
     return {}
   }
 
-  const ogp = `${process.env.NEXT_PUBLIC_HOST}/${cityPics.locations[0].pics[0].url}`
+  const ogp = `${process.env.NEXT_PUBLIC_HOST}${cityPics.locations[0].pics[0].url}`
 
   return {
     title: `PHANTOM TYPE - ${params.city.toUpperCase()}`,
@@ -101,15 +100,8 @@ async function CityPage({ params }: { params: { city: string } }) {
     return <></>
   }
 
-  const ogp = `${process.env.NEXT_PUBLIC_HOST}/${cityPics.locations[0].pics[0].url}`
   return (
     <>
-      <Head>
-        <meta property="og:title" content="PHANTOM TYPE" />
-        <meta property="og:description" content="Japan photo gallery" />
-        <meta property="og:image" content={ogp} />
-        <meta name="twitter:image" content={ogp} />
-      </Head>
       <FixedNav city={cityName} />
       <div className="grid gap-16 grid-rows-1 z-0">
         <h2 className="mt-16 text-4xl text-center uppercase">{cityName}</h2>
