@@ -1,17 +1,23 @@
-import Head from "next/head"
 import Image from "next/image"
 import { Nav } from "./components/Nav"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  openGraph: {
+    images: [
+      {
+        url: `${process.env.NEXT_PUBLIC_HOST}/ogkyoto.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "kyoto shimogamo",
+      },
+    ],
+  },
+}
 
 const Template = () => {
-  const ogpContent = `${process.env.NEXT_PUBLIC_HOST}/ogkyoto.jpg`
   return (
     <>
-      <Head>
-        <meta property="og:title" content="PHANTOM TYPE" />
-        <meta property="og:description" content="Japan photo gallery" />
-        <meta property="og:image" content={ogpContent} />
-        <meta name="twitter:image" content={ogpContent} />
-      </Head>
       <div className="absolute w-screen h-screen top-0">
         <Image
           className="object-cover"
