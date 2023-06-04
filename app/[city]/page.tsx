@@ -1,17 +1,10 @@
 import Image from "next/image"
 
-import { Exif, Photo } from "../../@types/Photo"
+import { Exif, Photo, PicsInLoc } from "../../@types/Photo"
 
-import fs from "fs"
 import React from "react"
 import { FixedNav, Nav } from "../components/Nav"
-import * as ExifReader from "exifreader"
 import Head from "next/head"
-
-type PicsInLoc = {
-  location: string
-  pics: Photo[]
-}
 
 function byDatetime(a: Photo, b: Photo): number {
   return b.exif!.DateTimeOriginal < a.exif!.DateTimeOriginal ? 1 : -1
@@ -49,7 +42,6 @@ function Pic(params: { city: string; pic: Photo }) {
         width={width}
         height={height}
         alt={`${city} ${name}`}
-        priority={true}
       />
       <div
         className={`p-2 text-xs font-light text-white absolute bottom-0 bg-gray-500/50`}
@@ -77,12 +69,14 @@ function Pic(params: { city: string; pic: Photo }) {
 
 async function CityPage({ params }: { params: { city: string } }) {
   const city = params.city
-  const picsInLoc: PicsInLoc = await getProjects({
-    params: { city },
-  })
+  const picsInLoc: PicsInLoc[] = await getProjects()
+  const picsInCity = picsInLoc.find((p) => p.city == city)
+  if (!picsInCity) {
+    console.error(`city [${city}] not found`)
+    return <></>
+  }
 
-  const ogp = `https://phantomtype.com${picsInLoc.pics[0].url}`
-  const pics = picsInLoc.pics
+  const ogp = `https://phantomtype.com${picsInCity.locations[0].pics[0].url}`
   return (
     <>
       <Head>
@@ -94,19 +88,21 @@ async function CityPage({ params }: { params: { city: string } }) {
       <FixedNav city={city} />
       <div className="grid gap-16 grid-rows-1 z-0">
         <h2 className="mt-16 text-4xl text-center uppercase">{city}</h2>
-        <section className="my-8 mx-1">
-          <h3 className="text-center text-3xl my-8 uppercase">
-            {picsInLoc.location}
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
-            {pics
-              .filter((p) => p.exif)
-              .sort(byDatetime)
-              .map((p) => {
-                return <Pic city={city} pic={p} />
-              })}
-          </div>
-        </section>
+        {picsInCity.locations.map((loc) => (
+          <section className="my-8 mx-1">
+            <h3 className="text-center text-3xl my-8 uppercase">
+              {loc.location}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+              {loc.pics
+                .filter((p) => p.exif)
+                .sort(byDatetime)
+                .map((p) => {
+                  return <Pic city={city} pic={p} />
+                })}
+            </div>
+          </section>
+        ))}
         <div className="my-8">
           <Nav />
         </div>
@@ -119,81 +115,16 @@ export async function generateStaticParams() {
   return ["kyoto", "nagoya", "kanazawa", "matsushima"]
 }
 
-const readDir = (dirPath: string) => {
-  const dirs = fs.readdirSync(dirPath, { withFileTypes: true })
-  return dirs.filter((d) => d.isDirectory()).map((d) => d.name)
-}
+async function getProjects() {
+  const url = `${process.env.NEXT_PUBLIC_HOST}/pics.json`
 
-const readExif = (filePath: string): Exif | null => {
-  const p = fs.readFileSync(`${filePath}`)
-  console.log(filePath)
-  const tags = ExifReader.load(p, { expanded: true })
-  const exif = tags.exif!
-  const tFile = tags.file!
-  if (!exif || !tFile) {
-    console.error("Image has not exif.")
-    return null
-  }
-  const dateTimeOriginal = exif.DateTimeOriginal?.description
-  const make = exif.Make?.description
-  const model = exif.Model?.description
-  const lensMake = exif["LensMake"]?.description || ""
-  const lensModel = exif["LensModel"]?.description || ""
-  const focalLength = exif.FocalLength?.description
-  const focalLengthIn35mm = exif.FocalLengthIn35mmFilm?.description
-  const fnumber = exif.FNumber?.description
-  const exposureTime = exif.ExposureTime?.description
-  const iso = exif.ISOSpeedRatings?.description
-  return {
-    ImageWidth: tFile["Image Width"]?.value!,
-    ImageLength: tFile["Image Height"]?.value!,
-    Make: make || "",
-    Model: model || "",
-    DateTimeOriginal: dateTimeOriginal || "",
-    LensMake: lensMake,
-    LensModel: lensModel,
-    FocalLength: focalLength || "",
-    FocalLengthIn35mmFormat: focalLengthIn35mm || "",
-    FNumber: fnumber || "",
-    ExposureTime: exposureTime || "",
-    ISO: iso || "",
-  }
-}
-
-async function getProjects({ params }) {
-  // const dirs = readDir(`public/${params.city}`)
-  // const pics: PicsInLoc[] = dirs.map((dir) => {
-  //   const path = `public/${params.city}/${dir}`
-  //   const files = fs.readdirSync(path)
-  //   const picInLoc = files
-  //     .filter((file) => file.toLowerCase().endsWith(".jpg"))
-  //     .map((filePath) => {
-  //       const exif = readExif(`${path}/${filePath}`)
-  //       const pic: Photo = {
-  //         filename: filePath,
-  //         location: dir,
-  //         url: `/${params.city}/${dir}/${filePath}`,
-  //         exif: exif,
-  //       }
-  //       console.log(pic)
-  //       return pic
-  //     })
-  //   return { location: dir, pics: picInLoc }
-  // })
-  // // console.log(pics)
-  // return pics
-
-  // サーバーのホスト名、プロトコルをNextRouterから取得する
-  const url = `${process.env.NEXT_PUBLIC_HOST}/${params.city}.json`
-
-  // kyoto.jsonを読み込んで返す
   const pics = await fetch(url)
     .then((res) => res.json())
     .catch((e) => {
       console.error(e)
       return {}
     })
-  console.log(pics)
+  console.debug(pics)
   return pics
 }
 

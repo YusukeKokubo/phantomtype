@@ -29,7 +29,7 @@ function picsDataGenerator() {
             filename: filePath,
             city: cityName,
             location: cityLocationName,
-            url: `/pics/${cityName}/${filePath}`,
+            url: `/pics/${cityName}/${cityLocationName}/${filePath}`,
             exif: exif,
           }
           console.log(pic)
@@ -55,7 +55,7 @@ const readExif = (filePath: string): Exif | null => {
   const exif = tags.exif!
   const tFile = tags.file!
   if (!exif || !tFile) {
-    console.error("Image has not exif.")
+    console.error("The image has not exif.")
     return null
   }
   const dateTimeOriginal = exif.DateTimeOriginal?.description

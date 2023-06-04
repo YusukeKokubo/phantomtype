@@ -6,6 +6,16 @@ export type Photo = {
   exif: Exif | null
 }
 
+export type PicsInLoc = {
+  city: string
+  locations: Location[]
+}
+
+export type Location = {
+  location: string
+  pics: Photo[]
+}
+
 export type Exif = {
   ImageWidth: number
   ImageLength: number
