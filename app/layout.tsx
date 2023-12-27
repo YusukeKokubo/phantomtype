@@ -1,4 +1,4 @@
-import { Metadata } from "next"
+import { Metadata, Viewport } from "next"
 import "./globals.css"
 import { Inter } from "next/font/google"
 
@@ -13,11 +13,13 @@ export const metadata: Metadata = {
     type: "website",
     url: process.env.NEXT_PUBLIC_HOST,
   },
-  viewport: "initial-scale=1.0, width=device-width",
-  twitter: {
-    site: "@yusuke_kokubo",
-    card: "summary_large_image",
-  },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_HOST || ""),
+}
+
+export const viewport: Viewport = {
+  themeColor: "black",
+  initialScale: 1.0,
+  width: "device-width",
 }
 
 export default function RootLayout({ children }) {

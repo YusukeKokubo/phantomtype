@@ -42,6 +42,7 @@ function Pic(params: { city: string; pic: Photo }) {
         width={width}
         height={height}
         alt={`${city} ${name}`}
+        priority={true}
       />
       <div
         className={`p-2 text-xs font-light text-white absolute bottom-0 bg-gray-500/50`}
@@ -105,8 +106,8 @@ async function CityPage({ params }: { params: { city: string } }) {
       <FixedNav city={cityName} />
       <div className="grid gap-16 grid-rows-1 z-0">
         <h2 className="mt-16 text-4xl text-center uppercase">{cityName}</h2>
-        {cityPics.locations.map((loc) => (
-          <section className="my-8 mx-1">
+        {cityPics.locations.map((loc, loc_i) => (
+          <section className="my-8 mx-1" key={loc_i}>
             <h3 className="text-center text-3xl my-8 uppercase">
               {loc.location}
             </h3>
@@ -114,8 +115,8 @@ async function CityPage({ params }: { params: { city: string } }) {
               {loc.pics
                 .filter((p) => p.exif)
                 .sort(byDatetime)
-                .map((p) => {
-                  return <Pic city={cityName} pic={p} />
+                .map((p, p_i) => {
+                  return <Pic city={cityName} pic={p} key={p_i} />
                 })}
             </div>
           </section>
