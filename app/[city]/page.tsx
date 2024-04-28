@@ -91,7 +91,11 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   }
 }
 
-async function CityPage({ params }: { params: { city: string } }) {
+export default async function CityPage({
+  params,
+}: {
+  params: { city: string }
+}) {
   const cityName = params.city
   const cities: City[] = await getProjects()
 
@@ -145,5 +149,3 @@ async function getProjects() {
   // console.debug(pics)
   return pics
 }
-
-export default CityPage
