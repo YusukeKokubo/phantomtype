@@ -1,5 +1,3 @@
-import Image from "next/image"
-
 import { Exif, Photo, City } from "../../@types/Photo"
 
 import React from "react"
@@ -37,13 +35,7 @@ function Pic(params: { city: string; pic: Photo }) {
   const { width, height } = calcSize(e, 1000)
   return (
     <div className="relative h-max">
-      <Image
-        src={p.url}
-        width={width}
-        height={height}
-        alt={`${city} ${name}`}
-        priority={true}
-      />
+      <img src={p.url} width={width} height={height} alt={`${city} ${name}`} />
       <div
         className={`p-2 text-xs font-light text-white absolute bottom-0 bg-gray-500/50`}
       >
