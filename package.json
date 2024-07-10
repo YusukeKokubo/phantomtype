@@ -10,12 +10,13 @@
   "scripts": {
     "dev": "next",
     "build": "NODE_ENV=production next build",
-    "start": "NODE_ENV=production bun run build && next start",
+    "start": "NODE_ENV=production npm run build && next start",
     "lint": "tslint --project src",
     "typecheck": "tsc --project src",
-    "export": "NODE_ENV=production bun run build && next export",
-    "deploy": "NODE_ENV=production bun run build && vercel --prod",
-    "generatePics": "ts-node scripts/picsDataGenerator.ts"
+    "export": "NODE_ENV=production npm run build && next export",
+    "deploy": "NODE_ENV=production npm run build && vercel --prod",
+    "generatePics": "ts-node scripts/picsDataGenerator.ts",
+    "vercel:login": "vercel login"
   },
   "dependencies": {
     "@headlessui/react": "^2.1.2",
