@@ -13,7 +13,8 @@ import * as ExifReader from "exifreader"
 function picsDataGenerator() {
   const dirPath = path.join(__dirname, "../public/pics")
   const cityDirs = fs.readdirSync(dirPath)
-  const result = cityDirs.map((cityName) => {
+  const cities = cityDirs.filter((d) => fs.statSync(path.join(dirPath, d)).isDirectory())
+  const result = cities.map((cityName) => {
     const cityDirPath = path.join(dirPath, cityName)
     const cityLocationDirs = readDir(cityDirPath)
     const cityPics = cityLocationDirs.map((cityLocationName) => {
