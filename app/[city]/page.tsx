@@ -129,7 +129,7 @@ export default async function CityPage({
   )
 }
 
-async function getProjects() {
+export async function getProjects() {
   const url = `${process.env.NEXT_PUBLIC_HOST}/pics.json`
 
   const pics = await fetch(url)

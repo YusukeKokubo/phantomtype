@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { Nav } from "./components/Nav"
 import { Metadata } from "next"
+import { getProjects } from "./[city]/page"
 
 export const metadata: Metadata = {
   openGraph: {
@@ -20,7 +21,8 @@ export const metadata: Metadata = {
   },
 }
 
-const Template = () => {
+const Template = async () => {
+  const cities = await getProjects()
   return (
     <>
       <div className="absolute w-screen h-screen top-0">
@@ -57,7 +59,7 @@ const Template = () => {
               />
             </div>
           </div>
-          <Nav />
+          <Nav cities={cities} />
         </div>
         <div />
       </section>
