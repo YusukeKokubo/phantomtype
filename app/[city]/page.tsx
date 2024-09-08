@@ -3,6 +3,7 @@ import { Exif, Photo, City } from "../../@types/Photo"
 import React from "react"
 import { Header, Nav } from "../components/Nav"
 import { Metadata } from "next"
+import Image from "next/image"
 
 function byDatetime(a: Photo, b: Photo): number {
   return b.exif!.DateTimeOriginal < a.exif!.DateTimeOriginal ? 1 : -1
@@ -35,7 +36,12 @@ function Pic(params: { city: string; pic: Photo }) {
   const { width, height } = calcSize(e, 1000)
   return (
     <div className="relative h-max">
-      <img src={p.url} width={width} height={height} alt={`${city} ${name}`} />
+      <Image
+        src={p.url}
+        width={width}
+        height={height}
+        alt={`${city} ${name}`}
+      />
       <div
         className={`p-2 text-xs font-light text-white absolute bottom-0 bg-gray-500/50`}
       >
