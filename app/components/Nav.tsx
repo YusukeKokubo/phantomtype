@@ -4,7 +4,7 @@ import Link from "next/link"
 
 export const Header = ({ city }: { city: string }) => {
   return (
-    <section className="flex top-0 px-5 w-full fixed justify-between bg-black bg-opacity-50 z-50">
+    <section className="flex px-5 w-full justify-between bg-black">
       <div className="mt-2">
         <Link href="/">
           <img

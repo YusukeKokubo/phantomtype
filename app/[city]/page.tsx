@@ -106,13 +106,11 @@ export default async function CityPage({
   return (
     <>
       <Header city={cityName} />
-      <div className="grid gap-16 grid-rows-1 z-0">
-        <h2 className="mt-16 text-4xl text-center uppercase">{cityName}</h2>
+      <div className="h-screen overflow-y-scroll">
+        <h2 className="text-4xl text-center uppercase">{cityName}</h2>
         {cityPics.locations.map((loc, loc_i) => (
-          <section className="my-8 mx-1" key={loc_i}>
-            <h3 className="text-center text-3xl my-8 uppercase">
-              {loc.location}
-            </h3>
+          <section key={loc_i} className="py-8 px-1 flex flex-col gap-2">
+            <h3 className="text-center text-3xl uppercase">{loc.location}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
               {loc.pics
                 .filter((p) => p.exif)
