@@ -11,8 +11,7 @@
     "dev": "next",
     "build": "NODE_ENV=production next build",
     "start": "NODE_ENV=production npm run build && next start",
-    "lint": "tslint --project src",
-    "typecheck": "tsc --project src",
+    "lint": "npx biome lint",
     "export": "NODE_ENV=production npm run build && next export",
     "deploy": "NODE_ENV=production npm run build && vercel --prod",
     "generatePics": "ts-node scripts/picsDataGenerator.ts",
@@ -29,13 +28,14 @@
     "tailwindcss": "^3.4.10"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.8.3",
     "@types/node": "22.5.4",
     "@types/react": "^18.3.5",
     "@types/react-dom": "18.3.0",
+    "ts-node": "^10.9.2",
     "tslint": "^6.1.3",
     "tslint-react": "^5.0.0",
     "typescript": "^5.5.4",
-    "ts-node": "^10.9.2",
     "vercel": "^37.4.0"
   }
 }
