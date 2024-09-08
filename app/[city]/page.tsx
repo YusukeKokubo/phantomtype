@@ -105,8 +105,8 @@ export default async function CityPage({
 
   return (
     <>
-      <Header city={cityName} />
-      <div className="h-screen overflow-y-scroll">
+      <Header city={cityName} cities={cities} />
+      <div className="h-[calc(100vh-4rem)] overflow-y-scroll">
         <h2 className="text-4xl text-center uppercase">{cityName}</h2>
         {cityPics.locations.map((loc, loc_i) => (
           <section key={loc_i} className="py-8 px-1 flex flex-col gap-2">
@@ -122,15 +122,11 @@ export default async function CityPage({
           </section>
         ))}
         <div className="my-8">
-          <Nav city={cityName} />
+          <Nav city={cityName} cities={cities} />
         </div>
       </div>
     </>
   )
-}
-
-export async function generateStaticParams() {
-  return ["kyoto", "nagoya", "kanazawa", "matsushima"]
 }
 
 async function getProjects() {

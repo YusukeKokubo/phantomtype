@@ -1,8 +1,9 @@
 "use client"
 
+import { City } from "../../@types/Photo"
 import Link from "next/link"
 
-export const Header = ({ city }: { city: string }) => {
+export const Header = ({ city, cities }: { city: string; cities: City[] }) => {
   return (
     <section className="flex px-5 w-full justify-between bg-black">
       <div className="mt-2">
@@ -18,14 +19,14 @@ export const Header = ({ city }: { city: string }) => {
         </Link>
       </div>
       <div className="flex gap-4 items-center justify-center">
-        {Cities.map((c) => (
-          <Link href={c} key={c} scroll={false}>
+        {cities.map((c) => (
+          <Link href={c.city} key={c.city} scroll={false}>
             <span
               className={`text-lg uppercase ${
-                c == city ? "text-white" : "text-gray-500"
+                c.city == city ? "text-white" : "text-gray-500"
               } hover:text-white`}
             >
-              {c}
+              {c.city}
             </span>
           </Link>
         ))}
@@ -34,18 +35,22 @@ export const Header = ({ city }: { city: string }) => {
   )
 }
 
-export const Nav = ({ city }: { city?: string }) => {
+export const Nav = ({ city, cities }: { city?: string; cities: City[] }) => {
   return (
     <div className="flex gap-8 items-center justify-center">
-      {Cities.filter((c) => c !== city).map((c) => (
-        <Link href={c} key={c}>
-          <span className="text-lg uppercase text-white hover:underline">
-            {c}
-          </span>
-        </Link>
-      ))}
+      {cities
+        .filter((c) => c.city !== city)
+        .map((c) => {
+          const examplePic = c.locations[0].pics[0]
+          return (
+            <Link href={c.city} key={c.city} className="relative">
+              <img src={examplePic.url} width={200} height="auto" />
+              <span className="top-0 absolute bg-black bg-opacity-50 px-4 text-lg uppercase text-white hover:underline">
+                {c.city}
+              </span>
+            </Link>
+          )
+        })}
     </div>
   )
 }
-
-const Cities = ["kyoto", "kanazawa", "nagoya", "matsushima"]
