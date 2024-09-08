@@ -4,16 +4,18 @@
 // 例: public/pics/kyoto/kyoto2.jpg -> public/pics.json -> ["kyoto/kyoto1.jpg", "kyoto/kyoto2.jpg"]
 // 画像を読み込んだときにexifを解析してメタ情報としてjsonを生成する
 
-const fs = require("fs")
-const path = require("path")
+const fs = require("node:fs")
+const path = require("node:path")
 
-import { Exif, Photo } from "../@types/Photo"
 import * as ExifReader from "exifreader"
+import type { Exif, Photo } from "../@types/Photo"
 
 function picsDataGenerator() {
   const dirPath = path.join(__dirname, "../public/pics")
   const cityDirs = fs.readdirSync(dirPath)
-  const cities = cityDirs.filter((d) => fs.statSync(path.join(dirPath, d)).isDirectory())
+  const cities = cityDirs.filter((d) =>
+    fs.statSync(path.join(dirPath, d)).isDirectory(),
+  )
   const result = cities.map((cityName) => {
     const cityDirPath = path.join(dirPath, cityName)
     const cityLocationDirs = readDir(cityDirPath)
@@ -62,8 +64,8 @@ const readExif = (filePath: string): Exif | null => {
   const dateTimeOriginal = exif.DateTimeOriginal?.description
   const make = exif.Make?.description
   const model = exif.Model?.description
-  const lensMake = exif["LensMake"]?.description || ""
-  const lensModel = exif["LensModel"]?.description || ""
+  const lensMake = exif.LensMake?.description || ""
+  const lensModel = exif.LensModel?.description || ""
   const focalLength = exif.FocalLength?.description
   const focalLengthIn35mm = exif.FocalLengthIn35mmFilm?.description
   const fnumber = exif.FNumber?.description
