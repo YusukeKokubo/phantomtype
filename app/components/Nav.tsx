@@ -18,7 +18,7 @@ export const Header = ({ city, cities }: { city: string; cities: City[] }) => {
           </span>
         </Link>
       </div>
-      <div className="flex gap-4 items-center justify-center">
+      <div className="flex flex-col md:flex-row md:gap-4 items-center justify-center">
         {cities.map((c) => (
           <Link href={c.city} key={c.city} scroll={false}>
             <span
@@ -37,14 +37,19 @@ export const Header = ({ city, cities }: { city: string; cities: City[] }) => {
 
 export const Nav = ({ city, cities }: { city?: string; cities: City[] }) => {
   return (
-    <div className="flex gap-8 items-center justify-center">
+    <div className="flex flex-col gap-4 md:flex-row md:gap-8 items-center justify-center">
       {cities
         .filter((c) => c.city !== city)
         .map((c) => {
           const examplePic = c.locations[0].pics[0]
           return (
             <Link href={c.city} key={c.city} className="relative">
-              <img src={examplePic.url} width={200} height="auto" />
+              <img
+                src={examplePic.url}
+                width={200}
+                height="auto"
+                className="w-12 md:w-32"
+              />
               <span className="top-0 absolute bg-black bg-opacity-50 px-4 text-lg uppercase text-white hover:underline">
                 {c.city}
               </span>
