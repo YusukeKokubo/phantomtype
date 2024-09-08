@@ -1,7 +1,6 @@
 import Image from "next/image"
 import { Nav } from "./components/Nav"
 import { Metadata } from "next"
-import { getProjects } from "./[city]/page"
 
 export const metadata: Metadata = {
   openGraph: {
@@ -66,4 +65,18 @@ const Template = async () => {
     </>
   )
 }
+
+async function getProjects() {
+  const url = `${process.env.NEXT_PUBLIC_HOST}/pics.json`
+
+  const pics = await fetch(url)
+    .then((res) => res.json())
+    .catch((e) => {
+      console.error(e)
+      return {}
+    })
+  // console.debug(pics)
+  return pics
+}
+
 export default Template
