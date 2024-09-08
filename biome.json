@@ -1,6 +1,7 @@
 {
   "files": {
-    "include": ["app/**/*.ts", "scripts/**/*.ts"]
+    "include": ["app/**/*.ts", "scripts/**/*.ts"],
+    "ignore": ["node_modules", ".next"]
   },
   "formatter": {
     "indentStyle": "space",
