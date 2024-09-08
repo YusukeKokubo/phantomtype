@@ -1,7 +1,7 @@
 import { Exif, Photo, City } from "../../@types/Photo"
 
 import React from "react"
-import { FixedNav, Nav } from "../components/Nav"
+import { Header, Nav } from "../components/Nav"
 import { Metadata } from "next"
 
 function byDatetime(a: Photo, b: Photo): number {
@@ -99,7 +99,7 @@ export default async function CityPage({
 
   return (
     <>
-      <FixedNav city={cityName} />
+      <Header city={cityName} />
       <div className="grid gap-16 grid-rows-1 z-0">
         <h2 className="mt-16 text-4xl text-center uppercase">{cityName}</h2>
         {cityPics.locations.map((loc, loc_i) => (
@@ -111,14 +111,14 @@ export default async function CityPage({
               {loc.pics
                 .filter((p) => p.exif)
                 .sort(byDatetime)
-                .map((p, p_i) => {
-                  return <Pic city={cityName} pic={p} key={p_i} />
-                })}
+                .map((p, p_i) => (
+                  <Pic city={cityName} pic={p} key={p_i} />
+                ))}
             </div>
           </section>
         ))}
         <div className="my-8">
-          <Nav />
+          <Nav city={cityName} />
         </div>
       </div>
     </>
