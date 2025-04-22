@@ -1,9 +1,7 @@
-import { Exif, Photo, City } from "../../@types/Photo"
+import { City, Exif, Photo } from "../../@types/Photo"
 
-import React from "react"
-import { Header, Nav } from "../components/Nav"
-import { Metadata } from "next"
 import Image from "next/image"
+import { Header, Nav } from "../components/Nav"
 
 function byDatetime(a: Photo, b: Photo): number {
   return b.exif!.DateTimeOriginal < a.exif!.DateTimeOriginal ? 1 : -1
@@ -66,18 +64,19 @@ function Pic(params: { city: string; pic: Photo }) {
   )
 }
 
-export async function generateMetadata({ params }): Promise<Metadata> {
+export async function generateMetadata({ params }) {
+  const { city } = await params
   const cities: City[] = await getProjects()
-  const cityPics = cities.find((p) => p.city == params.city)
+  const cityPics = cities.find((p) => p.city == city)
   if (!cityPics) {
-    console.error(`city [${params.city}] not found`)
+    console.error(`city [${city}] not found`)
     return {}
   }
 
   const ogp = `${process.env.NEXT_PUBLIC_HOST}${cityPics.locations[0].pics[0].url}`
 
   return {
-    title: `PHANTOM TYPE - ${params.city.toUpperCase()}`,
+    title: `PHANTOM TYPE - ${city.toUpperCase()}`,
     openGraph: {
       images: [ogp],
     },
@@ -94,20 +93,20 @@ export default async function CityPage({
 }: {
   params: { city: string }
 }) {
-  const cityName = params.city
+  const { city } = await params
   const cities: City[] = await getProjects()
 
-  const cityPics = cities.find((p) => p.city == cityName)
+  const cityPics = cities.find((p) => p.city == city)
   if (!cityPics) {
-    console.error(`city [${cityName}] not found`)
+    console.error(`city [${city}] not found`)
     return <></>
   }
 
   return (
     <>
-      <Header city={cityName} cities={cities} />
+      <Header city={city} cities={cities} />
       <div className="md:h-[calc(100vh-4rem)] overflow-y-scroll">
-        <h2 className="text-4xl text-center uppercase">{cityName}</h2>
+        <h2 className="text-4xl text-center uppercase">{city}</h2>
         {cityPics.locations.map((loc, loc_i) => (
           <section key={loc_i} className="py-8 px-1 flex flex-col gap-2">
             <h3 className="text-center text-3xl uppercase">{loc.location}</h3>
@@ -116,13 +115,13 @@ export default async function CityPage({
                 .filter((p) => p.exif)
                 .sort(byDatetime)
                 .map((p, p_i) => (
-                  <Pic city={cityName} pic={p} key={p_i} />
+                  <Pic city={city} pic={p} key={p_i} />
                 ))}
             </div>
           </section>
         ))}
         <div className="my-8">
-          <Nav city={cityName} cities={cities} />
+          <Nav city={city} cities={cities} />
         </div>
       </div>
     </>
@@ -130,14 +129,14 @@ export default async function CityPage({
 }
 
 async function getProjects() {
-  const url = `${process.env.NEXT_PUBLIC_HOST}/pics.json`
+  const baseUrl = process.env.NEXT_PUBLIC_HOST || "http://localhost:3000"
+  const url = `${baseUrl}/pics.json`
 
   const pics = await fetch(url)
     .then((res) => res.json())
     .catch((e) => {
       console.error(e)
-      return {}
+      return []
     })
-  // console.debug(pics)
   return pics
 }
