@@ -64,7 +64,11 @@ function Pic(params: { city: string; pic: Photo }) {
   )
 }
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ city: string }>
+}) {
   const { city } = await params
   const cities: City[] = await getProjects()
   const cityPics = cities.find((p) => p.city == city)
@@ -91,7 +95,7 @@ export async function generateMetadata({ params }) {
 export default async function CityPage({
   params,
 }: {
-  params: { city: string }
+  params: Promise<{ city: string }>
 }) {
   const { city } = await params
   const cities: City[] = await getProjects()
