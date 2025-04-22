@@ -1,5 +1,5 @@
 import { City, Exif, Photo } from "../../@types/Photo"
-
+import citiesData from "../../public/pics.json"
 import Image from "next/image"
 import { Header, Nav } from "../components/Nav"
 
@@ -70,7 +70,7 @@ export async function generateMetadata({
   params: Promise<{ city: string }>
 }) {
   const { city } = await params
-  const cities: City[] = await getProjects()
+  const cities: City[] = citiesData
   const cityPics = cities.find((p) => p.city == city)
   if (!cityPics) {
     console.error(`city [${city}] not found`)
@@ -98,7 +98,7 @@ export default async function CityPage({
   params: Promise<{ city: string }>
 }) {
   const { city } = await params
-  const cities: City[] = await getProjects()
+  const cities: City[] = citiesData
 
   const cityPics = cities.find((p) => p.city == city)
   if (!cityPics) {
@@ -130,17 +130,4 @@ export default async function CityPage({
       </div>
     </>
   )
-}
-
-async function getProjects() {
-  const baseUrl = process.env.NEXT_PUBLIC_HOST || "http://localhost:3000"
-  const url = `${baseUrl}/pics.json`
-
-  const pics = await fetch(url)
-    .then((res) => res.json())
-    .catch((e) => {
-      console.error(e)
-      return []
-    })
-  return pics
 }
