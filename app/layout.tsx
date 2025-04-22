@@ -13,7 +13,11 @@ export const metadata: Metadata = {
     type: "website",
     url: process.env.NEXT_PUBLIC_HOST,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_HOST || ""),
+  ...(process.env.NEXT_PUBLIC_HOST
+    ? {
+        metadataBase: new URL(process.env.NEXT_PUBLIC_HOST),
+      }
+    : {}),
 }
 
 export const viewport: Viewport = {

@@ -67,13 +67,14 @@ const Template = async () => {
 }
 
 async function getProjects() {
-  const url = `${process.env.NEXT_PUBLIC_HOST}/pics.json`
+  const baseUrl = process.env.NEXT_PUBLIC_HOST || "http://localhost:3000"
+  const url = `${baseUrl}/pics.json`
 
   const pics = await fetch(url)
     .then((res) => res.json())
     .catch((e) => {
       console.error(e)
-      return {}
+      return []
     })
   // console.debug(pics)
   return pics
