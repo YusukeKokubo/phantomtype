@@ -80,10 +80,10 @@ const readExif = (filePath: string): Exif | null => {
     LensMake: lensMake,
     LensModel: lensModel,
     FocalLength: focalLength || "",
-    FocalLengthIn35mmFormat: focalLengthIn35mm || "",
+    FocalLengthIn35mmFormat: Number.parseInt(focalLengthIn35mm || "0"),
     FNumber: fnumber || "",
     ExposureTime: exposureTime || "",
-    ISO: iso || "",
+    ISO: Number.parseInt(iso || "0"),
   }
 }
 

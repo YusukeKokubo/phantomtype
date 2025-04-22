@@ -22,10 +22,10 @@ export type Exif = {
   Make: string
   Model: string
   DateTimeOriginal: string
-  FNumber: string
+  FNumber: string | number
   FocalLength: string
-  FocalLengthIn35mmFormat: string
-  ISO: string
+  FocalLengthIn35mmFormat: number
+  ISO: number
   ExposureTime: string
   LensMake: string
   LensModel: string
