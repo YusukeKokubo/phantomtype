@@ -44,7 +44,7 @@ export default function PhotoPage({
       <div class="px-4 py-8 flex flex-col gap-4">
         <a
           href={`/${city}`}
-          class="text-gray-400 hover:text-white text-lg uppercase"
+          class="text-text-secondary hover:text-foreground text-lg uppercase"
         >
           ← {city}
         </a>
@@ -58,7 +58,7 @@ export default function PhotoPage({
         />
 
         {exif && (
-          <table class="w-full mx-auto border-collapse border border-gray-300">
+          <table class="w-full mx-auto border-collapse border border-border">
             <tbody>
               <tr>
                 <td>撮影日時</td>

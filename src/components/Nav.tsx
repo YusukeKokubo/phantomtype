@@ -2,7 +2,7 @@ import { City } from "../../@types/Photo"
 
 export const Header = ({ city, cities }: { city: string; cities: City[] }) => {
   return (
-    <section class="flex px-5 w-full justify-between bg-black">
+    <section class="flex px-5 w-full justify-between bg-surface">
       <div class="mt-2">
         <a href="/">
           <img
@@ -20,8 +20,8 @@ export const Header = ({ city, cities }: { city: string; cities: City[] }) => {
           <a href={`/${c.city}`} key={c.city}>
             <span
               class={`text-lg uppercase ${
-                c.city == city ? "text-white" : "text-gray-500"
-              } hover:text-white`}
+                c.city == city ? "text-foreground" : "text-text-secondary"
+              } hover:text-foreground`}
             >
               {c.city}
             </span>
@@ -47,7 +47,7 @@ export const Nav = ({ city, cities }: { city?: string; cities: City[] }) => {
                 height="auto"
                 class="w-12 md:w-32"
               />
-              <span class="top-0 absolute bg-black bg-opacity-50 px-4 text-lg uppercase text-white hover:underline">
+              <span class="top-0 absolute bg-surface-overlay px-4 text-lg uppercase text-foreground hover:underline">
                 {c.city}
               </span>
             </a>

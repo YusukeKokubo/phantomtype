@@ -38,7 +38,7 @@ function Pic(params: { city: string; pic: Photo }) {
     >
       <img src={p.url} width={width} height={height} alt={`${city} ${name}`} />
       <div
-        class={`p-2 text-xs font-light text-white absolute bottom-0 bg-gray-500/50`}
+        class={`p-2 text-xs font-light text-foreground absolute bottom-0 bg-surface-overlay`}
       >
         <div class="flex flex-col justify-start">
           <span class="mb-0">{e.DateTimeOriginal}</span>
