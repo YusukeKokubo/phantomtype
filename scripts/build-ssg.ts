@@ -27,6 +27,9 @@ interface City {
 async function buildSSG() {
   console.log("Building static site...")
 
+  // Set PUBLIC_HOST for OGP tags
+  const PUBLIC_HOST = process.env.PUBLIC_HOST || "https://phantomtype.com"
+
   // Clean dist directory
   const distDir = join(process.cwd(), "dist")
   if (existsSync(distDir)) {
@@ -41,7 +44,9 @@ async function buildSSG() {
 
   // Build home page
   console.log("Building home page...")
-  const homeRes = await app.request("http://localhost/")
+  const homeRes = await app.request("http://localhost/", undefined, {
+    PUBLIC_HOST,
+  })
   const homeHtml = await homeRes.text()
   writeFileSync(join(distDir, "index.html"), homeHtml)
   console.log("✓ Home page built")
@@ -52,7 +57,11 @@ async function buildSSG() {
     console.log(`Building ${cityName} page...`)
 
     try {
-      const cityRes = await app.request(`http://localhost/${cityName}`)
+      const cityRes = await app.request(
+        `http://localhost/${cityName}`,
+        undefined,
+        { PUBLIC_HOST },
+      )
       const cityHtml = await cityRes.text()
 
       // Create city directory
