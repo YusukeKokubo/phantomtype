@@ -1,5 +1,5 @@
 import { City, Photo } from "../../@types/Photo"
-import { Header, Nav } from "../components/Nav"
+import { Header } from "../components/Nav"
 
 function calcSize(
   exif: Photo["exif"],
@@ -41,7 +41,7 @@ export default function PhotoPage({
   return (
     <>
       <Header city={city} cities={cities} />
-      <div class="max-w-screen px-4 py-8 flex flex-col gap-8">
+      <div class="px-4 py-8 flex flex-col gap-4">
         <a
           href={`/${city}`}
           class="text-gray-400 hover:text-white text-lg uppercase"
@@ -58,38 +58,42 @@ export default function PhotoPage({
         />
 
         {exif && (
-          <div class="flex flex-wrap gap-4">
-            <div>
-              <div>撮影日時</div>
-              <div>{exif.DateTimeOriginal}</div>
-            </div>
-            <div>
-              <div>カメラ</div>
-              <div>
-                {exif.Make} {exif.Model}
-              </div>
-              <div>レンズ</div>
-              <div>{exif.LensModel.replace(/\0/g, "")}</div>
-            </div>
-            <div>
-              <div>撮影設定</div>
-              <div>
-                <div>
-                  焦点距離: {exif.FocalLength} ({exif.FocalLengthIn35mmFormat}{" "}
-                  mm)
-                </div>
-                <div>絞り: {exif.FNumber}</div>
-                <div>シャッター速度: {exif.ExposureTime}S</div>
-                <div>ISO: {exif.ISO}</div>
-              </div>
-            </div>
-            <div>
-              <div>解像度</div>
-              <div>
-                {exif.ImageWidth} × {exif.ImageLength}
-              </div>
-            </div>
-          </div>
+          <table class="w-full mx-auto border-collapse border border-gray-300">
+            <tbody>
+              <tr>
+                <td>撮影日時</td>
+                <td>{exif.DateTimeOriginal}</td>
+              </tr>
+              <tr>
+                <td>カメラ</td>
+                <td>
+                  {exif.Make} {exif.Model}
+                </td>
+              </tr>
+              <tr>
+                <td>レンズ</td>
+                <td>{exif.LensModel.replace(/\0/g, "")}</td>
+              </tr>
+              <tr>
+                <td>絞り</td>
+                <td>{exif.FNumber}</td>
+              </tr>
+              <tr>
+                <td>焦点距離</td>
+                <td>
+                  {exif.FocalLength} ({exif.FocalLengthIn35mmFormat} mm)
+                </td>
+              </tr>
+              <tr>
+                <td>シャッター速度</td>
+                <td>{exif.ExposureTime}S</td>
+              </tr>
+              <tr>
+                <td>ISO</td>
+                <td>ISO {exif.ISO}</td>
+              </tr>
+            </tbody>
+          </table>
         )}
       </div>
     </>
