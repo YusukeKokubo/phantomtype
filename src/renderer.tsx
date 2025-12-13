@@ -1,5 +1,5 @@
-import { jsxRenderer, useRequestContext } from 'hono/jsx-renderer'
-import { Link, ViteClient } from 'vite-ssr-components/hono'
+import { jsxRenderer, useRequestContext } from "hono/jsx-renderer"
+import { Link, ViteClient } from "vite-ssr-components/hono"
 
 export interface PageMetadata {
   title?: string
@@ -10,11 +10,11 @@ export interface PageMetadata {
 
 export const renderer = jsxRenderer(({ children }) => {
   const c = useRequestContext()
-  const title = (c.get('title') as string) || 'PHANTOM TYPE'
-  const description = (c.get('description') as string) || 'Japan photo gallery'
-  const publicHost = c.env?.PUBLIC_HOST || ''
-  const ogImage = (c.get('ogImage') as string) || `${publicHost}/ogkyoto.jpg`
-  const ogUrl = (c.get('ogUrl') as string) || publicHost
+  const title = (c.get("title") as string) || "PHANTOM TYPE"
+  const description = (c.get("description") as string) || "Japan photo gallery"
+  const publicHost = c.env?.PUBLIC_HOST || ""
+  const ogImage = (c.get("ogImage") as string) || `${publicHost}/ogkyoto.jpg`
+  const ogUrl = (c.get("ogUrl") as string) || publicHost
 
   return (
     <html lang="en">
@@ -42,15 +42,20 @@ export const renderer = jsxRenderer(({ children }) => {
 
         {/* Google Fonts - Inter */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap"
+          rel="stylesheet"
+        />
 
         {/* Tailwind CSS */}
         <Link href="/styles.css" rel="stylesheet" />
       </head>
-      <body class="bg-black text-white font-body">
-        {children}
-      </body>
+      <body class="">{children}</body>
     </html>
   )
 })
