@@ -30,14 +30,13 @@ function Pic(params: { city: string; pic: Photo }) {
   const name = p.filename.substring(0, p.filename.indexOf("."))
   const e = p.exif!
   const { width, height } = calcSize(e, 1000)
+  const photoUrl = `/${city}/photo/${encodeURIComponent(p.filename)}`
   return (
-    <div class="relative h-max">
-      <img
-        src={p.url}
-        width={width}
-        height={height}
-        alt={`${city} ${name}`}
-      />
+    <a
+      href={photoUrl}
+      class="block relative h-max cursor-pointer hover:opacity-90 transition-opacity"
+    >
+      <img src={p.url} width={width} height={height} alt={`${city} ${name}`} />
       <div
         class={`p-2 text-xs font-light text-white absolute bottom-0 bg-gray-500/50`}
       >
@@ -58,7 +57,7 @@ function Pic(params: { city: string; pic: Photo }) {
           </div>
         </div>
       </div>
-    </div>
+    </a>
   )
 }
 
