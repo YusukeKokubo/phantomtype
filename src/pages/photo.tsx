@@ -58,38 +58,40 @@ export default function PhotoPage({
         />
 
         {exif && (
-          <table class="w-full mx-auto">
+          <table>
             <tbody>
-              <tr>
-                <td>撮影日時</td>
+              <tr class="border-b border-border">
+                <td class="text-text-secondary text-right pr-4">撮影日時</td>
                 <td>{exif.DateTimeOriginal}</td>
               </tr>
-              <tr>
-                <td>カメラ</td>
+              <tr class="border-b border-border">
+                <td class="text-text-secondary text-right pr-4">カメラ</td>
                 <td>
                   {exif.Make} {exif.Model}
                 </td>
               </tr>
-              <tr>
-                <td>レンズ</td>
+              <tr class="border-b border-border">
+                <td class="text-text-secondary text-right pr-4">レンズ</td>
                 <td>{exif.LensModel.replace(/\0/g, "")}</td>
               </tr>
-              <tr>
-                <td>絞り</td>
+              <tr class="border-b border-border">
+                <td class="text-text-secondary text-right pr-4">絞り</td>
                 <td>{exif.FNumber}</td>
               </tr>
-              <tr>
-                <td>焦点距離</td>
+              <tr class="border-b border-border">
+                <td class="text-text-secondary text-right pr-4">焦点距離</td>
                 <td>
                   {exif.FocalLength} ({exif.FocalLengthIn35mmFormat} mm)
                 </td>
               </tr>
-              <tr>
-                <td>シャッター速度</td>
+              <tr class="border-b border-border">
+                <td class="text-text-secondary text-right pr-4">
+                  シャッター速度
+                </td>
                 <td>{exif.ExposureTime}S</td>
               </tr>
-              <tr>
-                <td>ISO</td>
+              <tr class="border-b border-border">
+                <td class="text-text-secondary text-right pr-4">ISO</td>
                 <td>ISO {exif.ISO}</td>
               </tr>
             </tbody>
