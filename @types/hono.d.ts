@@ -13,6 +13,8 @@ declare module 'hono' {
     description?: string
     ogImage?: string
     ogUrl?: string
+    ogImageWidth?: string
+    ogImageHeight?: string
   }
 }
 

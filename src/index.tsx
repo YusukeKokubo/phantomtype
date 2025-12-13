@@ -63,10 +63,43 @@ app.get("/:city/photo/:filename", (c) => {
   const publicHost = c.env.PUBLIC_HOST || ""
   const ogImage = `${publicHost}${photo.url}`
 
-  c.set("title", `PHANTOM TYPE - ${city.toUpperCase()} - ${filename}`)
-  c.set("description", "Japan photo gallery")
+  // Create detailed description for OGP
+  let description = `Photo from ${city}`
+  if (photo.exif) {
+    const exif = photo.exif
+    const location = cityPics.locations.find((loc) =>
+      loc.pics.some((p) => p.filename === filename)
+    )
+    const locationName = location ? location.location : ""
+
+    description = `${locationName ? `${locationName}, ` : ""}${city}. `
+    description += `Shot on ${exif.DateTimeOriginal} with ${exif.Make} ${exif.Model}`
+    if (exif.LensModel) {
+      description += ` using ${exif.LensModel.replace(/\0/g, "")}`
+    }
+  }
+
+  // Remove file extension from title
+  const nameWithoutExt =
+    filename.substring(0, filename.lastIndexOf(".")) || filename
+
+  // Get current request URL for og:url (works in both dev and production)
+  const requestUrl = new URL(c.req.url)
+  const ogUrl = publicHost
+    ? `${publicHost}/${city}/photo/${encodeURIComponent(filename)}`
+    : `${requestUrl.origin}/${city}/photo/${encodeURIComponent(filename)}`
+
+  c.set("title", `PHANTOM TYPE - ${city.toUpperCase()} - ${nameWithoutExt}`)
+  c.set("description", description)
   c.set("ogImage", ogImage)
-  c.set("ogUrl", `${publicHost}/${city}/photo/${encodeURIComponent(filename)}`)
+  c.set("ogUrl", ogUrl)
+
+  // Set OGP image dimensions if available
+  if (photo.exif) {
+    c.set("ogImageWidth", photo.exif.ImageWidth.toString())
+    c.set("ogImageHeight", photo.exif.ImageLength.toString())
+  }
+
   return c.render(<PhotoPage city={city} photo={photo} cities={cities} />)
 })
 

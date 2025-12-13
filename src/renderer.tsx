@@ -6,6 +6,8 @@ export interface PageMetadata {
   description?: string
   ogImage?: string
   ogUrl?: string
+  ogImageWidth?: string
+  ogImageHeight?: string
 }
 
 export const renderer = jsxRenderer(({ children }) => {
@@ -15,6 +17,8 @@ export const renderer = jsxRenderer(({ children }) => {
   const publicHost = c.env?.PUBLIC_HOST || ""
   const ogImage = (c.get("ogImage") as string) || `${publicHost}/ogkyoto.jpg`
   const ogUrl = (c.get("ogUrl") as string) || publicHost
+  const ogImageWidth = (c.get("ogImageWidth") as string) || "1200"
+  const ogImageHeight = (c.get("ogImageHeight") as string) || "630"
 
   return (
     <html lang="en">
@@ -32,8 +36,8 @@ export const renderer = jsxRenderer(({ children }) => {
         <meta property="og:type" content="website" />
         <meta property="og:url" content={ogUrl} />
         <meta property="og:image" content={ogImage} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        <meta property="og:image:width" content={ogImageWidth} />
+        <meta property="og:image:height" content={ogImageHeight} />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
