@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "wrangler pages dev dist --live-reload",
-    "build:css": "tailwindcss -i ./src/styles/input.css -o ./public/styles.css --minify",
+    "build:css": "npx @tailwindcss/cli -i ./src/styles/input.css -o ./public/styles.css --minify",
     "build:ssg": "ts-node scripts/build-ssg.ts",
     "build": "npm run build:css && npm run build:ssg",
     "deploy": "npm run build && wrangler pages deploy dist",
@@ -18,10 +18,11 @@
     "generatePics": "ts-node scripts/picsDataGenerator.ts"
   },
   "dependencies": {
+    "@tailwindcss/cli": "^4.1.18",
     "exifreader": "^4.29.0",
     "hono": "^4.6.14",
     "sharp": "^0.34.1",
-    "tailwindcss": "^3.4.19"
+    "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",

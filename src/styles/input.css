@@ -1,6 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-body: Helvetica, "Noto Sans JP";
+  --color-black: #1c1a1a;
+  --width-70v: 70vw;
+  --min-height-300: 300px;
+}
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
