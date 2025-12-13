@@ -1,4 +1,4 @@
-import { jsxRenderer } from 'hono/jsx-renderer'
+import { jsxRenderer, useRequestContext } from 'hono/jsx-renderer'
 
 export interface PageMetadata {
   title?: string
@@ -7,12 +7,12 @@ export interface PageMetadata {
   ogUrl?: string
 }
 
-export const renderer = jsxRenderer(({ children, ...props }) => {
-  const metadata = props as PageMetadata
-  const title = metadata.title || 'PHANTOM TYPE'
-  const description = metadata.description || 'Japan photo gallery'
-  const ogImage = metadata.ogImage || `${process.env.PUBLIC_HOST || ''}/ogkyoto.jpg`
-  const ogUrl = metadata.ogUrl || process.env.PUBLIC_HOST || ''
+export const renderer = jsxRenderer(({ children }) => {
+  const c = useRequestContext()
+  const title = (c.get('title') as string) || 'PHANTOM TYPE'
+  const description = (c.get('description') as string) || 'Japan photo gallery'
+  const ogImage = (c.get('ogImage') as string) || `${process.env.PUBLIC_HOST || ''}/ogkyoto.jpg`
+  const ogUrl = (c.get('ogUrl') as string) || process.env.PUBLIC_HOST || ''
 
   return (
     <html lang="en">
