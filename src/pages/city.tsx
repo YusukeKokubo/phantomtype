@@ -71,9 +71,9 @@ export default function CityPage({
   cities: City[]
 }) {
   return (
-    <div class="flex flex-col gap-8">
+    <div class="flex flex-col gap-8 mb-8">
       <Header city={city} cities={cities} />
-      <div class="h-[calc(100vh-4rem)]">
+      <div>
         <h2 class="text-4xl text-center uppercase">{city}</h2>
         {cityPics.locations.map((loc, loc_i) => (
           <section key={loc_i} class="py-8 px-1 flex flex-col gap-2">
@@ -88,10 +88,8 @@ export default function CityPage({
             </div>
           </section>
         ))}
-        <div class="my-4">
-          <Nav city={city} cities={cities} />
-        </div>
       </div>
+      <Nav city={city} cities={cities} />
     </div>
   )
 }
