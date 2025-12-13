@@ -58,7 +58,7 @@ export default function PhotoPage({
         />
 
         {exif && (
-          <table class="w-full mx-auto border-collapse border border-border">
+          <table class="w-full mx-auto">
             <tbody>
               <tr>
                 <td>撮影日時</td>
