@@ -5,5 +5,10 @@ import { tailwindWatch } from './vite-plugin-tailwind-watch'
 
 export default defineConfig({
   plugins: [cloudflare(), ssrPlugin(), tailwindWatch()],
+  build: {
+    rollupOptions: {
+      input: './src/index.tsx',
+    },
+  },
 })
 

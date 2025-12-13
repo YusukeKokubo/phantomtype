@@ -1,5 +1,5 @@
 import { jsxRenderer, useRequestContext } from "hono/jsx-renderer"
-import { Link, ViteClient } from "vite-ssr-components/hono"
+import { ViteClient } from "vite-ssr-components/hono"
 
 export interface PageMetadata {
   title?: string
@@ -53,7 +53,7 @@ export const renderer = jsxRenderer(({ children }) => {
         />
 
         {/* Tailwind CSS */}
-        <Link href="/styles.css" rel="stylesheet" />
+        <link href="/styles.css" rel="stylesheet" />
       </head>
       <body class="">{children}</body>
     </html>
