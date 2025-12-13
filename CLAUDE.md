@@ -39,10 +39,15 @@ npm run lint:fix
 
 ### 写真データの生成
 ```bash
+cd scripts
+npm install  # 初回のみ
 npm run generatePics
+cd ..
 ```
 このコマンドは `public/pics/` ディレクトリ配下の画像ファイルをスキャンし、EXIFメタデータを抽出して `public/pics.json` を生成します。
 新しい写真を追加した際は必ず実行してください。
+
+**注意**: `scripts/` ディレクトリは独立したプロジェクトとして管理されています。専用の `package.json` を持っており、写真データ生成に必要な依存関係（exifreader、sharpなど）が含まれています。
 
 ### Cloudflare Pagesへのデプロイ
 ```bash
@@ -73,9 +78,11 @@ npm run deploy
   - `pics.json` - 自動生成される写真メタデータ(コミット対象)
   - `styles.css` - ビルドされたTailwind CSS(gitignore対象)
 
-- `scripts/` - ビルド/ユーティリティスクリプト
+- `scripts/` - 写真データ生成スクリプト（独立したプロジェクト）
+  - `package.json` - スクリプト専用の依存関係（exifreader、sharpなど）
+  - `tsconfig.json` - TypeScript設定
   - `picsDataGenerator.ts` - 写真データ生成スクリプト
-  - `build-ssg.ts` - SSGビルドスクリプト
+  - `build-ssg.ts` - SSGビルドスクリプト（メインプロジェクトから実行）
 
 - `dist/` - SSGビルド出力ディレクトリ(gitignore対象)
   - 各都市のディレクトリとindex.html
@@ -84,7 +91,7 @@ npm run deploy
 ### データフロー
 
 1. 写真ファイルは `public/pics/[city]/[location]/[filename].jpg` の形式で配置
-2. `npm run generatePics` で `scripts/picsDataGenerator.ts` が実行される
+2. `cd scripts && npm run generatePics` で `picsDataGenerator.ts` が実行される
 3. スクリプトは全JPGファイルをスキャンし、exifreaderでEXIFデータを抽出
 4. `public/pics.json` に以下の構造でデータを出力:
    ```
@@ -137,7 +144,12 @@ npm run deploy
 ## 画像の追加手順
 
 1. `public/pics/[city]/[location]/` に JPG ファイルを配置
-2. `npm run generatePics` を実行して `pics.json` を更新
+2. scriptsディレクトリで写真データを生成:
+   ```bash
+   cd scripts
+   npm run generatePics
+   cd ..
+   ```
 3. `npm run build` でビルドを実行
 4. `npm run dev` で動作確認
 5. 変更をコミット(`pics.json` も含める)

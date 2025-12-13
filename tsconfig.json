@@ -43,7 +43,9 @@
     "transpileOnly": true,
     "compilerOptions": {
       "module": "commonjs",
-      "moduleResolution": "node"
+      "moduleResolution": "node",
+      "jsx": "react-jsx",
+      "jsxImportSource": "hono/jsx"
     }
   }
 }
