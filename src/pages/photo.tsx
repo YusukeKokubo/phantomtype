@@ -41,77 +41,56 @@ export default function PhotoPage({
   return (
     <>
       <Header city={city} cities={cities} />
-      <div class="md:h-[calc(100vh-4rem)] overflow-y-scroll">
-        <div class="max-w-7xl mx-auto px-4 py-8">
-          <div class="mb-4">
-            <a
-              href={`/${city}`}
-              class="text-gray-400 hover:text-white text-lg uppercase"
-            >
-              ← {city}
-            </a>
-          </div>
+      <div class="max-w-screen px-4 py-8 flex flex-col gap-8">
+        <a
+          href={`/${city}`}
+          class="text-gray-400 hover:text-white text-lg uppercase"
+        >
+          ← {city}
+        </a>
 
-          <div class="flex flex-col md:flex-row gap-8">
-            <div class="flex-1">
-              <img
-                src={photo.url}
-                width={width}
-                height={height}
-                alt={`${city} ${name}`}
-                class="w-full h-auto"
-              />
+        <img
+          src={photo.url}
+          width={width}
+          height={height}
+          alt={`${city} ${name}`}
+          class="w-full h-auto"
+        />
+
+        {exif && (
+          <div class="flex flex-wrap gap-4">
+            <div>
+              <div>撮影日時</div>
+              <div>{exif.DateTimeOriginal}</div>
             </div>
-
-            {exif && (
-              <div class="md:w-80 shrink-0">
-                <div class="bg-gray-900/50 p-6 rounded-lg">
-                  <h2 class="text-2xl font-light mb-4 uppercase">{name}</h2>
-                  <div class="space-y-4 text-sm">
-                    <div>
-                      <div class="text-gray-400 mb-1">撮影日時</div>
-                      <div class="text-white">{exif.DateTimeOriginal}</div>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 mb-1">カメラ</div>
-                      <div class="text-white">
-                        {exif.Make} {exif.Model}
-                      </div>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 mb-1">レンズ</div>
-                      <div class="text-white">
-                        {exif.LensModel.replace(/\0/g, "")}
-                      </div>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 mb-1">撮影設定</div>
-                      <div class="text-white space-y-1">
-                        <div>
-                          焦点距離: {exif.FocalLength} (
-                          {exif.FocalLengthIn35mmFormat}mm)
-                        </div>
-                        <div>絞り: {exif.FNumber}</div>
-                        <div>シャッター速度: {exif.ExposureTime}S</div>
-                        <div>ISO: {exif.ISO}</div>
-                      </div>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 mb-1">解像度</div>
-                      <div class="text-white">
-                        {exif.ImageWidth} × {exif.ImageLength}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <div>
+              <div>カメラ</div>
+              <div>
+                {exif.Make} {exif.Model}
               </div>
-            )}
+              <div>レンズ</div>
+              <div>{exif.LensModel.replace(/\0/g, "")}</div>
+            </div>
+            <div>
+              <div>撮影設定</div>
+              <div>
+                <div>
+                  焦点距離: {exif.FocalLength} ({exif.FocalLengthIn35mmFormat}{" "}
+                  mm)
+                </div>
+                <div>絞り: {exif.FNumber}</div>
+                <div>シャッター速度: {exif.ExposureTime}S</div>
+                <div>ISO: {exif.ISO}</div>
+              </div>
+            </div>
+            <div>
+              <div>解像度</div>
+              <div>
+                {exif.ImageWidth} × {exif.ImageLength}
+              </div>
+            </div>
           </div>
-
-          <div class="mt-8">
-            <Nav city={city} cities={cities} />
-          </div>
-        </div>
+        )}
       </div>
     </>
   )
