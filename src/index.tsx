@@ -1,5 +1,5 @@
 import { Hono } from "hono"
-import { serveStatic } from "hono/cloudflare-pages"
+import { serveStatic } from "hono/cloudflare-workers"
 import { renderer } from "./renderer"
 import HomePage from "./pages/home"
 import CityPage from "./pages/city"

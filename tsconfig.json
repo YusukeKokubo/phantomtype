@@ -22,7 +22,8 @@
       "dom"
     ],
     "types": [
-      "@cloudflare/workers-types"
+      "@cloudflare/workers-types",
+      "vite/client"
     ],
     "baseUrl": ".",
     "forceConsistentCasingInFileNames": true,

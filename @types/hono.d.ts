@@ -3,6 +3,7 @@ import 'hono'
 type AppEnv = {
   Bindings: {
     PUBLIC_HOST?: string
+    ASSETS?: Fetcher
   }
 }
 
