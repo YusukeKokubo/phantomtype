@@ -4,3 +4,6 @@ pages_build_output_dir = "dist"
 
 [env.production]
 vars = { PUBLIC_HOST = "https://phantomtype.com" }
+routes = [
+  { pattern = "phantomtype.com", custom_domain = true }
+]

@@ -10,13 +10,21 @@ import type { AppEnv } from "../@types/hono"
 
 const app = new Hono<AppEnv>()
 
+// Normalize paths (remove trailing slashes except for root)
+app.use("*", async (c, next) => {
+  const url = new URL(c.req.url)
+  const pathname = url.pathname
+
+  // Remove trailing slash except for root
+  if (pathname !== "/" && pathname.endsWith("/")) {
+    return c.redirect(pathname.slice(0, -1), 301)
+  }
+
+  await next()
+})
+
 // Apply renderer middleware
 app.use(renderer)
-
-// Serve static files
-app.use("/pics/*", serveStatic({ root: "./public", manifest: {} }))
-app.use("/*.{svg,jpg,css}", serveStatic({ root: "./public", manifest: {} }))
-app.use("/styles.css", serveStatic({ root: "./public", manifest: {} }))
 
 // Home page
 app.get("/", (c) => {
@@ -81,5 +89,10 @@ app.get("/:city", (c) => {
   c.set("ogUrl", `${publicHost}/${city}`)
   return c.render(<CityPage city={city} cityPics={cityPics} cities={cities} />)
 })
+
+// Serve static files (must be after dynamic routes)
+app.use("/pics/*", serveStatic({ root: "./public", manifest: {} }))
+app.use("/*.{svg,jpg,css}", serveStatic({ root: "./public", manifest: {} }))
+app.use("/styles.css", serveStatic({ root: "./public", manifest: {} }))
 
 export default app

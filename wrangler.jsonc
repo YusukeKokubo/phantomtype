@@ -9,6 +9,6 @@
   },
   "vars": {
     "PUBLIC_HOST": "https://phantomtype.com"
-  }
+  },
+  "routes": [{ "pattern": "phantomtype.com", "custom_domain": true }]
 }
-
