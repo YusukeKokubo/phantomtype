@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:css:*)",
+      "Bash(npm run build:ssg:*)",
+      "Bash(npm run dev)",
+      "Bash(curl:*)",
+      "Bash(npx wrangler:*)",
+      "Bash(npm run build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(npm view:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run generatePics:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run lint:fix:*)"
+    ]
+  }
+}

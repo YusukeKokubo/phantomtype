@@ -1,11 +1,12 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ES2022",
+    "module": "ES2022",
     "allowJs": false,
-    "jsx": "preserve",
-    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
+    "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": false,
     "strict": true,
@@ -17,36 +18,34 @@
     "sourceMap": true,
     "noEmit": true,
     "lib": [
-      "es6",
-      "dom",
-      "es2016"
+      "ES2022",
+      "dom"
+    ],
+    "types": [
+      "@cloudflare/workers-types"
     ],
     "baseUrl": ".",
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
+    "incremental": true
   },
   "exclude": [
     "node_modules"
   ],
   "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "lib/random.js",
-    ".next/types/**/*.ts"
+    "src/**/*",
+    "@types/**/*",
+    "scripts/**/*"
   ],
   "ts-node": {
     "transpileOnly": true,
     "compilerOptions": {
-      "module": "commonjs"
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "jsx": "react-jsx",
+      "jsxImportSource": "hono/jsx"
     }
-  },
+  }
 }

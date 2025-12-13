@@ -4,16 +4,19 @@ node_modules/
 .env
 .DS_store
 
-src/app/.next
-.next/
-out/
+# Generated files
+public/styles.css
 
-.now
-
+# Not tracked
 public/kyoto
 public/nagoya
 public/matsushima
 public/kanazawa
 public/pics
 
-.vercel
+# Cloudflare
+.wrangler/
+
+# Old Next.js / Vercel artifacts (kept for reference)
+.next/
+.vercel/

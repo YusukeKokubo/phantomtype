@@ -1,6 +1,4 @@
 import { City, Exif, Photo } from "../../@types/Photo"
-import citiesData from "../../public/pics.json"
-import Image from "next/image"
 import { Header, Nav } from "../components/Nav"
 
 function byDatetime(a: Photo, b: Photo): number {
@@ -33,25 +31,25 @@ function Pic(params: { city: string; pic: Photo }) {
   const e = p.exif!
   const { width, height } = calcSize(e, 1000)
   return (
-    <div className="relative h-max">
-      <Image
+    <div class="relative h-max">
+      <img
         src={p.url}
         width={width}
         height={height}
         alt={`${city} ${name}`}
       />
       <div
-        className={`p-2 text-xs font-light text-white absolute bottom-0 bg-gray-500/50`}
+        class={`p-2 text-xs font-light text-white absolute bottom-0 bg-gray-500/50`}
       >
-        <div className="flex flex-col justify-start">
-          <span className="mb-0">{e.DateTimeOriginal}</span>
-          <div className="flex gap-2">
+        <div class="flex flex-col justify-start">
+          <span class="mb-0">{e.DateTimeOriginal}</span>
+          <div class="flex gap-2">
             <span>
-              {e.Make} {e.Model} {e.LensModel.replace(/\0/g, "")}
+              {e.Make} {e.Model}
             </span>
             <span>{e.LensModel.replace(/\0/g, "")}</span>
           </div>
-          <div className="flex gap-2">
+          <div class="flex gap-2">
             <span>{e.FocalLength}</span>
             <span>({e.FocalLengthIn35mmFormat}mm)</span>
             <span>{e.FNumber}</span>
@@ -64,57 +62,24 @@ function Pic(params: { city: string; pic: Photo }) {
   )
 }
 
-export async function generateMetadata({
-  params,
+export default function CityPage({
+  city,
+  cityPics,
+  cities,
 }: {
-  params: Promise<{ city: string }>
+  city: string
+  cityPics: City
+  cities: City[]
 }) {
-  const { city } = await params
-  const cities: City[] = citiesData
-  const cityPics = cities.find((p) => p.city == city)
-  if (!cityPics) {
-    console.error(`city [${city}] not found`)
-    return {}
-  }
-
-  const ogp = `${process.env.NEXT_PUBLIC_HOST}${cityPics.locations[0].pics[0].url}`
-
-  return {
-    title: `PHANTOM TYPE - ${city.toUpperCase()}`,
-    openGraph: {
-      images: [ogp],
-    },
-    twitter: {
-      card: "summary_large_image",
-      creator: "@yusuke_kokubo",
-      images: ogp,
-    },
-  }
-}
-
-export default async function CityPage({
-  params,
-}: {
-  params: Promise<{ city: string }>
-}) {
-  const { city } = await params
-  const cities: City[] = citiesData
-
-  const cityPics = cities.find((p) => p.city == city)
-  if (!cityPics) {
-    console.error(`city [${city}] not found`)
-    return <></>
-  }
-
   return (
     <>
       <Header city={city} cities={cities} />
-      <div className="md:h-[calc(100vh-4rem)] overflow-y-scroll">
-        <h2 className="text-4xl text-center uppercase">{city}</h2>
+      <div class="md:h-[calc(100vh-4rem)] overflow-y-scroll">
+        <h2 class="text-4xl text-center uppercase">{city}</h2>
         {cityPics.locations.map((loc, loc_i) => (
-          <section key={loc_i} className="py-8 px-1 flex flex-col gap-2">
-            <h3 className="text-center text-3xl uppercase">{loc.location}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+          <section key={loc_i} class="py-8 px-1 flex flex-col gap-2">
+            <h3 class="text-center text-3xl uppercase">{loc.location}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-1">
               {loc.pics
                 .filter((p) => p.exif)
                 .sort(byDatetime)
@@ -124,7 +89,7 @@ export default async function CityPage({
             </div>
           </section>
         ))}
-        <div className="my-8">
+        <div class="my-8">
           <Nav city={city} cities={cities} />
         </div>
       </div>
