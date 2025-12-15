@@ -1,7 +1,11 @@
 {
   "files": {
-    "include": ["app/**/*.ts", "scripts/**/*.ts"],
-    "ignore": ["node_modules", ".next"]
+    "includes": [
+      "app/**/*.ts",
+      "scripts/**/*.ts",
+      "!!**/node_modules",
+      "!!**/.next"
+    ]
   },
   "formatter": {
     "indentStyle": "space",
@@ -16,6 +20,9 @@
     "rules": {
       "style": {
         "noNonNullAssertion": "off"
+      },
+      "suspicious": {
+        "noNonNullAssertedOptionalChain": "off"
       }
     }
   }
