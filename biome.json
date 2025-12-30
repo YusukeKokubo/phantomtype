@@ -2,7 +2,7 @@
   "files": {
     "includes": [
       "app/**/*.ts",
-      "scripts/**/*.ts",
+      "generatePics/**/*.ts",
       "!!**/node_modules",
       "!!**/.next"
     ]

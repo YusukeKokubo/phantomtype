@@ -38,7 +38,7 @@
   "include": [
     "src/**/*",
     "@types/**/*",
-    "scripts/**/*"
+    "generatePics/**/*"
   ],
   "ts-node": {
     "transpileOnly": true,

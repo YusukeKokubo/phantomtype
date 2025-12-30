@@ -4,7 +4,7 @@
   "description": "画像データ生成スクリプト",
   "private": true,
   "scripts": {
-    "generatePics": "ts-node picsDataGenerator.ts"
+    "generatePics": "ts-node index.ts"
   },
   "dependencies": {
     "exifreader": "^4.33.1",
