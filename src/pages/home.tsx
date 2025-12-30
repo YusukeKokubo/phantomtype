@@ -15,14 +15,14 @@ export default function HomePage({ cities }: { cities: City[] }) {
         <div class="mx-8 lg:mx-16 grid grid-cols-1 gap-16">
           <div class="flex">
             <div>
-              <h1 class="font-light text-5xl leading-none !text-white">
+              <h1 class="font-light text-5xl leading-none text-white!">
                 PHANTOM TYPE
               </h1>
-              <p class="font-light text-xl mt-2 !text-white">
+              <p class="font-light text-xl mt-2 text-white!">
                 Japan Pics by
                 <a
                   target="_blank"
-                  class="font-normal mx-1 !text-white"
+                  class="font-normal mx-1 text-white!"
                   rel="noopener"
                   href="https://twitter.com/yusuke_kokubo"
                 >
