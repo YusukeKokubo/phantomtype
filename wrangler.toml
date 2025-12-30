@@ -1,9 +1,0 @@
-name = "phantomtype"
-compatibility_date = "2024-01-01"
-pages_build_output_dir = "dist"
-
-[env.production]
-vars = { PUBLIC_HOST = "https://phantomtype.com" }
-routes = [
-  { pattern = "phantomtype.com", custom_domain = true }
-]
