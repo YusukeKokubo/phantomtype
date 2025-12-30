@@ -82,6 +82,7 @@ npm run cf-typegen
   - `pages/` - ページコンポーネント
     - `home.tsx` - トップページ(都市選択画面)
     - `city.tsx` - 都市ごとの写真ギャラリーページ
+    - `photo.tsx` - 個別写真ページ
   - `components/` - 共通コンポーネント
     - `Nav.tsx` - ナビゲーションコンポーネント(Header と Nav)
   - `styles/` - スタイル定義
@@ -107,6 +108,16 @@ npm run cf-typegen
 - `wrangler.jsonc` - Wrangler 設定ファイル（Worker 設定、Assets 設定を含む）
 
 - `.wrangler/` - Wrangler ビルド出力ディレクトリ(gitignore 対象)
+
+### ルーティング構造
+
+- `GET /` - ホームページ（都市選択画面）
+- `GET /:city` - 都市ごとの写真ギャラリーページ
+- `GET /:city/photo/:filename` - 個別写真ページ（EXIF 情報表示）
+- `GET /pics/*` - 静的ファイル配信（写真画像）
+- `GET /*.{svg,jpg,css}` - 静的ファイル配信（その他のアセット）
+
+ルーティングの順序が重要です。写真詳細ページ（`/:city/photo/:filename`）は都市ページ（`/:city`）より前に定義する必要があります。これにより、`/kyoto/photo/image.jpg` のようなリクエストが正しく処理されます。
 
 ### データフロー
 
