@@ -4,15 +4,18 @@ import type { City } from "../../@types/Photo"
 export default function HomePage({ cities }: { cities: City[] }) {
   return (
     <>
-      <div class="absolute w-screen h-screen top-0">
-        <img
-          class="object-cover w-full h-full"
-          alt="kyoto shimogamo"
-          src="/kyoto.jpg"
-        />
+      <a href="#main-content" class="skip-link">
+        メインコンテンツへスキップ
+      </a>
+      <div
+        class="absolute w-screen h-screen top-0"
+        role="presentation"
+        aria-hidden="true"
+      >
+        <img class="object-cover w-full h-full" alt="" src="/kyoto.jpg" />
       </div>
       <section class="absolute w-screen h-screen flex flex-col-reverse justify-around">
-        <div class="mx-8 lg:mx-16 grid grid-cols-1 gap-16">
+        <main id="main-content" class="mx-8 lg:mx-16 grid grid-cols-1 gap-16">
           <div class="flex">
             <div>
               <h1 class="font-light text-5xl leading-none text-white!">
@@ -22,9 +25,10 @@ export default function HomePage({ cities }: { cities: City[] }) {
                 Japan Pics by
                 <a
                   target="_blank"
-                  class="font-normal mx-1 text-white!"
-                  rel="noopener"
+                  class="font-normal mx-1 text-white! focus-visible:outline-2 focus-visible:outline-offset-2"
+                  rel="noopener noreferrer"
                   href="https://twitter.com/yusuke_kokubo"
+                  aria-label="作者のTwitterアカウント（新しいタブで開きます）"
                 >
                   @yusuke_kokubo
                 </a>
@@ -34,12 +38,12 @@ export default function HomePage({ cities }: { cities: City[] }) {
               <img
                 class="inline w-32 mx-4"
                 src="/logomark-white.svg"
-                alt="phantomtype logo"
+                alt="PHANTOM TYPE ロゴ"
               />
             </div>
           </div>
           <Nav cities={cities} />
-        </div>
+        </main>
         <div />
       </section>
     </>

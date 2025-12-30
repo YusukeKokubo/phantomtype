@@ -21,7 +21,7 @@ export const renderer = jsxRenderer(({ children }) => {
   const ogImageHeight = (c.get("ogImageHeight") as string) || "630"
 
   return (
-    <html lang="en">
+    <html lang="ja">
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />

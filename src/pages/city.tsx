@@ -34,9 +34,16 @@ function Pic(params: { city: string; pic: Photo }) {
   return (
     <a
       href={photoUrl}
-      class="block relative h-max cursor-pointer hover:opacity-90 transition-opacity"
+      class="block relative h-max cursor-pointer hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2"
+      aria-label={`${city} ${name}の写真を見る`}
     >
-      <img src={p.url} width={width} height={height} alt={`${city} ${name}`} />
+      <img
+        src={p.url}
+        width={width}
+        height={height}
+        alt={`${city} ${name}の写真`}
+        loading="lazy"
+      />
       <div
         class={`p-2 text-xs font-light text-foreground absolute bottom-0 bg-surface-overlay`}
       >
@@ -71,25 +78,30 @@ export default function CityPage({
   cities: City[]
 }) {
   return (
-    <div class="flex flex-col gap-8 mb-8">
-      <Header city={city} cities={cities} />
-      <div>
-        <h2 class="text-4xl text-center uppercase">{city}</h2>
-        {cityPics.locations.map((loc, loc_i) => (
-          <section key={loc_i} class="py-8 px-1 flex flex-col gap-2">
-            <h3 class="text-center text-3xl uppercase">{loc.location}</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-1">
-              {loc.pics
-                .filter((p) => p.exif)
-                .sort(byDatetime)
-                .map((p, p_i) => (
-                  <Pic city={city} pic={p} key={p_i} />
-                ))}
-            </div>
-          </section>
-        ))}
+    <>
+      <a href="#main-content" class="skip-link">
+        メインコンテンツへスキップ
+      </a>
+      <div class="flex flex-col gap-8 mb-8">
+        <Header city={city} cities={cities} />
+        <main id="main-content">
+          <h1 class="text-4xl text-center uppercase">{city}</h1>
+          {cityPics.locations.map((loc, loc_i) => (
+            <section key={loc_i} class="py-8 px-1 flex flex-col gap-2">
+              <h2 class="text-center text-3xl uppercase">{loc.location}</h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-1" role="list">
+                {loc.pics
+                  .filter((p) => p.exif)
+                  .sort(byDatetime)
+                  .map((p, p_i) => (
+                    <Pic city={city} pic={p} key={p_i} />
+                  ))}
+              </div>
+            </section>
+          ))}
+        </main>
+        <Nav city={city} cities={cities} />
       </div>
-      <Nav city={city} cities={cities} />
-    </div>
+    </>
   )
 }

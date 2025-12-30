@@ -40,64 +40,89 @@ export default function PhotoPage({
 
   return (
     <>
+      <a href="#main-content" class="skip-link">
+        メインコンテンツへスキップ
+      </a>
       <Header city={city} cities={cities} />
-      <div class="px-4 py-8 flex flex-col gap-4">
-        <a
-          href={`/${city}`}
-          class="text-text-secondary hover:text-foreground text-lg uppercase"
-        >
-          ← {city}
-        </a>
+      <main id="main-content" class="px-4 py-8 flex flex-col gap-4">
+        <nav aria-label="パンくずリスト">
+          <a
+            href={`/${city}`}
+            class="text-text-secondary hover:text-foreground text-lg uppercase focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            ← {city}
+          </a>
+        </nav>
 
-        <img
-          src={photo.url}
-          width={width}
-          height={height}
-          alt={`${city} ${name}`}
-          class="w-full h-auto"
-        />
+        <article>
+          <img
+            src={photo.url}
+            width={width}
+            height={height}
+            alt={`${city} ${name}の写真`}
+            class="w-full h-auto"
+          />
 
-        {exif && (
-          <table>
-            <tbody>
-              <tr class="border-b border-border">
-                <td class="text-text-secondary text-right pr-4">撮影日時</td>
-                <td>{exif.DateTimeOriginal}</td>
-              </tr>
-              <tr class="border-b border-border">
-                <td class="text-text-secondary text-right pr-4">カメラ</td>
-                <td>
-                  {exif.Make} {exif.Model}
-                </td>
-              </tr>
-              <tr class="border-b border-border">
-                <td class="text-text-secondary text-right pr-4">レンズ</td>
-                <td>{exif.LensModel.replace(/\0/g, "")}</td>
-              </tr>
-              <tr class="border-b border-border">
-                <td class="text-text-secondary text-right pr-4">絞り</td>
-                <td>{exif.FNumber}</td>
-              </tr>
-              <tr class="border-b border-border">
-                <td class="text-text-secondary text-right pr-4">焦点距離</td>
-                <td>
-                  {exif.FocalLength} ({exif.FocalLengthIn35mmFormat} mm)
-                </td>
-              </tr>
-              <tr class="border-b border-border">
-                <td class="text-text-secondary text-right pr-4">
-                  シャッター速度
-                </td>
-                <td>{exif.ExposureTime}S</td>
-              </tr>
-              <tr class="border-b border-border">
-                <td class="text-text-secondary text-right pr-4">ISO</td>
-                <td>ISO {exif.ISO}</td>
-              </tr>
-            </tbody>
-          </table>
-        )}
-      </div>
+          {exif && (
+            <section aria-labelledby="exif-heading" class="pt-4">
+              <h2 id="exif-heading" class="sr-only">
+                撮影情報
+              </h2>
+              <table class="w-full">
+                <caption class="sr-only">EXIF メタデータ</caption>
+                <tbody>
+                  <tr class="border-b border-border">
+                    <th scope="row" class="text-text-secondary text-right pr-4">
+                      撮影日時
+                    </th>
+                    <td>{exif.DateTimeOriginal}</td>
+                  </tr>
+                  <tr class="border-b border-border">
+                    <th scope="row" class="text-text-secondary text-right pr-4">
+                      カメラ
+                    </th>
+                    <td>
+                      {exif.Make} {exif.Model}
+                    </td>
+                  </tr>
+                  <tr class="border-b border-border">
+                    <th scope="row" class="text-text-secondary text-right pr-4">
+                      レンズ
+                    </th>
+                    <td>{exif.LensModel.replace(/\0/g, "")}</td>
+                  </tr>
+                  <tr class="border-b border-border">
+                    <th scope="row" class="text-text-secondary text-right pr-4">
+                      絞り
+                    </th>
+                    <td>{exif.FNumber}</td>
+                  </tr>
+                  <tr class="border-b border-border">
+                    <th scope="row" class="text-text-secondary text-right pr-4">
+                      焦点距離
+                    </th>
+                    <td>
+                      {exif.FocalLength} ({exif.FocalLengthIn35mmFormat} mm)
+                    </td>
+                  </tr>
+                  <tr class="border-b border-border">
+                    <th scope="row" class="text-text-secondary text-right pr-4">
+                      シャッター速度
+                    </th>
+                    <td>{exif.ExposureTime}S</td>
+                  </tr>
+                  <tr class="border-b border-border">
+                    <th scope="row" class="text-text-secondary text-right pr-4">
+                      ISO
+                    </th>
+                    <td>ISO {exif.ISO}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+          )}
+        </article>
+      </main>
     </>
   )
 }
