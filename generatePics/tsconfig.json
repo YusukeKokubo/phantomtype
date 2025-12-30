@@ -13,19 +13,12 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": [
-      "ES2022"
-    ],
+    "lib": ["ES2022"],
     "baseUrl": ".",
     "paths": {
       "@types/*": ["../@types/*"]
     }
   },
-  "include": [
-    "index.ts",
-    "../@types/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["index.ts", "../@types/**/*"],
+  "exclude": ["node_modules"]
 }
