@@ -1,5 +1,5 @@
 import { Nav } from "../components/Nav"
-import { City } from "../../@types/Photo"
+import type { City } from "../../@types/Photo"
 
 export default function HomePage({ cities }: { cities: City[] }) {
   return (

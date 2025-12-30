@@ -5,7 +5,7 @@ import HomePage from "./pages/home"
 import CityPage from "./pages/city"
 import PhotoPage from "./pages/photo"
 import citiesData from "../public/pics.json"
-import { City, Photo } from "../@types/Photo"
+import type { City, Photo } from "../@types/Photo"
 import type { AppEnv } from "../@types/hono"
 
 const app = new Hono<AppEnv>()
@@ -114,7 +114,12 @@ app.get("/:city", (c) => {
   }
 
   const publicHost = c.env.PUBLIC_HOST || ""
-  const ogImage = `${publicHost}${cityPics.locations[0].pics[0].url}`
+  const firstLocation = cityPics.locations[0]
+  const firstPic = firstLocation?.pics[0]
+  if (!firstPic) {
+    return c.notFound()
+  }
+  const ogImage = `${publicHost}${firstPic.url}`
 
   c.set("title", `PHANTOM TYPE - ${city.toUpperCase()}`)
   c.set("description", "Japan photo gallery")

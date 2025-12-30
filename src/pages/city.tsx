@@ -1,4 +1,4 @@
-import { City, Exif, Photo } from "../../@types/Photo"
+import type { City, Exif, Photo } from "../../@types/Photo"
 import { Header, Nav } from "../components/Nav"
 
 function byDatetime(a: Photo, b: Photo): number {

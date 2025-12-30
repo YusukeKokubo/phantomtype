@@ -13,20 +13,20 @@ import type { Exif, Photo } from "../@types/Photo"
 function picsDataGenerator() {
   const dirPath = path.join(__dirname, "../public/pics")
   const cityDirs = fs.readdirSync(dirPath)
-  const cities = cityDirs.filter((d) =>
+  const cities = cityDirs.filter((d: string) =>
     fs.statSync(path.join(dirPath, d)).isDirectory(),
   )
-  const result = cities.map((cityName) => {
+  const result = cities.map((cityName: string) => {
     const cityDirPath = path.join(dirPath, cityName)
     const cityLocationDirs = readDir(cityDirPath)
-    const cityPics = cityLocationDirs.map((cityLocationName) => {
+    const cityPics = cityLocationDirs.map((cityLocationName: string) => {
       const cityLocationDirPath = path.join(cityDirPath, cityLocationName)
       const picsDir = fs.readdirSync(cityLocationDirPath)
       console.log(picsDir)
 
       const pics = picsDir
-        .filter((file) => file.toLowerCase().endsWith(".jpg"))
-        .map((filePath) => {
+        .filter((file: string) => file.toLowerCase().endsWith(".jpg"))
+        .map((filePath: string) => {
           const exif = readExif(`${cityLocationDirPath}/${filePath}`)
           const pic: Photo = {
             filename: filePath,
@@ -48,7 +48,7 @@ function picsDataGenerator() {
 
 const readDir = (dirPath: string) => {
   const dirs = fs.readdirSync(dirPath, { withFileTypes: true })
-  return dirs.filter((d) => d.isDirectory()).map((d) => d.name)
+  return dirs.filter((d: { isDirectory: () => boolean }) => d.isDirectory()).map((d: { name: string }) => d.name)
 }
 
 const readExif = (filePath: string): Exif | null => {

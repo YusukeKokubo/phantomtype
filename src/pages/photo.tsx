@@ -1,4 +1,4 @@
-import { City, Photo } from "../../@types/Photo"
+import type { City, Photo } from "../../@types/Photo"
 import { Header } from "../components/Nav"
 
 function calcSize(

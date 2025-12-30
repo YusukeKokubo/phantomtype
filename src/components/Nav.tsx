@@ -1,4 +1,4 @@
-import { City } from "../../@types/Photo"
+import type { City } from "../../@types/Photo"
 
 export const Header = ({ city, cities }: { city: string; cities: City[] }) => {
   return (
@@ -38,7 +38,8 @@ export const Nav = ({ city, cities }: { city?: string; cities: City[] }) => {
       {cities
         .filter((c) => c.city !== city)
         .map((c) => {
-          const examplePic = c.locations[0].pics[0]
+          const examplePic = c.locations[0]?.pics[0]
+          if (!examplePic) return null
           return (
             <a href={`/${c.city}`} key={c.city} class="relative">
               <img
