@@ -21,16 +21,7 @@ npm run cf-typegen   # Cloudflare Bindings型定義生成
 
 ### 写真データの生成
 
-```bash
-cd generatePics
-npm install  # 初回のみ
-npm run generatePics
-cd ..
-```
-
-`public/pics/` 配下の画像をスキャンし、EXIF メタデータを抽出して `public/pics.json` を生成します。新しい写真を追加した際は必ず実行してください。
-
-**注意**: `generatePics/` ディレクトリは独立したプロジェクト（専用の `package.json` を持つ）です。
+`generatePics/` ディレクトリのスクリプトを使用します。詳細は `generatePics/CLAUDE.md` を参照してください。
 
 ## アーキテクチャ
 
@@ -47,9 +38,7 @@ cd ..
   - `pics/` - 写真ファイル（都市/ロケーション/ファイル名の階層構造）
   - `pics.json` - 自動生成される写真メタデータ（コミット対象）
   - `styles.css` - ビルドされた Tailwind CSS（gitignore 対象）
-- `generatePics/` - 写真データ生成スクリプト（独立したプロジェクト）
-  - `index.ts` - 写真データ生成スクリプト
-  - `package.json` - スクリプト専用の依存関係
+- `generatePics/` - 写真データ生成スクリプト（独立したプロジェクト、詳細は `generatePics/CLAUDE.md` を参照）
 - `vite.config.ts` - Vite 設定ファイル
 - `wrangler.jsonc` - Wrangler 設定ファイル
 
@@ -66,12 +55,11 @@ cd ..
 ### データフロー
 
 1. 写真ファイルを `public/pics/[city]/[location]/[filename].jpg` に配置
-2. `cd generatePics && npm run generatePics` で全 JPG ファイルをスキャンし、EXIF データを抽出
-3. `public/pics.json` に `City[]` 構造でデータを出力（`City -> Location[] -> Photo[]`）
-4. Hono ページコンポーネントは `pics.json` を静的インポートして表示
-5. `npm run build` で Vite ビルドを実行し、Worker 用のバンドルを生成
+2. `generatePics/` スクリプトで `public/pics.json` を生成（詳細は `generatePics/CLAUDE.md` を参照）
+3. Hono ページコンポーネントは `pics.json` を静的インポートして表示
+4. `npm run build` で Vite ビルドを実行し、Worker 用のバンドルを生成
 
-### 重要な技術的詳細
+### 技術的詳細
 
 - **Hono JSX**: React ではなく Hono の軽量 JSX を使用（`class` 属性を使用）
 - **日本語ファイル名対応**: 日本語のファイル名やディレクトリ名が使用可能
@@ -87,12 +75,3 @@ cd ..
 - **フォーマッター**: Biome
 - **型チェック**: strict モード、strictNullChecks 有効
 - `noNonNullAssertion` ルールは無効化されている(EXIF 処理で `!` 演算子を使用するため)
-- **テスト**: 現在、自動テストは設定されていません
-
-## 画像の追加手順
-
-1. `public/pics/[city]/[location]/` に JPG ファイルを配置
-2. `cd generatePics && npm run generatePics` で写真データを生成
-3. `npm run dev` で動作確認
-4. 変更をコミット（`pics.json` も含める）
-5. `npm run deploy` でデプロイ
