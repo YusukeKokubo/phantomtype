@@ -11,6 +11,15 @@ import { blogEntries } from "../yusuke/client/content/blog/data"
 import { ModalDialog } from "../yusuke/client/components/ModalDialog"
 
 export default function YusukePage() {
+  // 開発環境かどうかを判定（Viteのビルド時に置き換えられる）
+  const isDev = typeof import.meta.env !== "undefined" && import.meta.env.DEV
+  const tabsScript = isDev
+    ? "/src/yusuke/client/yusuke-tabs.tsx"
+    : "/client/yusuke-tabs.js"
+  const modalScript = isDev
+    ? "/src/yusuke/client/yusuke-modal.tsx"
+    : "/client/yusuke-modal.js"
+
   // サーバーサイドで初期状態（careerタブ）をレンダリング
   const defaultTab = "career"
 
@@ -54,12 +63,7 @@ export default function YusukePage() {
         </div>
 
         {/* クライアントコンポーネントのスクリプト（hydrateRoot使用） */}
-        {html`
-          <script
-            type="module"
-            src="/src/yusuke/client/yusuke-tabs.tsx"
-          ></script>
-        `}
+        {html` <script type="module" src="${tabsScript}"></script> `}
       </main>
 
       {/* ポップアップモーダル（サーバーサイドで初期状態をレンダリング、クライアント側でハイドレーション） */}
@@ -68,12 +72,7 @@ export default function YusukePage() {
           <div></div>
         </ModalDialog>
       </div>
-      {html`
-        <script
-          type="module"
-          src="/src/yusuke/client/yusuke-modal.tsx"
-        ></script>
-      `}
+      {html` <script type="module" src="${modalScript}"></script> `}
     </>
   )
 }
