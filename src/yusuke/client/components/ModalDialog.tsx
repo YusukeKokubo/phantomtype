@@ -8,6 +8,28 @@ export function ModalDialog({ title, onClose, children }: ModalDialogProps) {
   // モーダル外をクリックしたときの処理
   const handleBackdropClick = (e: MouseEvent) => {
     if (e.target === e.currentTarget) {
+      handleClose()
+    }
+  }
+
+  // 閉じるアニメーションを適用してから閉じる
+  const handleClose = () => {
+    const dialog = document.getElementById(
+      "yusuke-modal-dialog"
+    ) as HTMLDialogElement | null
+    if (dialog) {
+      // 閉じるアニメーションを適用
+      dialog.style.opacity = "0"
+      dialog.style.transform = "scale(0.95)"
+      setTimeout(() => {
+        onClose()
+        // アニメーション後にスタイルをリセット（次回開くときのために）
+        setTimeout(() => {
+          dialog.style.opacity = ""
+          dialog.style.transform = ""
+        }, 50)
+      }, 200) // アニメーション時間に合わせる
+    } else {
       onClose()
     }
   }
@@ -24,7 +46,7 @@ export function ModalDialog({ title, onClose, children }: ModalDialogProps) {
           <form method="dialog">
             <button
               type="submit"
-              onClick={onClose}
+              onClick={handleClose}
               class="text-text-secondary hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
               aria-label="閉じる"
             >
