@@ -48,7 +48,9 @@ function picsDataGenerator() {
 
 const readDir = (dirPath: string) => {
   const dirs = fs.readdirSync(dirPath, { withFileTypes: true })
-  return dirs.filter((d: { isDirectory: () => boolean }) => d.isDirectory()).map((d: { name: string }) => d.name)
+  return dirs
+    .filter((d: { isDirectory: () => boolean }) => d.isDirectory())
+    .map((d: { name: string }) => d.name)
 }
 
 const readExif = (filePath: string): Exif | null => {

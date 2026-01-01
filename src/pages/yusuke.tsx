@@ -1,4 +1,3 @@
-import { html } from "hono/html"
 import { Tabs } from "../yusuke/client/components/Tabs"
 import { CareerContent } from "../yusuke/client/content/career/CareerContent"
 import { careerEntries } from "../yusuke/client/content/career/data"
@@ -9,17 +8,22 @@ import { valuesData } from "../yusuke/client/content/values/data"
 import { BlogContent } from "../yusuke/client/content/blog/BlogContent"
 import { blogEntries } from "../yusuke/client/content/blog/data"
 import { ModalDialog } from "../yusuke/client/components/ModalDialog"
+import { withClientScript } from "../lib/with-client-script"
+
+// クライアント側でhydrationするコンポーネントを作成
+const ClientTabs = withClientScript(
+  Tabs,
+  "src/yusuke/client/yusuke-tabs.tsx",
+  "yusuke-tabs-container"
+)
+
+const ClientModal = withClientScript(
+  ModalDialog,
+  "src/yusuke/client/yusuke-modal.tsx",
+  "yusuke-modal-container"
+)
 
 export default function YusukePage() {
-  // 開発環境かどうかを判定（Viteのビルド時に置き換えられる）
-  const isDev = typeof import.meta.env !== "undefined" && import.meta.env.DEV
-  const tabsScript = isDev
-    ? "/src/yusuke/client/yusuke-tabs.tsx"
-    : "/client/yusuke-tabs.js"
-  const modalScript = isDev
-    ? "/src/yusuke/client/yusuke-modal.tsx"
-    : "/client/yusuke-modal.js"
-
   // サーバーサイドで初期状態（careerタブ）をレンダリング
   const defaultTab = "career"
 
@@ -43,36 +47,28 @@ export default function YusukePage() {
         </div>
 
         {/* タブUIコンテナ（サーバーサイドでレンダリング、クライアント側でハイドレーション） */}
-        <div id="yusuke-tabs-container">
-          <Tabs defaultTab={defaultTab}>
-            {(activeTab) => {
-              switch (activeTab) {
-                case "career":
-                  return <CareerContent entries={careerEntries} />
-                case "personal":
-                  return <PersonalContent entries={personalEntries} />
-                case "values":
-                  return <ValuesContent content={valuesData} />
-                case "blog":
-                  return <BlogContent entries={blogEntries} />
-                default:
-                  return null
-              }
-            }}
-          </Tabs>
-        </div>
-
-        {/* クライアントコンポーネントのスクリプト（hydrateRoot使用） */}
-        {html` <script type="module" src="${tabsScript}"></script> `}
+        <ClientTabs defaultTab={defaultTab}>
+          {(activeTab) => {
+            switch (activeTab) {
+              case "career":
+                return <CareerContent entries={careerEntries} />
+              case "personal":
+                return <PersonalContent entries={personalEntries} />
+              case "values":
+                return <ValuesContent content={valuesData} />
+              case "blog":
+                return <BlogContent entries={blogEntries} />
+              default:
+                return null
+            }
+          }}
+        </ClientTabs>
       </main>
 
       {/* ポップアップモーダル（サーバーサイドで初期状態をレンダリング、クライアント側でハイドレーション） */}
-      <div id="yusuke-modal-container">
-        <ModalDialog title="" onClose={() => {}}>
-          <div></div>
-        </ModalDialog>
-      </div>
-      {html` <script type="module" src="${modalScript}"></script> `}
+      <ClientModal title="" onClose={() => {}}>
+        <div></div>
+      </ClientModal>
     </>
   )
 }
