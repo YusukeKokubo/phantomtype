@@ -20,15 +20,15 @@
 /* Dark Theme Colors */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: #0a0a0a;
+    --color-background: #121212;
     --color-foreground: #ffffff;
-    --color-surface: #1a1a1a;
+    --color-surface: #1e1e1e;
     --color-surface-variant: #2a2a2a;
     --color-border: #404040;
     --color-text-primary: #ffffff;
     --color-text-secondary: #d1d5db;
     --color-text-muted: #9ca3af;
-    --color-surface-overlay: rgb(26 26 26 / 0.5);
+    --color-surface-overlay: rgb(30 30 30 / 0.5);
   }
 }
 
@@ -81,4 +81,30 @@ a:focus-visible {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/* Scrollbar Styles */
+/* WebKit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) var(--color-surface);
 }
