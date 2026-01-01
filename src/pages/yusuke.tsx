@@ -8,24 +8,14 @@ import { valuesData } from "../yusuke/client/content/values/data"
 import { BlogContent } from "../yusuke/client/content/blog/BlogContent"
 import { blogEntries } from "../yusuke/client/content/blog/data"
 import { ModalDialog } from "../yusuke/client/components/ModalDialog"
-import { withClientScript } from "../lib/with-client-script"
-
-// クライアント側でhydrationするコンポーネントを作成
-const ClientTabs = withClientScript(
-  Tabs,
-  "src/yusuke/client/yusuke-tabs.tsx",
-  "yusuke-tabs-container"
-)
-
-const ClientModal = withClientScript(
-  ModalDialog,
-  "src/yusuke/client/yusuke-modal.tsx",
-  "yusuke-modal-container"
-)
+import { getClientScript } from "../lib/client-manifest"
 
 export default function YusukePage() {
   // サーバーサイドで初期状態（careerタブ）をレンダリング
   const defaultTab = "career"
+
+  // クライアントスクリプトのパスを取得
+  const clientScript = getClientScript("src/yusuke/client/yusuke-client.tsx")
 
   return (
     <>
@@ -47,28 +37,35 @@ export default function YusukePage() {
         </div>
 
         {/* タブUIコンテナ（サーバーサイドでレンダリング、クライアント側でハイドレーション） */}
-        <ClientTabs defaultTab={defaultTab}>
-          {(activeTab) => {
-            switch (activeTab) {
-              case "career":
-                return <CareerContent entries={careerEntries} />
-              case "personal":
-                return <PersonalContent entries={personalEntries} />
-              case "values":
-                return <ValuesContent content={valuesData} />
-              case "blog":
-                return <BlogContent entries={blogEntries} />
-              default:
-                return null
-            }
-          }}
-        </ClientTabs>
+        <div id="yusuke-tabs-container">
+          <Tabs defaultTab={defaultTab}>
+            {(activeTab) => {
+              switch (activeTab) {
+                case "career":
+                  return <CareerContent entries={careerEntries} />
+                case "personal":
+                  return <PersonalContent entries={personalEntries} />
+                case "values":
+                  return <ValuesContent content={valuesData} />
+                case "blog":
+                  return <BlogContent entries={blogEntries} />
+                default:
+                  return null
+              }
+            }}
+          </Tabs>
+        </div>
       </main>
 
       {/* ポップアップモーダル（サーバーサイドで初期状態をレンダリング、クライアント側でハイドレーション） */}
-      <ClientModal title="" onClose={() => {}}>
-        <div></div>
-      </ClientModal>
+      <div id="yusuke-modal-container">
+        <ModalDialog title="" onClose={() => {}}>
+          <div></div>
+        </ModalDialog>
+      </div>
+
+      {/* クライアントスクリプト（1回だけ読み込む） */}
+      <script type="module" src={clientScript} />
     </>
   )
 }

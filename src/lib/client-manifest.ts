@@ -33,8 +33,12 @@ export function getClientScript(sourcePath: string): string {
     return `/${sourcePath}`
   }
 
-  // 本番環境ではマニフェストから解決
-  const manifest = loadManifest()
-  const entry = manifest[sourcePath]
-  return entry ? `/${entry.file}` : `/${sourcePath}`
+  // 本番環境では固定のビルド済みパスを使用
+  // vite.config.tsの設定に基づく
+  if (sourcePath === "src/yusuke/client/yusuke-client.tsx") {
+    return "/client/yusuke-client.js"
+  }
+
+  // フォールバック
+  return `/${sourcePath}`
 }

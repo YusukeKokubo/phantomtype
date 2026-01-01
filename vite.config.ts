@@ -10,12 +10,11 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: './src/index.tsx',
-        'yusuke-modal': './src/yusuke/client/yusuke-modal.tsx',
-        'yusuke-tabs': './src/yusuke/client/yusuke-tabs.tsx',
+        'yusuke-client': './src/yusuke/client/yusuke-client.tsx',
       },
       output: {
         entryFileNames: (chunkInfo) => {
-          return chunkInfo.name === 'yusuke-modal' || chunkInfo.name === 'yusuke-tabs'
+          return chunkInfo.name === 'yusuke-client'
             ? 'client/[name].js'
             : '[name].js'
         },
