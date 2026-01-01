@@ -4,6 +4,7 @@ import { renderer } from "./renderer"
 import HomePage from "./pages/home"
 import CityPage from "./pages/city"
 import PhotoPage from "./pages/photo"
+import YusukePage from "./pages/yusuke"
 import citiesData from "../public/pics.json"
 import type { City, Photo } from "../@types/Photo"
 import type { AppEnv } from "../@types/hono"
@@ -36,6 +37,18 @@ app.get("/", (c) => {
   c.set("ogImage", `${publicHost}/ogkyoto.jpg`)
   c.set("ogUrl", publicHost)
   return c.render(<HomePage cities={cities} />)
+})
+
+// About page (must be before /:city route)
+app.get("/yusuke", (c) => {
+  const publicHost = c.env.PUBLIC_HOST || ""
+
+  c.set("title", "Yusuke Kokubo - PHANTOM TYPE")
+  c.set("description", "About Yusuke Kokubo")
+  c.set("ogImage", `${publicHost}/ogkyoto.jpg`)
+  c.set("ogUrl", `${publicHost}/yusuke`)
+
+  return c.render(<YusukePage />)
 })
 
 // Photo detail pages (must be before city pages to avoid route conflicts)
@@ -130,7 +143,8 @@ app.get("/:city", (c) => {
 
 // Serve static files (must be after dynamic routes)
 app.use("/pics/*", serveStatic({ root: "./public", manifest: {} }))
-app.use("/*.{svg,jpg,css}", serveStatic({ root: "./public", manifest: {} }))
+app.use("/yusuke/*", serveStatic({ root: "./public", manifest: {} }))
+app.use("/*.{svg,jpg,css,webp}", serveStatic({ root: "./public", manifest: {} }))
 app.use("/styles.css", serveStatic({ root: "./public", manifest: {} }))
 
 export default app
