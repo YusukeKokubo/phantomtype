@@ -37,7 +37,7 @@ export function ModalDialog({ title, onClose, children }: ModalDialogProps) {
   return (
     <dialog
       id="yusuke-modal-dialog"
-      class="backdrop:bg-black/50 backdrop:backdrop-blur-sm rounded-lg shadow-lg bg-background border border-border p-2 w-1/2 m-auto"
+      class="backdrop:bg-black/50 backdrop:backdrop-blur-sm rounded-lg shadow-lg bg-background border border-border p-2 w-[95%] md:w-2/3 m-auto"
       onClick={handleBackdropClick}
     >
       <div class="flex flex-col h-full max-h-[90vh]">
