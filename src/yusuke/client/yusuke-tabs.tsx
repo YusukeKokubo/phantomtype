@@ -1,4 +1,5 @@
-import { render } from "hono/jsx/dom"
+import { hydrateRoot } from "hono/jsx/dom/client"
+import { StrictMode } from "hono/jsx"
 import { Tabs, type TabId } from "./components/Tabs"
 import { CareerContent } from "./content/career/CareerContent"
 import { careerEntries } from "./content/career/data"
@@ -30,8 +31,13 @@ function YusukeTabs() {
   )
 }
 
-// クライアントサイドでの初期化
+// クライアントサイドでのハイドレーション
 const tabsContainer = document.getElementById("yusuke-tabs-container")
 if (tabsContainer) {
-  render(<YusukeTabs />, tabsContainer)
+  hydrateRoot(
+    tabsContainer,
+    <StrictMode>
+      <YusukeTabs />
+    </StrictMode>
+  )
 }

@@ -1,6 +1,19 @@
 import { html } from "hono/html"
+import { Tabs } from "../yusuke/client/components/Tabs"
+import { CareerContent } from "../yusuke/client/content/career/CareerContent"
+import { careerEntries } from "../yusuke/client/content/career/data"
+import { PersonalContent } from "../yusuke/client/content/personal/PersonalContent"
+import { personalEntries } from "../yusuke/client/content/personal/data"
+import { ValuesContent } from "../yusuke/client/content/values/ValuesContent"
+import { valuesData } from "../yusuke/client/content/values/data"
+import { BlogContent } from "../yusuke/client/content/blog/BlogContent"
+import { blogEntries } from "../yusuke/client/content/blog/data"
+import { ModalDialog } from "../yusuke/client/components/ModalDialog"
 
 export default function YusukePage() {
+  // サーバーサイドで初期状態（careerタブ）をレンダリング
+  const defaultTab = "career"
+
   return (
     <>
       <a href="#main-content" class="skip-link">
@@ -20,10 +33,27 @@ export default function YusukePage() {
           <p>Love cats 🐈 and photography 📷.</p>
         </div>
 
-        {/* タブUIコンテナ（クライアントコンポーネントで初期化） */}
-        <div id="yusuke-tabs-container"></div>
+        {/* タブUIコンテナ（サーバーサイドでレンダリング、クライアント側でハイドレーション） */}
+        <div id="yusuke-tabs-container">
+          <Tabs defaultTab={defaultTab}>
+            {(activeTab) => {
+              switch (activeTab) {
+                case "career":
+                  return <CareerContent entries={careerEntries} />
+                case "personal":
+                  return <PersonalContent entries={personalEntries} />
+                case "values":
+                  return <ValuesContent content={valuesData} />
+                case "blog":
+                  return <BlogContent entries={blogEntries} />
+                default:
+                  return null
+              }
+            }}
+          </Tabs>
+        </div>
 
-        {/* クライアントコンポーネントのスクリプト */}
+        {/* クライアントコンポーネントのスクリプト（hydrateRoot使用） */}
         {html`
           <script
             type="module"
@@ -32,8 +62,12 @@ export default function YusukePage() {
         `}
       </main>
 
-      {/* ポップアップモーダル（Client Component） */}
-      <div id="yusuke-modal-container"></div>
+      {/* ポップアップモーダル（サーバーサイドで初期状態をレンダリング、クライアント側でハイドレーション） */}
+      <div id="yusuke-modal-container">
+        <ModalDialog title="" onClose={() => {}}>
+          <div></div>
+        </ModalDialog>
+      </div>
       {html`
         <script
           type="module"

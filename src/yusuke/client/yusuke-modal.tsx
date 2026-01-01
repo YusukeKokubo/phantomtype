@@ -1,5 +1,6 @@
 import { useState, useEffect } from "hono/jsx"
-import { render } from "hono/jsx/dom"
+import { hydrateRoot } from "hono/jsx/dom/client"
+import { StrictMode } from "hono/jsx"
 import { ModalDialog } from "./components/ModalDialog"
 import { MarkdownViewer } from "./components/MarkdownViewer"
 
@@ -65,8 +66,13 @@ function YusukeModal() {
   )
 }
 
-// クライアントサイドでの初期化（ドキュメントの例に従う）
+// クライアントサイドでのハイドレーション
 const modalContainer = document.getElementById("yusuke-modal-container")
 if (modalContainer) {
-  render(<YusukeModal />, modalContainer)
+  hydrateRoot(
+    modalContainer,
+    <StrictMode>
+      <YusukeModal />
+    </StrictMode>
+  )
 }

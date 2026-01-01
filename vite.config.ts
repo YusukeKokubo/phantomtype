@@ -9,8 +9,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: './src/index.tsx',
-        'yusuke-modal': './src/client/yusuke-modal.tsx',
-        'yusuke-tabs': './src/client/yusuke-tabs.tsx',
+        'yusuke-modal': './src/yusuke/client/yusuke-modal.tsx',
+        'yusuke-tabs': './src/yusuke/client/yusuke-tabs.tsx',
       },
       output: {
         entryFileNames: (chunkInfo) => {

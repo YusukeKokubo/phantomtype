@@ -21,6 +21,9 @@ const tabs: Tab[] = [
 
 // URLハッシュからタブIDを取得
 function getTabFromHash(): TabId | null {
+  if (typeof window === "undefined") {
+    return null
+  }
   const hash = window.location.hash.slice(1) // '#'を除去
   if (
     hash === "career" ||
@@ -35,14 +38,20 @@ function getTabFromHash(): TabId | null {
 
 // タブIDをURLハッシュに設定
 function setTabToHash(tabId: TabId) {
-  window.location.hash = tabId
+  if (typeof window !== "undefined") {
+    window.location.hash = tabId
+  }
 }
 
 export function Tabs({ defaultTab = "career", children }: TabsProps) {
   // URLハッシュから初期値を取得、なければdefaultTabを使用
-  const [activeTab, setActiveTab] = useState<TabId>(
-    getTabFromHash() || defaultTab
-  )
+  // サーバーサイドでは常にdefaultTabを使用
+  const [activeTab, setActiveTab] = useState<TabId>(() => {
+    if (typeof window === "undefined") {
+      return defaultTab
+    }
+    return getTabFromHash() || defaultTab
+  })
 
   // 初期化時にURLハッシュを設定（ハッシュがない場合）
   useEffect(() => {
