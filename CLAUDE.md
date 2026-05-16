@@ -30,10 +30,12 @@ npm run cf-typegen   # Cloudflare Bindings型定義生成
 - `src/` - Hono アプリケーション
   - `index.tsx` - エントリーポイント
   - `renderer.tsx` - HTML レイアウト、メタデータ生成
-  - `pages/` - ページコンポーネント（`home.tsx`, `city.tsx`, `photo.tsx`）
+  - `pages/` - ページコンポーネント（`home.tsx`, `city.tsx`, `photo.tsx`, `yusuke.tsx`）
   - `components/` - 共通コンポーネント（`Nav.tsx`）
+  - `lib/` - 共通ライブラリ・ユーティリティ
+  - `yusuke/` - Yusuke ページ用アセット・コンポーネント
   - `styles/` - スタイル定義（`input.css`）
-- `@types/` - TypeScript 型定義（`Photo.d.ts`, `hono.d.ts`）
+- `@types/` - TypeScript 型定義（`Photo.d.ts`, `hono.d.ts`, `About.d.ts`, `Blog.d.ts`）
 - `public/` - 静的アセット
   - `pics/` - 写真ファイル（都市/ロケーション/ファイル名の階層構造）
   - `pics.json` - 自動生成される写真メタデータ（コミット対象）
@@ -45,12 +47,16 @@ npm run cf-typegen   # Cloudflare Bindings型定義生成
 ### ルーティング構造
 
 - `GET /` - ホームページ（都市選択画面）
+- `GET /yusuke` - About ページ（`/:city` より前に定義する必要あり）
 - `GET /:city` - 都市ごとの写真ギャラリーページ
 - `GET /:city/photo/:filename` - 個別写真ページ（EXIF 情報表示）
 - `GET /pics/*` - 静的ファイル配信（写真画像）
-- `GET /*.{svg,jpg,css}` - 静的ファイル配信（その他のアセット）
+- `GET /yusuke/*` - 静的ファイル配信（Yusuke ページアセット）
+- `GET /*.{svg,jpg,css,webp}` - 静的ファイル配信（その他のアセット）
 
-ルーティングの順序が重要です。写真詳細ページ（`/:city/photo/:filename`）は都市ページ（`/:city`）より前に定義する必要があります。これにより、`/kyoto/photo/image.jpg` のようなリクエストが正しく処理されます。
+ルーティングの順序が重要です。固定パス（`/yusuke`）は動的パス（`/:city`）より前に、写真詳細ページ（`/:city/photo/:filename`）は都市ページ（`/:city`）より前に定義する必要があります。
+
+トレイリングスラッシュのリダイレクト: `app.use("*", ...)` でルート以外のパスからトレイリングスラッシュを除去する 301 リダイレクトを実装しています。
 
 ### データフロー
 
