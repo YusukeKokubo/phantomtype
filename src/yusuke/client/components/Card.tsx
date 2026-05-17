@@ -1,5 +1,6 @@
 import type { TimelineEntry } from "../../../../@types/About"
 import type { BlogEntry } from "../../../../@types/Blog"
+import { useYusukeModal } from "../modal-context"
 import type { ColorInfo } from "./Timeline"
 
 type ImageStyle = "large" | "small" | "default"
@@ -8,7 +9,6 @@ interface CardProps {
   entry: TimelineEntry | BlogEntry
   color?: ColorInfo
   yearRange?: string
-  entryIdPrefix?: string // entry.dateがない場合のID生成用
   imageStyle?: ImageStyle // 画像の表示スタイル
   compact?: boolean // コンパクトモード（高さを小さくする）
 }
@@ -17,10 +17,11 @@ export function Card({
   entry,
   color,
   yearRange,
-  entryIdPrefix,
   imageStyle = "large",
   compact = false,
 }: CardProps) {
+  const { openEntry } = useYusukeModal()
+
   // 画像スタイルに応じたクラスを決定
   const getImageClasses = (style: ImageStyle, isCompact: boolean) => {
     // compactモードでは固定の高さで高さを小さくする
@@ -121,22 +122,10 @@ export function Card({
   }
 
   if ("detail" in entry && entry.detail) {
-    // entry.dateがある場合はそれを使い、ない場合はentryIdPrefixを使う
-    const entryId = entry.date
-      ? `entry-${entry.date}-${entry.title.replace(/\s+/g, "-")}`
-      : entryIdPrefix
-      ? `${entryIdPrefix}-${entry.title.replace(/\s+/g, "-")}`
-      : `entry-${entry.title.replace(/\s+/g, "-")}`
-
     return (
       <button
         type="button"
-        data-entry-id={entryId}
-        data-entry-title={entry.title}
-        data-entry-detail={("detail" in entry ? entry.detail : "").replace(
-          /\n/g,
-          "\\n"
-        )}
+        onClick={() => openEntry(entry.title, entry.detail)}
         class="w-full text-left h-full hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer"
       >
         {entryContent}

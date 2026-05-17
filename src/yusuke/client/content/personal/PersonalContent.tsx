@@ -1,6 +1,8 @@
 import type { GalleryEntry } from "../../../../../@types/About"
+import { useYusukeModal } from "../../modal-context"
 
 export function PersonalContent({ entries }: { entries: GalleryEntry[] }) {
+  const { openEntry } = useYusukeModal()
   if (entries.length === 0) {
     return <p class="text-text-secondary">コンテンツを追加してください</p>
   }
@@ -46,15 +48,11 @@ export function PersonalContent({ entries }: { entries: GalleryEntry[] }) {
         }
 
         if (entry.detail) {
-          const entryId = `entry-${i}-${entry.title.replace(/\s+/g, "-")}`
-          const detailForAttr = entry.detail.replace(/\n/g, "\\n")
           return (
             <button
               key={i}
               type="button"
-              data-entry-id={entryId}
-              data-entry-title={entry.title}
-              data-entry-detail={detailForAttr}
+              onClick={() => openEntry(entry.title, entry.detail)}
               class="text-left focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer"
             >
               {cardContent}

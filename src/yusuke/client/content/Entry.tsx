@@ -1,7 +1,10 @@
 import type { TimelineEntry } from "../../../../@types/About"
+import { useYusukeModal } from "../modal-context"
 import { formatDateRange } from "./utils"
 
 export function Entry({ entry }: { entry: TimelineEntry }) {
+  const { openEntry } = useYusukeModal()
+
   const content = (
     <div class="flex gap-4">
       {entry.image && (
@@ -42,15 +45,10 @@ export function Entry({ entry }: { entry: TimelineEntry }) {
   }
 
   if (entry.detail) {
-    const entryId = `entry-${entry.date}-${entry.title.replace(/\s+/g, "-")}`
-    // 改行をエスケープ（Hono JSXが属性値を自動エスケープするため）
-    const detailForAttr = entry.detail.replace(/\n/g, "\\n")
     return (
       <button
         type="button"
-        data-entry-id={entryId}
-        data-entry-title={entry.title}
-        data-entry-detail={detailForAttr}
+        onClick={() => openEntry(entry.title, entry.detail)}
         class="w-full text-left py-2 border-b border-border hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer"
       >
         {content}

@@ -1,13 +1,8 @@
-import { Tabs } from "../yusuke/client/components/Tabs"
-import { renderTabContent } from "../yusuke/client/render-tab-content"
-import { YusukeModal } from "../yusuke/client/components/YusukeModal"
+import { YusukeApp } from "../yusuke/client/YusukeApp"
 import { getClientScript } from "../lib/client-manifest"
 
 export default function YusukePage() {
-  // サーバーサイドで初期状態（careerタブ）をレンダリング
   const defaultTab = "career"
-
-  // クライアントスクリプトのパスを取得
   const clientScript = getClientScript("src/yusuke/client/yusuke-client.tsx")
 
   return (
@@ -29,18 +24,11 @@ export default function YusukePage() {
           <p>Love cats 🐈 and photography 📷.</p>
         </div>
 
-        {/* タブUIコンテナ（サーバーサイドでレンダリング、クライアント側でハイドレーション） */}
-        <div id="yusuke-tabs-container">
-          <Tabs defaultTab={defaultTab}>{renderTabContent}</Tabs>
+        <div id="yusuke-app-container">
+          <YusukeApp defaultTab={defaultTab} />
         </div>
       </main>
 
-      {/* ポップアップモーダル（サーバーサイドで初期状態をレンダリング、クライアント側でハイドレーション） */}
-      <div id="yusuke-modal-container">
-        <YusukeModal />
-      </div>
-
-      {/* クライアントスクリプト（1回だけ読み込む） */}
       <script type="module" src={clientScript} />
     </>
   )
