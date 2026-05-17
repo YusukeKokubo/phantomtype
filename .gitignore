@@ -20,3 +20,6 @@ public/pics
 # Old Next.js / Vercel artifacts (kept for reference)
 .next/
 .vercel/
+
+# Local tool version management
+mise
