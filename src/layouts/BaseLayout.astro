@@ -1,5 +1,6 @@
 ---
 import "../styles/input.css"
+import { ClientRouter } from "astro:transitions"
 
 export interface Props {
   title?: string
@@ -45,6 +46,8 @@ const resolvedOgUrl = ogUrl || publicHost
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:creator" content="@yusuke_kokubo" />
     <meta name="twitter:image" content={resolvedOgImage} />
+
+    <ClientRouter />
 
     <!-- Google Fonts - Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
