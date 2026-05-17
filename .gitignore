@@ -7,6 +7,9 @@ node_modules/
 # Astro generated types
 .astro/
 
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo
+
 # Not tracked
 public/kyoto
 public/nagoya
