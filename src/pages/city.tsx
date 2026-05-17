@@ -20,7 +20,7 @@ function Pic(params: { city: string; pic: Photo }) {
       aria-label={`${city} ${name}の写真を見る`}
     >
       <img
-        src={p.url}
+        src={encodeURI(p.url)}
         width={width}
         height={height}
         alt={`${city} ${name}の写真`}

@@ -33,7 +33,7 @@ export default function PhotoPage({
 
         <article>
           <img
-            src={photo.url}
+            src={encodeURI(photo.url)}
             width={width}
             height={height}
             alt={`${city} ${name}の写真`}

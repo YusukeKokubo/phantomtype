@@ -141,10 +141,12 @@ app.get("/:city", (c) => {
   return c.render(<CityPage city={city} cityPics={cityPics} cities={cities} />)
 })
 
-// Serve static files (must be after dynamic routes)
-app.use("/pics/*", serveStatic({ root: "./public", manifest: {} }))
-app.use("/yusuke/*", serveStatic({ root: "./public", manifest: {} }))
-app.use("/*.{svg,jpg,css,webp}", serveStatic({ root: "./public", manifest: {} }))
-app.use("/styles.css", serveStatic({ root: "./public", manifest: {} }))
+// Serve static files (production only; in dev Vite serves public/ directly)
+if (!import.meta.env.DEV) {
+  app.use("/pics/*", serveStatic({ root: "./public", manifest: {} }))
+  app.use("/yusuke/*", serveStatic({ root: "./public", manifest: {} }))
+  app.use("/*.{svg,jpg,css,webp}", serveStatic({ root: "./public", manifest: {} }))
+  app.use("/styles.css", serveStatic({ root: "./public", manifest: {} }))
+}
 
 export default app
