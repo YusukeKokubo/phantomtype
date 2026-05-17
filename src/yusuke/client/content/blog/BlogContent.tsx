@@ -12,22 +12,25 @@ export function BlogContent({ entries }: { entries: BlogEntry[] }) {
     return b.date.localeCompare(a.date)
   })
 
-  // 年ごとにグループ化
-  const entriesByYear = sortedEntries.reduce((acc, entry) => {
+  // 年ごとにグループ化（表示順は配列で明示的に管理）
+  const yearGroups = new Map<string, BlogEntry[]>()
+  for (const entry of sortedEntries) {
     const year = entry.date.substring(0, 4) // YYYY-MM-DD から年を取得
-    if (!acc[year]) {
-      acc[year] = []
+    const group = yearGroups.get(year)
+    if (group) {
+      group.push(entry)
+    } else {
+      yearGroups.set(year, [entry])
     }
-    acc[year].push(entry)
-    return acc
-  }, {} as Record<string, BlogEntry[]>)
+  }
 
-  // 年を降順でソート
-  const years = Object.keys(entriesByYear).sort((a, b) => b.localeCompare(a))
+  const entriesByYear = [...yearGroups.entries()]
+    .map(([year, entries]) => ({ year, entries }))
+    .sort((a, b) => b.year.localeCompare(a.year))
 
   return (
     <div class="mx-auto max-w-3xl py-8 px-4 flex flex-col gap-8">
-      {years.map((year) => (
+      {entriesByYear.map(({ year, entries }) => (
         <div key={year}>
           {/* 年の見出し */}
           <h2 class="text-2xl font-bold text-gray-800 mb-6">{year}</h2>
@@ -38,7 +41,7 @@ export function BlogContent({ entries }: { entries: BlogEntry[] }) {
             <div class="absolute left-4 top-0 bottom-0 w-0.5 border-l border-dashed border-gray-300"></div>
 
             <div class="space-y-8">
-              {entriesByYear[year]!.map((entry) => {
+              {entries.map((entry) => {
                 const displayDate = formatYearMonth(entry.date)
                 const relativeTime = getRelativeTime(entry.date)
 
