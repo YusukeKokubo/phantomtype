@@ -1,25 +1,27 @@
-type Manifest = Record<string, { file: string; src: string }>
+import manifest from "virtual:client-manifest"
 
-let manifest: Manifest | null = null
+type ManifestEntry = {
+  file: string
+  src?: string
+}
 
-export function loadManifest(): Manifest {
-  if (manifest) return manifest
+type Manifest = Record<string, ManifestEntry>
 
-  // 開発環境では空のマニフェスト
-  if (typeof import.meta.env !== "undefined" && import.meta.env.DEV) {
-    return {}
+function findManifestEntry(
+  entries: Manifest,
+  sourcePath: string
+): ManifestEntry | undefined {
+  const normalized = sourcePath.replace(/^\.\//, "")
+  const keys = [sourcePath, normalized, `./${normalized}`]
+
+  for (const key of keys) {
+    const entry = entries[key]
+    if (entry) {
+      return entry
+    }
   }
 
-  // 本番環境ではマニフェストを読み込む
-  // Cloudflare Workerでは動的にimportする必要がある
-  try {
-    // ビルド時にViteがマニフェストを生成する
-    // 実際のパスはビルド設定に依存
-    manifest = {}
-    return manifest
-  } catch {
-    return {}
-  }
+  return undefined
 }
 
 /**
@@ -27,18 +29,16 @@ export function loadManifest(): Manifest {
  * 開発環境ではそのままソースパスを返す
  */
 export function getClientScript(sourcePath: string): string {
-  const isDev = typeof import.meta.env !== "undefined" && import.meta.env.DEV
-
-  if (isDev) {
+  if (typeof import.meta.env !== "undefined" && import.meta.env.DEV) {
     return `/${sourcePath}`
   }
 
-  // 本番環境では固定のビルド済みパスを使用
-  // vite.config.tsの設定に基づく
-  if (sourcePath === "src/yusuke/client/yusuke-client.tsx") {
-    return "/client/yusuke-client.js"
+  const entry = findManifestEntry(manifest, sourcePath)
+  if (!entry) {
+    throw new Error(
+      `Client script not found in Vite manifest: ${sourcePath}. Add it to vite.config.ts build.rollupOptions.input.`,
+    )
   }
 
-  // フォールバック
-  return `/${sourcePath}`
+  return `/${entry.file.replace(/^\//, "")}`
 }

@@ -1,10 +1,11 @@
 import { cloudflare } from '@cloudflare/vite-plugin'
 import { defineConfig } from 'vite'
 import ssrPlugin from 'vite-ssr-components/plugin'
+import { clientManifestPlugin } from './vite-plugin-client-manifest'
 import { tailwindWatch } from './vite-plugin-tailwind-watch'
 
 export default defineConfig({
-  plugins: [cloudflare(), ssrPlugin(), tailwindWatch()],
+  plugins: [cloudflare(), ssrPlugin(), tailwindWatch(), clientManifestPlugin()],
   build: {
     manifest: true,
     rollupOptions: {
