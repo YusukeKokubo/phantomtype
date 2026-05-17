@@ -2,10 +2,6 @@ import type { TimelineEntry } from "../../../../@types/About"
 import { formatYearMonth } from "../content/utils"
 import { Card } from "./Card"
 
-// カードのレイアウト定数
-const CARD_HEIGHT = 200 // カードの推定高さ
-const CARD_MARGIN = 20 // カード間のマージン
-
 // 色の型定義
 export type ColorInfo = {
   hex: string
@@ -279,30 +275,24 @@ export function Timeline({
                 </span>
               </div>
 
-              {/* エントリカード（すべて右側に配置、同じ年のエントリは縦方向に配置） */}
-              {yearEntries.map((entry, entryIndex) => {
-                const entryWithPos = entriesWithGridPos.find(
-                  (e) => e.date === entry.date && e.title === entry.title
-                )!
-                const color = getColor(entry.color)
-                const yearRange = formatYearRange(entry.date, entry.endDate)
-                const hasColor = !!entry.color
+              {/* エントリカード（同じグリッド行のものは flex + gap で縦積み） */}
+              {(() => {
+                const entriesByRow = new Map<number, TimelineEntry[]>()
+                for (const entry of yearEntries) {
+                  const entryWithPos = entriesWithGridPos.find(
+                    (e) => e.date === entry.date && e.title === entry.title
+                  )!
+                  const cardRow = entry.endDate
+                    ? entryWithPos.endRow
+                    : entryWithPos.startRow
+                  const rowEntries = entriesByRow.get(cardRow)
+                  if (rowEntries) {
+                    rowEntries.push(entry)
+                  } else {
+                    entriesByRow.set(cardRow, [entry])
+                  }
+                }
 
-                // endDateがある場合はendRow、ない場合はstartRowを使用
-                // endDateが'Now'の場合はendRowを使用（現在位置に表示）
-                const cardRow = entry.endDate
-                  ? entryWithPos.endRow
-                  : entryWithPos.startRow
-
-                // 同じ年のエントリを縦方向に配置するためのオフセット
-                const verticalOffset = entryIndex * (CARD_HEIGHT + CARD_MARGIN)
-                const baseOffset =
-                  ((yearEntries.length - 1) * (CARD_HEIGHT + CARD_MARGIN)) / 2
-                const topOffset = verticalOffset - baseOffset
-
-                const cardContent = cardRenderer(entry, color, yearRange)
-
-                // カードサイズに応じたクラスを決定
                 const cardWrapperClass =
                   cardSize === "small"
                     ? "w-full max-w-[280px] sm:w-64 sm:max-w-none md:w-80 lg:w-96 ml-4 sm:ml-8"
@@ -312,28 +302,48 @@ export function Timeline({
                     ? "p-1.5 sm:p-2 md:p-2.5"
                     : "p-2 sm:p-3 md:p-4"
 
-                return (
-                  <div
-                    key={`${year}-${entryIndex}`}
-                    class={cardWrapperClass}
-                    style={`grid-column: 2 / 3; grid-row: ${cardRow}; justify-self: start; margin-top: ${topOffset}px;`}
-                  >
-                    {/* カード */}
+                return [...entriesByRow.entries()].map(
+                  ([cardRow, rowEntries]) => (
                     <div
-                      class={`bg-white rounded shadow-md ${cardPaddingClass} hover:shadow-lg transition-shadow relative ${
-                        hasColor ? "border-t-6" : ""
-                      }`}
-                      style={
-                        hasColor
-                          ? `border-top-color: ${color.hex}; border-top-width: 8px;`
-                          : ""
-                      }
+                      key={`${year}-${cardRow}`}
+                      class={cardWrapperClass}
+                      style={`grid-column: 2 / 3; grid-row: ${cardRow}; justify-self: start; align-self: center;`}
                     >
-                      {cardContent}
+                      <div class="flex flex-col gap-5">
+                        {rowEntries.map((entry) => {
+                          const color = getColor(entry.color)
+                          const yearRange = formatYearRange(
+                            entry.date,
+                            entry.endDate
+                          )
+                          const hasColor = !!entry.color
+                          const cardContent = cardRenderer(
+                            entry,
+                            color,
+                            yearRange
+                          )
+
+                          return (
+                            <div
+                              key={`${entry.date}-${entry.title}`}
+                              class={`bg-white rounded shadow-md ${cardPaddingClass} hover:shadow-lg transition-shadow relative ${
+                                hasColor ? "border-t-6" : ""
+                              }`}
+                              style={
+                                hasColor
+                                  ? `border-top-color: ${color.hex}; border-top-width: 8px;`
+                                  : ""
+                              }
+                            >
+                              {cardContent}
+                            </div>
+                          )
+                        })}
+                      </div>
                     </div>
-                  </div>
+                  )
                 )
-              })}
+              })()}
             </div>
           )
         })}
