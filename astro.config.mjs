@@ -13,7 +13,7 @@ export default defineConfig({
       },
     },
     optimizeDeps: {
-      exclude: ["vite-ssr-components"],
+      entries: ["./src/**/*.{astro,tsx,ts,js}", "!./src/legacy/**/*"],
     },
   },
 })
