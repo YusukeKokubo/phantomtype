@@ -1,15 +1,8 @@
 import { useState, useEffect } from "hono/jsx"
 import { hydrateRoot } from "hono/jsx/dom/client"
 import { StrictMode } from "hono/jsx"
-import { Tabs, type TabId } from "./components/Tabs"
-import { CareerContent } from "./content/career/CareerContent"
-import { careerEntries } from "./content/career/data"
-import { PersonalContent } from "./content/personal/PersonalContent"
-import { personalEntries } from "./content/personal/data"
-import { ValuesContent } from "./content/values/ValuesContent"
-import { valuesData } from "./content/values/data"
-import { BlogContent } from "./content/blog/BlogContent"
-import { blogEntries } from "./content/blog/data"
+import { Tabs } from "./components/Tabs"
+import { renderTabContent } from "./render-tab-content"
 import { ModalDialog } from "./components/ModalDialog"
 import { MarkdownViewer } from "./components/MarkdownViewer"
 
@@ -20,24 +13,7 @@ interface ModalState {
 }
 
 function YusukeTabs() {
-  return (
-    <Tabs defaultTab="career">
-      {(activeTab: TabId) => {
-        switch (activeTab) {
-          case "career":
-            return <CareerContent entries={careerEntries} />
-          case "personal":
-            return <PersonalContent entries={personalEntries} />
-          case "values":
-            return <ValuesContent content={valuesData} />
-          case "blog":
-            return <BlogContent entries={blogEntries} />
-          default:
-            return null
-        }
-      }}
-    </Tabs>
-  )
+  return <Tabs defaultTab="career">{renderTabContent}</Tabs>
 }
 
 function YusukeModal() {

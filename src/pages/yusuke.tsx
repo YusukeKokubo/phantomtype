@@ -1,12 +1,5 @@
 import { Tabs } from "../yusuke/client/components/Tabs"
-import { CareerContent } from "../yusuke/client/content/career/CareerContent"
-import { careerEntries } from "../yusuke/client/content/career/data"
-import { PersonalContent } from "../yusuke/client/content/personal/PersonalContent"
-import { personalEntries } from "../yusuke/client/content/personal/data"
-import { ValuesContent } from "../yusuke/client/content/values/ValuesContent"
-import { valuesData } from "../yusuke/client/content/values/data"
-import { BlogContent } from "../yusuke/client/content/blog/BlogContent"
-import { blogEntries } from "../yusuke/client/content/blog/data"
+import { renderTabContent } from "../yusuke/client/render-tab-content"
 import { ModalDialog } from "../yusuke/client/components/ModalDialog"
 import { getClientScript } from "../lib/client-manifest"
 
@@ -38,22 +31,7 @@ export default function YusukePage() {
 
         {/* タブUIコンテナ（サーバーサイドでレンダリング、クライアント側でハイドレーション） */}
         <div id="yusuke-tabs-container">
-          <Tabs defaultTab={defaultTab}>
-            {(activeTab) => {
-              switch (activeTab) {
-                case "career":
-                  return <CareerContent entries={careerEntries} />
-                case "personal":
-                  return <PersonalContent entries={personalEntries} />
-                case "values":
-                  return <ValuesContent content={valuesData} />
-                case "blog":
-                  return <BlogContent entries={blogEntries} />
-                default:
-                  return null
-              }
-            }}
-          </Tabs>
+          <Tabs defaultTab={defaultTab}>{renderTabContent}</Tabs>
         </div>
       </main>
 
