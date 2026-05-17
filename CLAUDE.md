@@ -65,6 +65,8 @@ npm run cf-typegen   # Cloudflare Bindings型定義生成
 3. Hono ページコンポーネントは `pics.json` を静的インポートして表示
 4. `npm run build` で Vite ビルドを実行し、Worker 用のバンドルを生成
 
+**注意**: macOS は日本語ファイル名を NFD 形式で保存する場合がある。Cloudflare Workers Assets は NFC の URL でマッチングするため、NFD ファイル名は本番環境で 500 エラーになる。写真追加後はデプロイ前に NFC を確認: `python3 -c "import os,unicodedata; [print(n) for r,d,f in os.walk('public/pics') for n in d+f if n != unicodedata.normalize('NFC',n)]"` (出力なしなら OK)
+
 ### 技術的詳細
 
 - **Hono JSX**: React ではなく Hono の軽量 JSX を使用（`class` 属性を使用）
