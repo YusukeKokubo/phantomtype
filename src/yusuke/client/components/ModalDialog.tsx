@@ -1,10 +1,10 @@
-import { useEffect, useRef, type Child } from "hono/jsx"
+import { useEffect, useRef, type ReactNode } from "react"
 
 interface ModalDialogProps {
   open: boolean
   title: string
   onClose: () => void
-  children: Child
+  children: ReactNode
 }
 
 export function ModalDialog({
@@ -29,28 +29,24 @@ export function ModalDialog({
     }
   }, [open])
 
-  // モーダル外をクリックしたときの処理
-  const handleBackdropClick = (e: MouseEvent) => {
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     if (e.target === e.currentTarget) {
       handleClose()
     }
   }
 
-  // 閉じるアニメーションを適用してから閉じる
   const handleClose = () => {
     const dialog = dialogRef.current
     if (dialog) {
-      // 閉じるアニメーションを適用
       dialog.style.opacity = "0"
       dialog.style.transform = "scale(0.95)"
       setTimeout(() => {
         onClose()
-        // アニメーション後にスタイルをリセット（次回開くときのために）
         setTimeout(() => {
           dialog.style.opacity = ""
           dialog.style.transform = ""
         }, 50)
-      }, 200) // アニメーション時間に合わせる
+      }, 200)
     } else {
       onClose()
     }
@@ -59,36 +55,36 @@ export function ModalDialog({
   return (
     <dialog
       ref={dialogRef}
-      class="backdrop:bg-black/50 backdrop:backdrop-blur-sm rounded-lg shadow-lg bg-background border border-border p-2 w-[95%] md:w-2/3 m-auto"
+      className="backdrop:bg-black/50 backdrop:backdrop-blur-sm rounded-lg shadow-lg bg-background border border-border p-2 w-[95%] md:w-2/3 m-auto"
       onClick={handleBackdropClick}
     >
-      <div class="flex flex-col h-full max-h-[90vh]">
-        <div class="flex items-center justify-between p-6 border-b border-border">
-          <h2 class="text-2xl font-light text-foreground">{title}</h2>
+      <div className="flex flex-col h-full max-h-[90vh]">
+        <div className="flex items-center justify-between p-6 border-b border-border">
+          <h2 className="text-2xl font-light text-foreground">{title}</h2>
           <form method="dialog">
             <button
               type="submit"
               onClick={handleClose}
-              class="text-text-secondary hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="text-text-secondary hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
               aria-label="閉じる"
             >
               <svg
-                class="w-6 h-6"
+                className="w-6 h-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
             </button>
           </form>
         </div>
-        <div class="flex-1 overflow-y-auto h-max">{children}</div>
+        <div className="flex-1 overflow-y-auto h-max">{children}</div>
       </div>
     </dialog>
   )

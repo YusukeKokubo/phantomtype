@@ -1,4 +1,4 @@
-import { useState, useEffect, type Child } from "hono/jsx"
+import { useState, useEffect } from "react"
 
 export type TabId = "career" | "personal" | "values" | "blog"
 
@@ -9,7 +9,7 @@ interface Tab {
 
 interface TabsProps {
   defaultTab?: TabId
-  children: (activeTab: TabId) => Child
+  children: (activeTab: TabId) => React.ReactNode
 }
 
 const tabs: Tab[] = [
@@ -19,12 +19,11 @@ const tabs: Tab[] = [
   { id: "blog", label: "blog" },
 ]
 
-// URLハッシュからタブIDを取得
 function getTabFromHash(): TabId | null {
   if (typeof window === "undefined") {
     return null
   }
-  const hash = window.location.hash.slice(1) // '#'を除去
+  const hash = window.location.hash.slice(1)
   if (
     hash === "career" ||
     hash === "personal" ||
@@ -36,7 +35,6 @@ function getTabFromHash(): TabId | null {
   return null
 }
 
-// タブIDをURLハッシュに設定
 function setTabToHash(tabId: TabId) {
   if (typeof window !== "undefined") {
     window.location.hash = tabId
@@ -44,8 +42,6 @@ function setTabToHash(tabId: TabId) {
 }
 
 export function Tabs({ defaultTab = "career", children }: TabsProps) {
-  // URLハッシュから初期値を取得、なければdefaultTabを使用
-  // サーバーサイドでは常にdefaultTabを使用
   const [activeTab, setActiveTab] = useState<TabId>(() => {
     if (typeof window === "undefined") {
       return defaultTab
@@ -53,14 +49,12 @@ export function Tabs({ defaultTab = "career", children }: TabsProps) {
     return getTabFromHash() || defaultTab
   })
 
-  // 初期化時にURLハッシュを設定（ハッシュがない場合）
   useEffect(() => {
     if (!getTabFromHash()) {
       setTabToHash(activeTab)
     }
   }, [])
 
-  // ハッシュ変更をリッスン（ブラウザの戻る/進むボタン対応）
   useEffect(() => {
     const handleHashChange = () => {
       const tabFromHash = getTabFromHash()
@@ -75,16 +69,15 @@ export function Tabs({ defaultTab = "career", children }: TabsProps) {
     }
   }, [activeTab])
 
-  // タブ変更時にURLハッシュも更新
   const handleTabChange = (tabId: TabId) => {
     setActiveTab(tabId)
     setTabToHash(tabId)
   }
 
   return (
-    <div class="w-full">
+    <div className="w-full">
       <div
-        class="flex border-b border-border mb-6"
+        className="flex border-b border-border mb-6"
         role="tablist"
         aria-label="コンテンツタブ"
       >
@@ -98,7 +91,7 @@ export function Tabs({ defaultTab = "career", children }: TabsProps) {
               aria-selected={isActive}
               aria-controls={`tabpanel-${tab.id}`}
               id={`tab-${tab.id}`}
-              class={`px-6 py-3 text-sm font-light border-b-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ${
+              className={`px-6 py-3 text-sm font-light border-b-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ${
                 isActive
                   ? "border-foreground text-foreground"
                   : "border-transparent text-text-secondary hover:text-foreground"

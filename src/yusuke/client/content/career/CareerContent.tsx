@@ -4,7 +4,7 @@ import { Card } from "../../components/Card"
 
 export function CareerContent({ entries }: { entries: TimelineEntry[] }) {
   if (entries.length === 0) {
-    return <p class="text-text-secondary">コンテンツを追加してください</p>
+    return <p className="text-text-secondary">コンテンツを追加してください</p>
   }
 
   // カード表示用の関数を定義（ロゴ画像は小さく表示）
