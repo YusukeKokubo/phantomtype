@@ -1,12 +1,12 @@
 import type { FC } from "hono/jsx"
+import { useRequestContext } from "hono/jsx-renderer"
 import { getClientScript } from "./client-manifest"
-
-// スクリプトの重複読み込みを防ぐためのトラッキング
-const loadedScripts = new Set<string>()
 
 /**
  * コンポーネントにクライアント側のhydrationスクリプトを自動で注入する
- * 同じスクリプトは一度だけ読み込まれる
+ * 同じスクリプトはリクエスト内で一度だけ読み込まれる
+ *
+ * `c.render()` 経由（jsxRenderer 有効）でのみ利用可能。
  *
  * @param Component - SSRでレンダリングするコンポーネント
  * @param scriptPath - クライアント側のスクリプトファイルパス（src/から始まる相対パス）
@@ -34,10 +34,16 @@ export function withClientScript<P extends Record<string, any>>(
     const script = getClientScript(scriptPath)
     const id = containerId || `client-component-${Math.random().toString(36).slice(2, 9)}`
 
-    // スクリプトの読み込み判定（同じスクリプトは一度だけ）
-    const shouldIncludeScript = !loadedScripts.has(script)
+    const c = useRequestContext()
+    let loaded = c.get("loadedClientScripts")
+    if (!loaded) {
+      loaded = new Set<string>()
+      c.set("loadedClientScripts", loaded)
+    }
+
+    const shouldIncludeScript = !loaded.has(script)
     if (shouldIncludeScript) {
-      loadedScripts.add(script)
+      loaded.add(script)
     }
 
     return (
