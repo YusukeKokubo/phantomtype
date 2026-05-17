@@ -1,6 +1,6 @@
 import { Tabs } from "../yusuke/client/components/Tabs"
 import { renderTabContent } from "../yusuke/client/render-tab-content"
-import { ModalDialog } from "../yusuke/client/components/ModalDialog"
+import { YusukeModal } from "../yusuke/client/components/YusukeModal"
 import { getClientScript } from "../lib/client-manifest"
 
 export default function YusukePage() {
@@ -37,9 +37,7 @@ export default function YusukePage() {
 
       {/* ポップアップモーダル（サーバーサイドで初期状態をレンダリング、クライアント側でハイドレーション） */}
       <div id="yusuke-modal-container">
-        <ModalDialog title="" onClose={() => {}}>
-          <div></div>
-        </ModalDialog>
+        <YusukeModal />
       </div>
 
       {/* クライアントスクリプト（1回だけ読み込む） */}
