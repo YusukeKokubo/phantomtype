@@ -12,5 +12,8 @@ export default defineConfig({
         plugins: [tailwindcss()],
       },
     },
+    optimizeDeps: {
+      exclude: ["vite-ssr-components"],
+    },
   },
 })

@@ -18,16 +18,16 @@
     "lint:fix": "biome check --fix --unsafe"
   },
   "dependencies": {
-    "hono": "^4.12.19",
     "tailwindcss": "^4.3.0"
   },
+  "overrides": {
+    "vite": "^7"
+  },
   "devDependencies": {
-    "@astrojs/cloudflare": "^13.5.1",
     "@astrojs/react": "^5.0.5",
     "@biomejs/biome": "2.4.15",
     "@cloudflare/workers-types": "^4.20260517.1",
     "@tailwindcss/postcss": "^4.3.0",
-    "@tailwindcss/vite": "^4.3.0",
     "@types/node": "25.8.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -36,7 +36,6 @@
     "react-dom": "^19.2.6",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3",
-    "vite": "^8.0.13",
     "wrangler": "^4.92.0"
   }
 }
