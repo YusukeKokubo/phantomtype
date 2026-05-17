@@ -32,7 +32,7 @@ npm run cf-typegen   # Cloudflare Bindings型定義生成
   - `renderer.tsx` - HTML レイアウト、メタデータ生成
   - `pages/` - ページコンポーネント（home, city, photo, yusuke）
   - `components/` - 共通コンポーネント
-  - `lib/` - SSR コンポーネントへのクライアントスクリプト注入と、本番/開発のスクリプトパス解決
+  - `lib/` - 本番/開発のクライアントスクリプトパス解決（`client-manifest.ts`）
   - `yusuke/` - Yusuke About ページのクライアントサイド。`src/pages/yusuke.tsx` が SSR、`src/yusuke/` がブラウザ側の hydration を担当する分業構造。`client/` 以下に UI コンポーネントとコンテンツデータを配置。
   - `styles/` - Tailwind CSS 入力ファイル
 - `@types/` - TypeScript 型定義

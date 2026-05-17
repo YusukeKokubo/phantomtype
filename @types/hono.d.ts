@@ -15,7 +15,6 @@ declare module 'hono' {
     ogUrl?: string
     ogImageWidth?: string
     ogImageHeight?: string
-    loadedClientScripts?: Set<string>
   }
 }
 
