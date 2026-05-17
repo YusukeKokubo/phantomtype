@@ -1,12 +1,34 @@
-import type { Child } from "hono/jsx"
+import { useEffect, useRef, type Child } from "hono/jsx"
 
 interface ModalDialogProps {
+  open: boolean
   title: string
   onClose: () => void
   children: Child
 }
 
-export function ModalDialog({ title, onClose, children }: ModalDialogProps) {
+export function ModalDialog({
+  open,
+  title,
+  onClose,
+  children,
+}: ModalDialogProps) {
+  const dialogRef = useRef<HTMLDialogElement>(null)
+
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog) {
+      return
+    }
+    if (open) {
+      if (!dialog.open) {
+        dialog.showModal()
+      }
+    } else if (dialog.open) {
+      dialog.close()
+    }
+  }, [open])
+
   // モーダル外をクリックしたときの処理
   const handleBackdropClick = (e: MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -16,9 +38,7 @@ export function ModalDialog({ title, onClose, children }: ModalDialogProps) {
 
   // 閉じるアニメーションを適用してから閉じる
   const handleClose = () => {
-    const dialog = document.getElementById(
-      "yusuke-modal-dialog"
-    ) as HTMLDialogElement | null
+    const dialog = dialogRef.current
     if (dialog) {
       // 閉じるアニメーションを適用
       dialog.style.opacity = "0"
@@ -38,7 +58,7 @@ export function ModalDialog({ title, onClose, children }: ModalDialogProps) {
 
   return (
     <dialog
-      id="yusuke-modal-dialog"
+      ref={dialogRef}
       class="backdrop:bg-black/50 backdrop:backdrop-blur-sm rounded-lg shadow-lg bg-background border border-border p-2 w-[95%] md:w-2/3 m-auto"
       onClick={handleBackdropClick}
     >
