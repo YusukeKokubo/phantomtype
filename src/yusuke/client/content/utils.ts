@@ -33,53 +33,6 @@ export function parseDate(dateStr: string): Date {
 }
 
 /**
- * 2つの日付間の期間をミリ秒で取得
- */
-export function getDurationMs(startDate: string, endDate: string): number {
-  const start = parseDate(startDate)
-  const end = parseDate(endDate)
-  return end.getTime() - start.getTime()
-}
-
-/**
- * 期間を年数と月数で計算
- */
-export function calculateDuration(
-  startDate: string,
-  endDate: string,
-): { years: number; months: number } {
-  const start = parseDate(startDate)
-  const end = parseDate(endDate)
-  const years = end.getFullYear() - start.getFullYear()
-  const months = end.getMonth() - start.getMonth()
-  const totalMonths = years * 12 + months
-  return {
-    years: Math.floor(totalMonths / 12),
-    months: totalMonths % 12,
-  }
-}
-
-/**
- * 期間を人間が読みやすい形式で表示
- */
-export function formatDuration(
-  startDate: string,
-  endDate: string,
-): string {
-  const { years, months } = calculateDuration(startDate, endDate)
-  if (years === 0 && months === 0) {
-    return "1ヶ月未満"
-  }
-  if (years === 0) {
-    return `${months}ヶ月`
-  }
-  if (months === 0) {
-    return `${years}年`
-  }
-  return `${years}年${months}ヶ月`
-}
-
-/**
  * タイムライン全体の期間に対する相対位置（0-100%）を計算
  */
 export function calculatePosition(
