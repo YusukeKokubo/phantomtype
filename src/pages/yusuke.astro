@@ -1,8 +1,25 @@
 ---
 export const prerender = true
 
+import { getCollection } from "astro:content"
 import BaseLayout from "../layouts/BaseLayout.astro"
 import { YusukeApp } from "../yusuke/client/YusukeApp"
+import type { TimelineEntry } from "../../@types/About"
+
+const careerCollectionEntries = await getCollection("career")
+const careerEntries: TimelineEntry[] = careerCollectionEntries
+  .sort((a, b) => b.data.date.localeCompare(a.data.date))
+  .map((entry) => ({
+    date: entry.data.date,
+    endDate: entry.data.endDate,
+    title: entry.data.title,
+    image: entry.data.image,
+    color: entry.data.color,
+    detail: entry.body,
+  }))
+
+const valuesCollectionEntries = await getCollection("values")
+const valuesContent = valuesCollectionEntries[0]?.body ?? ""
 ---
 
 <BaseLayout
@@ -23,6 +40,11 @@ import { YusukeApp } from "../yusuke/client/YusukeApp"
       <p>Love cats 🐈 and photography 📷.</p>
     </div>
 
-    <YusukeApp client:load defaultTab="career" />
+    <YusukeApp
+      client:load
+      defaultTab="career"
+      careerEntries={careerEntries}
+      valuesContent={valuesContent}
+    />
   </main>
 </BaseLayout>

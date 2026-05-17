@@ -38,7 +38,7 @@ export function PersonalContent({ entries }: { entries: GalleryEntry[] }) {
             <div key={i} className="flex flex-col">
               <button
                 type="button"
-                onClick={() => openEntry(entry.title, entry.detail)}
+                onClick={() => openEntry(entry.title, entry.detail!)}
                 className="text-left focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer"
               >
                 {cardContent}
