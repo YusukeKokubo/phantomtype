@@ -4,8 +4,8 @@ node_modules/
 .env
 .DS_store
 
-# Generated files
-public/styles.css
+# Astro generated types
+.astro/
 
 # Not tracked
 public/kyoto
