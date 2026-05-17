@@ -30,12 +30,12 @@ npm run cf-typegen   # Cloudflare Bindings型定義生成
 - `src/` - Hono アプリケーション
   - `index.tsx` - エントリーポイント
   - `renderer.tsx` - HTML レイアウト、メタデータ生成
-  - `pages/` - ページコンポーネント（`home.tsx`, `city.tsx`, `photo.tsx`, `yusuke.tsx`）
-  - `components/` - 共通コンポーネント（`Nav.tsx`）
-  - `lib/` - クライアント hydration ユーティリティ（`with-client-script.tsx` で SSR コンポーネントにクライアントスクリプトを注入、`client-manifest.ts` で本番/開発のスクリプトパスを解決）
-  - `yusuke/` - Yusuke About ページのクライアントサイドコンポーネント群（`client/yusuke-client.tsx` がエントリーポイント、`client/components/` に UI、`client/content/` に career・blog・personal・values の各コンテンツデータ）。`src/pages/yusuke.tsx` が SSR、`src/yusuke/` がブラウザ側の hydration を担当する分業構造。
-  - `styles/` - スタイル定義（`input.css`）
-- `@types/` - TypeScript 型定義（`Photo.d.ts`, `hono.d.ts`, `About.d.ts`, `Blog.d.ts`）
+  - `pages/` - ページコンポーネント（home, city, photo, yusuke）
+  - `components/` - 共通コンポーネント
+  - `lib/` - SSR コンポーネントへのクライアントスクリプト注入と、本番/開発のスクリプトパス解決
+  - `yusuke/` - Yusuke About ページのクライアントサイド。`src/pages/yusuke.tsx` が SSR、`src/yusuke/` がブラウザ側の hydration を担当する分業構造。`client/` 以下に UI コンポーネントとコンテンツデータを配置。
+  - `styles/` - Tailwind CSS 入力ファイル
+- `@types/` - TypeScript 型定義
 - `public/` - 静的アセット
   - `pics/` - 写真ファイル（都市/ロケーション/ファイル名の階層構造）
   - `pics.json` - 自動生成される写真メタデータ（コミット対象）

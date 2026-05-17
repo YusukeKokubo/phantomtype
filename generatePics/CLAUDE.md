@@ -22,12 +22,9 @@ npm run generatePics
 
 ## ディレクトリ構造
 
-- `index.ts` - 写真データ生成スクリプト
-- `package.json` - スクリプト専用の依存関係
-- `tsconfig.json` - TypeScript 設定
+独立した Node.js プロジェクト（専用の `package.json` を持つ）。メインロジックは `index.ts` 1ファイル。
 
 ## 注意事項
 
-- このディレクトリは独立したプロジェクト（専用の `package.json` を持つ）です
 - 新しい写真を追加した際は必ずこのスクリプトを実行してください
-- 生成された `public/pics.json` はコミット対象です
+- 生成される `public/pics.json`（親ディレクトリの `public/`）はコミット対象です
