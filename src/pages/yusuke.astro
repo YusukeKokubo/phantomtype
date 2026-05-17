@@ -1,0 +1,95 @@
+---
+export const prerender = true
+
+import BaseLayout from "../layouts/BaseLayout.astro"
+import { careerEntries } from "../yusuke/client/content/career/data"
+
+const tabs = [
+  { id: "career", label: "career" },
+  { id: "personal", label: "personal" },
+  { id: "values", label: "values" },
+  { id: "blog", label: "blog" },
+]
+---
+
+<BaseLayout
+  title="Yusuke Kokubo | PHANTOM TYPE"
+  description="Yusuke Kokubo - Software Engineer in Nagoya, Japan"
+>
+  <main id="main" class="max-w-3xl mx-auto">
+    <div class="p-16">
+      <p>
+        <img
+          src="/yusuke/jikokuten.png"
+          alt="Yusuke Kokubo"
+          class="w-12 h-12 border rounded"
+        />
+        I'm Yusuke Kokubo, a software engineer living in Nagoya, Japan🇯🇵.
+      </p>
+      <p>My Skills are Web Development and a bit of Web UI Design.</p>
+      <p>Love cats 🐈 and photography 📷.</p>
+    </div>
+
+    <div class="w-full">
+      <div
+        class="flex border-b border-border mb-6"
+        role="tablist"
+        aria-label="コンテンツタブ"
+      >
+        {
+          tabs.map((tab) => (
+            <button
+              type="button"
+              role="tab"
+              aria-selected={tab.id === "career"}
+              aria-controls={`tabpanel-${tab.id}`}
+              id={`tab-${tab.id}`}
+              class={`px-6 py-3 text-sm font-light border-b-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ${
+                tab.id === "career"
+                  ? "border-foreground text-foreground"
+                  : "border-transparent text-text-secondary"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))
+        }
+      </div>
+
+      <div
+        role="tabpanel"
+        id="tabpanel-career"
+        aria-labelledby="tab-career"
+        class="px-4"
+      >
+        <div class="flex flex-col gap-8">
+          {
+            careerEntries.map((entry) => (
+              <div class="flex gap-4 items-start">
+                {entry.image && (
+                  <img
+                    src={entry.image}
+                    alt={entry.title}
+                    class="w-16 h-16 object-contain shrink-0"
+                  />
+                )}
+                <div>
+                  <h2
+                    class="text-lg font-medium"
+                    style={`border-left: 4px solid ${entry.color || "#ccc"}; padding-left: 8px`}
+                  >
+                    {entry.title}
+                  </h2>
+                  <p class="text-sm text-text-secondary">
+                    {entry.date.substring(0, 7)} —{" "}
+                    {entry.endDate === "Now" ? "現在" : entry.endDate?.substring(0, 7)}
+                  </p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
