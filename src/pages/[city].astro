@@ -77,6 +77,7 @@ function byDatetime(a: Photo, b: Photo): number {
                         width={width}
                         height={height}
                         alt={`${city} ${name}の写真`}
+                        transition:name={`photo-${p.filename}`}
                         loading="lazy"
                       />
                       <div class="p-2 text-xs font-light text-foreground absolute bottom-0 bg-surface-overlay">

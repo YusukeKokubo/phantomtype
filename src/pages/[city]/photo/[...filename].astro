@@ -67,6 +67,7 @@ const ogUrl = `${publicHost}/${city}/photo/${encodeURIComponent(photo.filename)}
         height={height}
         alt={`${city} ${name}の写真`}
         class="w-full h-auto"
+        transition:name={`photo-${photo.filename}`}
       />
 
       {
