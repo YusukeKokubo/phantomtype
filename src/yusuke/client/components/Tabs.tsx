@@ -1,4 +1,4 @@
-import { useState, useEffect } from "hono/jsx"
+import { useState, useEffect, type Child } from "hono/jsx"
 
 export type TabId = "career" | "personal" | "values" | "blog"
 
@@ -9,7 +9,7 @@ interface Tab {
 
 interface TabsProps {
   defaultTab?: TabId
-  children: (activeTab: TabId) => any
+  children: (activeTab: TabId) => Child
 }
 
 const tabs: Tab[] = [

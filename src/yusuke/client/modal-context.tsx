@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useEffect } from "hono/jsx"
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type Child,
+} from "hono/jsx"
 import { ModalDialog } from "./components/ModalDialog"
 import { MarkdownViewer } from "./components/MarkdownViewer"
 
@@ -28,7 +34,7 @@ const initialModalState: ModalState = {
   isOpen: false,
 }
 
-export function YusukeModalProvider({ children }: { children: any }) {
+export function YusukeModalProvider({ children }: { children: Child }) {
   const [modalState, setModalState] = useState<ModalState>(initialModalState)
 
   const openEntry = (title: string, detail: string) => {

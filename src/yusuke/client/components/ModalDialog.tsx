@@ -1,7 +1,9 @@
+import type { Child } from "hono/jsx"
+
 interface ModalDialogProps {
   title: string
   onClose: () => void
-  children: any
+  children: Child
 }
 
 export function ModalDialog({ title, onClose, children }: ModalDialogProps) {
