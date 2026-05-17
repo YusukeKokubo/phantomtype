@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, type Child } from "hono/jsx"
-import { ModalDialog } from "./components/ModalDialog"
+import { createContext, useContext, useState, type ReactNode } from "react"
 import { MarkdownViewer } from "./components/MarkdownViewer"
+import { ModalDialog } from "./components/ModalDialog"
 
 export interface YusukeModalContextValue {
   openEntry: (title: string, detail: string) => void
@@ -21,7 +21,7 @@ interface ModalState {
   content: string
 }
 
-export function YusukeModalProvider({ children }: { children: Child }) {
+export function YusukeModalProvider({ children }: { children: ReactNode }) {
   const [modalState, setModalState] = useState<ModalState | null>(null)
 
   const openEntry = (title: string, detail: string) => {

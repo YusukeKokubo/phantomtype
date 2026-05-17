@@ -1,10 +1,13 @@
 {
   "files": {
     "includes": [
-      "app/**/*.ts",
-      "generatePics/**/*.ts",
+      "src/**",
+      "generatePics/**",
+      "!!src/legacy",
+      "!!src/yusuke",
+      "!!src/components",
       "!!**/node_modules",
-      "!!**/.next"
+      "!!**/.astro"
     ]
   },
   "formatter": {
@@ -16,6 +19,12 @@
       "semicolons": "asNeeded"
     }
   },
+  "css": {
+    "parser": {
+      "allowWrongLineComments": true,
+      "tailwindDirectives": true
+    }
+  },
   "linter": {
     "rules": {
       "style": {
@@ -25,5 +34,18 @@
         "noNonNullAssertedOptionalChain": "off"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.astro"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedVariables": "off",
+            "noUnusedImports": "off"
+          }
+        }
+      }
+    }
+  ]
 }

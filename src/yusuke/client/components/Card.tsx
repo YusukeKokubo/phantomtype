@@ -60,7 +60,7 @@ export function Card({
 
   const entryContent = (
     <div
-      class={
+      className={
         isSmallStyle
           ? `flex items-start ${gapClass}`
           : `flex flex-col ${gapClass}`
@@ -68,33 +68,33 @@ export function Card({
     >
       {/* 画像 */}
       {hasImage && imageClasses && "image" in entry && (
-        <div class={imageClasses.container}>
+        <div className={imageClasses.container}>
           <img
             src={entry.image}
             alt={entry.title}
-            class={imageClasses.image}
+            className={imageClasses.image}
             loading="lazy"
           />
         </div>
       )}
       {/* テキストコンテンツ */}
       <div
-        class={
+        className={
           isSmallStyle ? `flex flex-col ${textGapClass} flex-1 min-w-0` : ""
         }
       >
         {/* 日付範囲 */}
         {yearRange && (
           <div
-            class={compact ? "text-xs font-medium" : "text-sm font-medium"}
-            style={color ? `color: ${color.hex}` : ""}
+            className={compact ? "text-xs font-medium" : "text-sm font-medium"}
+            style={color ? { color: color.hex } : {}}
           >
             {yearRange}
           </div>
         )}
         {/* タイトル */}
         <div
-          class={`font-semibold text-gray-800 ${
+          className={`font-semibold text-gray-800 ${
             compact ? "text-sm" : "text-md"
           }`}
         >
@@ -102,7 +102,7 @@ export function Card({
         </div>
         {/* 説明 */}
         {"description" in entry && entry.description && !compact && (
-          <div class="text-sm text-gray-600">{entry.description}</div>
+          <div className="text-sm text-gray-600">{entry.description}</div>
         )}
       </div>
     </div>
@@ -114,7 +114,7 @@ export function Card({
         href={entry.url}
         target="_blank"
         rel="noopener noreferrer"
-        class="block h-full hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2"
+        className="block h-full hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2"
       >
         {entryContent}
       </a>
@@ -125,13 +125,13 @@ export function Card({
     return (
       <button
         type="button"
-        onClick={() => openEntry(entry.title, entry.detail)}
-        class="w-full text-left h-full hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer"
+        onClick={() => openEntry(entry.title, entry.detail!)}
+        className="w-full text-left h-full hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer"
       >
         {entryContent}
       </button>
     )
   }
 
-  return <div class="h-full">{entryContent}</div>
+  return <div className="h-full">{entryContent}</div>
 }

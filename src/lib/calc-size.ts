@@ -6,7 +6,7 @@ import type { Exif } from "../../@types/Photo"
 export function calcSize(
   exif: Exif | null | undefined,
   maxWidth: number,
-  maxHeight: number
+  maxHeight: number,
 ): { width: number; height: number } {
   if (!exif) {
     return { width: maxWidth, height: maxHeight }

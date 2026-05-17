@@ -1,0 +1,41 @@
+---
+import type { City } from "../../@types/Photo"
+
+interface Props {
+  city?: string
+  cities: City[]
+}
+
+const { city, cities } = Astro.props
+---
+
+<nav
+  class="flex flex-col gap-4 md:flex-row md:gap-8 items-center justify-center"
+  aria-label="都市選択ナビゲーション"
+>
+  {
+    cities
+      .filter((c) => c.city !== city)
+      .map((c) => {
+        const examplePic = c.locations[0]?.pics[0]
+        if (!examplePic) return null
+        return (
+          <a
+            href={`/${c.city}`}
+            class="relative focus-visible:outline-2 focus-visible:outline-offset-2"
+            aria-label={`${c.city}の写真を見る`}
+          >
+            <img
+              src={encodeURI(examplePic.url)}
+              width={200}
+              class="w-12 md:w-32"
+              alt={`${c.city}のサムネイル画像`}
+            />
+            <span class="top-0 absolute bg-surface-overlay px-4 text-lg uppercase text-foreground hover:underline">
+              {c.city}
+            </span>
+          </a>
+        )
+      })
+  }
+</nav>
