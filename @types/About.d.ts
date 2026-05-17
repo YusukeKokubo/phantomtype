@@ -14,7 +14,8 @@ export interface GalleryEntry {
 	description?: string
 	url?: string
 	image?: string // 画像URL（相対パスまたは絶対URL）
-	detail?: string // ポップアップで表示する詳細コンテンツ（HTML文字列）
+	/** ポップアップで表示する詳細コンテンツ（HTML文字列）。url と両方ある場合はカードで detail を開き、url は「サイトを開く」リンクとして表示 */
+	detail?: string
 }
 
 export interface AboutData {

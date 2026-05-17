@@ -33,6 +33,30 @@ export function PersonalContent({ entries }: { entries: GalleryEntry[] }) {
           </div>
         )
 
+        if (entry.detail) {
+          return (
+            <div key={i} class="flex flex-col">
+              <button
+                type="button"
+                onClick={() => openEntry(entry.title, entry.detail)}
+                class="text-left focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer"
+              >
+                {cardContent}
+              </button>
+              {entry.url ? (
+                <a
+                  href={entry.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="mx-4 mb-4 text-sm text-text-secondary hover:text-foreground underline focus-visible:outline-2 focus-visible:outline-offset-2"
+                >
+                  サイトを開く
+                </a>
+              ) : null}
+            </div>
+          )
+        }
+
         if (entry.url) {
           return (
             <a
@@ -44,19 +68,6 @@ export function PersonalContent({ entries }: { entries: GalleryEntry[] }) {
             >
               {cardContent}
             </a>
-          )
-        }
-
-        if (entry.detail) {
-          return (
-            <button
-              key={i}
-              type="button"
-              onClick={() => openEntry(entry.title, entry.detail)}
-              class="text-left focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer"
-            >
-              {cardContent}
-            </button>
           )
         }
 
