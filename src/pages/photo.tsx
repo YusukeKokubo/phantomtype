@@ -1,29 +1,6 @@
 import type { City, Photo } from "../../@types/Photo"
+import { calcSize } from "../lib/calc-size"
 import { Header } from "../components/Nav"
-
-function calcSize(
-  exif: Photo["exif"],
-  maxWidth: number,
-  maxHeight: number
-): { width: number; height: number } {
-  if (!exif) {
-    return { width: maxWidth, height: maxHeight }
-  }
-
-  const width = exif.ImageWidth
-  const height = exif.ImageLength
-  const aspectRatio = width / height
-
-  let newWidth = maxWidth
-  let newHeight = maxWidth / aspectRatio
-
-  if (newHeight > maxHeight) {
-    newHeight = maxHeight
-    newWidth = maxHeight * aspectRatio
-  }
-
-  return { width: Math.round(newWidth), height: Math.round(newHeight) }
-}
 
 export default function PhotoPage({
   city,

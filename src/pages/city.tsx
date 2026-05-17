@@ -1,27 +1,9 @@
-import type { City, Exif, Photo } from "../../@types/Photo"
+import type { City, Photo } from "../../@types/Photo"
+import { calcSize } from "../lib/calc-size"
 import { Header, Nav } from "../components/Nav"
 
 function byDatetime(a: Photo, b: Photo): number {
   return b.exif!.DateTimeOriginal < a.exif!.DateTimeOriginal ? 1 : -1
-}
-
-function calcSize(
-  exif: Exif,
-  length: number
-): { width: number; height: number } {
-  const width = exif.ImageWidth
-  const height = exif.ImageLength
-  const align = width > height ? "horizon" : "vertical"
-
-  if (align == "horizon") {
-    const new_w = length
-    const new_h = (height * new_w) / width
-    return { width: new_w, height: new_h }
-  } else {
-    const new_h = length
-    const new_w = (width * new_h) / height
-    return { width: new_w, height: new_h }
-  }
 }
 
 function Pic(params: { city: string; pic: Photo }) {
@@ -29,7 +11,7 @@ function Pic(params: { city: string; pic: Photo }) {
   const city = params.city
   const name = p.filename.substring(0, p.filename.indexOf("."))
   const e = p.exif!
-  const { width, height } = calcSize(e, 1000)
+  const { width, height } = calcSize(e, 1000, 1000)
   const photoUrl = `/${city}/photo/${encodeURIComponent(p.filename)}`
   return (
     <a
