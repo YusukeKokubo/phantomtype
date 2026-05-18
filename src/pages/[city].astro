@@ -62,4 +62,133 @@ const allPics = cityData.locations
     </main>
     <CityNav city={city} cities={cities} />
   </div>
+
+  <dialog
+    id="photo-dialog"
+    class="fixed inset-0 m-0 w-full h-full max-w-full max-h-full p-0 bg-background border-none overflow-hidden"
+  >
+    <div class="flex flex-col h-full">
+      <nav class="flex items-center justify-between px-4 py-3 shrink-0" aria-label="写真ナビゲーション">
+        <button
+          id="dialog-close"
+          class="text-text-secondary hover:text-foreground text-lg uppercase focus-visible:outline-2 focus-visible:outline-offset-2"
+        >← {city}</button>
+        <div class="flex gap-4">
+          <button id="dialog-prev" class="text-text-secondary hover:text-foreground text-lg disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-offset-2" aria-label="前の写真">←</button>
+          <button id="dialog-next" class="text-text-secondary hover:text-foreground text-lg disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-offset-2" aria-label="次の写真">→</button>
+        </div>
+      </nav>
+      <div class="flex-1 overflow-y-auto px-4 pb-4 flex flex-col gap-3">
+        <img id="dialog-img" src="" alt="" class="w-auto h-auto max-w-full max-h-[calc(100svh-11rem)] mx-auto block" />
+        <table id="dialog-exif" class="w-full"></table>
+      </div>
+    </div>
+  </dialog>
 </BaseLayout>
+
+<script define:vars={{ city, photos: allPics }}>
+  const dialog = document.getElementById("photo-dialog")
+  const imgEl = document.getElementById("dialog-img")
+  const exifEl = document.getElementById("dialog-exif")
+  const prevBtn = document.getElementById("dialog-prev")
+  const nextBtn = document.getElementById("dialog-next")
+  const closeBtn = document.getElementById("dialog-close")
+
+  let currentIndex = -1
+  let savedScrollY = 0
+
+  // ギャラリーの history エントリにスクロール位置を持たせる
+  history.replaceState({ type: "gallery", scrollY: 0 }, "")
+
+  function calcSize(exif, maxW, maxH) {
+    const ar = exif.ImageWidth / exif.ImageLength
+    let w = maxW, h = maxW / ar
+    if (h > maxH) { h = maxH; w = maxH * ar }
+    return { width: Math.round(w), height: Math.round(h) }
+  }
+
+  function updateDialogContent(index) {
+    currentIndex = index
+    const photo = photos[index]
+    const exif = photo.exif
+    const { width, height } = calcSize(exif, 1920, 1080)
+
+    imgEl.src = encodeURI(photo.url)
+    imgEl.width = width
+    imgEl.height = height
+    imgEl.alt = `${city} ${photo.location}の写真`
+
+    exifEl.innerHTML = [
+      ["撮影日時", exif.DateTimeOriginal],
+      ["カメラ", `${exif.Make} ${exif.Model}`],
+      ["レンズ", exif.LensModel.replace(/\0/g, "")],
+      ["絞り", exif.FNumber],
+      ["焦点距離", `${exif.FocalLength} (${exif.FocalLengthIn35mmFormat} mm)`],
+      ["シャッター速度", `${exif.ExposureTime}S`],
+      ["ISO", `ISO ${exif.ISO}`],
+    ].map(([label, value]) => `
+      <tr class="border-b border-border">
+        <th scope="row" class="text-text-secondary text-right pr-4 py-1 font-normal">${label}</th>
+        <td class="text-foreground py-1">${value}</td>
+      </tr>
+    `).join("")
+
+    prevBtn.disabled = index === 0
+    nextBtn.disabled = index === photos.length - 1
+  }
+
+  function openDialog(index) {
+    updateDialogContent(index)
+    const photoUrl = `/${city}/photo/${encodeURIComponent(photos[index].filename)}`
+    // 開いた直後は push、prev/next 移動は replace でスタックを増やさない
+    if (!dialog.open) {
+      savedScrollY = window.scrollY
+      history.replaceState({ type: "gallery", scrollY: savedScrollY }, "")
+      history.pushState({ type: "photo", index }, "", photoUrl)
+      dialog.showModal()
+    } else {
+      history.replaceState({ type: "photo", index }, "", photoUrl)
+    }
+  }
+
+  function closeDialog() {
+    dialog.close()
+    // replaceState でギャラリー URL に戻す（popstate を発火させず Astro と競合しない）
+    history.replaceState({ type: "gallery", scrollY: savedScrollY }, "", `/${city}`)
+    window.scrollTo(0, savedScrollY)
+  }
+
+  // ブラウザの戻るボタン対応
+  window.addEventListener("popstate", (e) => {
+    if (e.state?.type === "gallery") {
+      if (dialog.open) dialog.close()
+      window.scrollTo(0, e.state.scrollY || 0)
+    } else if (e.state?.type === "photo") {
+      updateDialogContent(e.state.index)
+      if (!dialog.open) dialog.showModal()
+    }
+  })
+
+  document.querySelectorAll("[data-filename]").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return
+      e.preventDefault()
+      const index = photos.findIndex((p) => p.filename === link.dataset.filename)
+      if (index !== -1) openDialog(index)
+    })
+  })
+
+  closeBtn.addEventListener("click", closeDialog)
+  prevBtn.addEventListener("click", () => { if (currentIndex > 0) openDialog(currentIndex - 1) })
+  nextBtn.addEventListener("click", () => { if (currentIndex < photos.length - 1) openDialog(currentIndex + 1) })
+
+  dialog.addEventListener("cancel", (e) => {
+    e.preventDefault()
+    closeDialog()
+  })
+
+  dialog.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft" && currentIndex > 0) openDialog(currentIndex - 1)
+    if (e.key === "ArrowRight" && currentIndex < photos.length - 1) openDialog(currentIndex + 1)
+  })
+</script>
