@@ -5,8 +5,8 @@ import type { City, Photo } from "../../@types/Photo"
 import picsData from "../../public/pics.json"
 import CityNav from "../components/CityNav.astro"
 import Header from "../components/Header.astro"
+import PhotoCard from "../components/PhotoCard.astro"
 import BaseLayout from "../layouts/BaseLayout.astro"
-import { calcSize } from "../lib/calc-size"
 
 export function getStaticPaths() {
   const cities = picsData as City[]
@@ -36,6 +36,11 @@ const ogUrl = `${publicHost}/${city}`
 function byDatetime(a: Photo, b: Photo): number {
   return b.exif!.DateTimeOriginal < a.exif!.DateTimeOriginal ? 1 : -1
 }
+
+const sortedLocations = cityData.locations.map((loc) => ({
+  ...loc,
+  pics: loc.pics.filter((p) => p.exif).sort(byDatetime),
+}))
 ---
 
 <BaseLayout
@@ -50,57 +55,17 @@ function byDatetime(a: Photo, b: Photo): number {
     <main id="main-content">
       <h1 class="text-4xl text-center uppercase">{city}</h1>
       {
-        cityData.locations.map((loc) => (
+        sortedLocations.map((loc, locIndex) => (
           <section class="py-8 px-1 flex flex-col gap-2">
             <h2 class="text-center text-3xl uppercase">{loc.location}</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-1" role="list">
-              {loc.pics
-                .filter((p) => p.exif)
-                .sort(byDatetime)
-                .map((p) => {
-                  const name = p.filename.substring(
-                    0,
-                    p.filename.indexOf("."),
-                  )
-                  const e = p.exif!
-                  const { width, height } = calcSize(e, 1000, 1000)
-                  const photoUrl = `/${city}/photo/${encodeURIComponent(p.filename)}`
-                  return (
-                    <a
-                      href={photoUrl}
-                      class="block relative h-max cursor-pointer hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2"
-                      aria-label={`${city} ${name}の写真を見る`}
-                      role="listitem"
-                    >
-                      <img
-                        src={encodeURI(p.url)}
-                        width={width}
-                        height={height}
-                        alt={`${city} ${name}の写真`}
-                        transition:name={`photo-${p.filename}`}
-                        loading="lazy"
-                      />
-                      <div class="p-2 text-xs font-light text-foreground absolute bottom-0 bg-surface-overlay">
-                        <div class="flex flex-col justify-start">
-                          <span class="mb-0">{e.DateTimeOriginal}</span>
-                          <div class="flex gap-2">
-                            <span>
-                              {e.Make} {e.Model}
-                            </span>
-                            <span>{e.LensModel.replace(/\0/g, "")}</span>
-                          </div>
-                          <div class="flex gap-2">
-                            <span>{e.FocalLength}</span>
-                            <span>({e.FocalLengthIn35mmFormat}mm)</span>
-                            <span>{e.FNumber}</span>
-                            <span>{e.ExposureTime}S</span>
-                            <span>ISO {e.ISO}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                  )
-                })}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1" role="list">
+              {loc.pics.map((p, picIndex) => (
+                <PhotoCard
+                  photo={p}
+                  city={city}
+                  priority={locIndex === 0 && picIndex === 0}
+                />
+              ))}
             </div>
           </section>
         ))

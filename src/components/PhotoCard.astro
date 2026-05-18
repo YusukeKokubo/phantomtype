@@ -1,0 +1,50 @@
+---
+import type { Photo } from "../../@types/Photo"
+import { calcSize } from "../lib/calc-size"
+
+interface Props {
+  photo: Photo
+  city: string
+  priority?: boolean
+}
+
+const { photo, city, priority = false } = Astro.props
+
+const name = photo.filename.substring(0, photo.filename.indexOf("."))
+const e = photo.exif!
+const { width, height } = calcSize(e, 1000, 1000)
+const photoUrl = `/${city}/photo/${encodeURIComponent(photo.filename)}`
+---
+
+<a
+  href={photoUrl}
+  class="block relative h-max cursor-pointer hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2"
+  aria-label={`${city} ${name}の写真を見る`}
+  role="listitem"
+>
+  <img
+    src={encodeURI(photo.url)}
+    width={width}
+    height={height}
+    alt={`${city} ${name}の写真`}
+    transition:name={`photo-${photo.filename}`}
+    loading={priority ? "eager" : "lazy"}
+    fetchpriority={priority ? "high" : "auto"}
+  />
+  <div class="p-2 text-xs font-light text-foreground absolute bottom-0 bg-surface-overlay">
+    <div class="flex flex-col justify-start">
+      <span class="mb-0">{e.DateTimeOriginal}</span>
+      <div class="flex gap-2">
+        <span>{e.Make} {e.Model}</span>
+        <span>{e.LensModel.replace(/\0/g, "")}</span>
+      </div>
+      <div class="flex gap-2">
+        <span>{e.FocalLength}</span>
+        <span>({e.FocalLengthIn35mmFormat}mm)</span>
+        <span>{e.FNumber}</span>
+        <span>{e.ExposureTime}S</span>
+        <span>ISO {e.ISO}</span>
+      </div>
+    </div>
+  </div>
+</a>
