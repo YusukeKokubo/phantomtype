@@ -44,6 +44,16 @@ const modalIds: Record<string, string> = Object.fromEntries(
 const valuesCollectionEntries = await getCollection("values")
 const valuesHtml = markdownToHtml(valuesCollectionEntries[0]?.body ?? "")
 
+// Notes
+const notesCollectionEntries = await getCollection("notes")
+const sortedNotes = notesCollectionEntries
+  .sort((a, b) => b.data.date.localeCompare(a.data.date))
+  .map((entry) => ({
+    slug: entry.id,
+    title: entry.data.title,
+    date: entry.data.date,
+  }))
+
 // Blog entries grouped by year
 const blogByYear = new Map<string, typeof blogEntries>()
 for (const entry of blogEntries) {
@@ -82,7 +92,7 @@ const blogYearGroups = [...blogByYear.entries()]
         aria-label="コンテンツタブ"
       >
         {
-          (["career", "personal", "values", "blog"] as const).map((tab) => {
+          (["career", "personal", "values", "blog", "notes"] as const).map((tab) => {
             const isDefault = tab === "career"
             return (
               <button
@@ -239,6 +249,28 @@ const blogYearGroups = [...blogByYear.entries()]
           }
         </div>
       </div>
+
+      <!-- Notes tab -->
+      <div
+        id="tabpanel-notes"
+        role="tabpanel"
+        aria-labelledby="tab-notes"
+        hidden
+      >
+        <div class="mx-auto max-w-3xl py-8 px-4 flex flex-col gap-4">
+          {
+            sortedNotes.map(({ slug, title, date }) => (
+              <a
+                href={`/yusuke/notes/${slug}`}
+                class="block bg-surface border border-border rounded-lg p-4 hover:shadow-md transition-shadow focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                <div class="text-xs text-text-secondary mb-1">{date}</div>
+                <div class="font-medium text-foreground">{title}</div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
     </div>
   </main>
 
@@ -287,8 +319,8 @@ const blogYearGroups = [...blogByYear.entries()]
   </dialog>
 
   <script>
-    type TabId = "career" | "personal" | "values" | "blog"
-    const VALID_TABS: TabId[] = ["career", "personal", "values", "blog"]
+    type TabId = "career" | "personal" | "values" | "blog" | "notes"
+    const VALID_TABS: TabId[] = ["career", "personal", "values", "blog", "notes"]
 
     function isValidTab(s: string): s is TabId {
       return (VALID_TABS as string[]).includes(s)
@@ -310,59 +342,64 @@ const blogYearGroups = [...blogByYear.entries()]
       }
     }
 
-    const initialHash = location.hash.slice(1)
-    const initialTab: TabId = isValidTab(initialHash) ? initialHash : "career"
-    activateTab(initialTab)
-    if (!isValidTab(initialHash)) history.replaceState(null, "", "#career")
+    function init() {
+      const initialHash = location.hash.slice(1)
+      const initialTab: TabId = isValidTab(initialHash) ? initialHash : "career"
+      activateTab(initialTab)
+      if (!isValidTab(initialHash)) history.replaceState(null, "", "#career")
 
-    for (const btn of document.querySelectorAll<HTMLElement>("[data-tab]")) {
-      btn.addEventListener("click", () => {
-        const tab = btn.dataset.tab as TabId
-        activateTab(tab)
-        location.hash = tab
+      for (const btn of document.querySelectorAll<HTMLElement>("[data-tab]")) {
+        btn.addEventListener("click", () => {
+          const tab = btn.dataset.tab as TabId
+          activateTab(tab)
+          location.hash = tab
+        })
+      }
+
+      // Modal
+      const modal = document.getElementById("yusuke-modal") as HTMLDialogElement
+      if (!modal) return
+      const modalTitle = document.getElementById("yusuke-modal-title")!
+      const modalBody = document.getElementById("yusuke-modal-body")!
+
+      function closeModal() {
+        modal.style.opacity = "0"
+        modal.style.transform = "scale(0.95)"
+        setTimeout(() => {
+          modal.close()
+          setTimeout(() => {
+            modal.style.opacity = ""
+            modal.style.transform = ""
+          }, 50)
+        }, 200)
+      }
+
+      document.addEventListener("click", (e) => {
+        const btn = (e.target as Element).closest<HTMLElement>("[data-modal-id]")
+        if (!btn) return
+        const id = btn.dataset.modalId!
+        const title = btn.dataset.modalTitle!
+        const content = document.getElementById(id)
+        if (!content) return
+        modalTitle.textContent = title
+        modalBody.innerHTML = content.innerHTML
+        modal.showModal()
+      })
+
+      document
+        .getElementById("yusuke-modal-close")!
+        .addEventListener("click", closeModal)
+
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeModal()
       })
     }
+
+    document.addEventListener("astro:page-load", init)
 
     window.addEventListener("hashchange", () => {
       const hash = location.hash.slice(1)
       if (isValidTab(hash)) activateTab(hash)
-    })
-
-    // Modal
-    const modal = document.getElementById("yusuke-modal") as HTMLDialogElement
-    const modalTitle = document.getElementById("yusuke-modal-title")!
-    const modalBody = document.getElementById("yusuke-modal-body")!
-
-    function closeModal() {
-      modal.style.opacity = "0"
-      modal.style.transform = "scale(0.95)"
-      setTimeout(() => {
-        modal.close()
-        setTimeout(() => {
-          modal.style.opacity = ""
-          modal.style.transform = ""
-        }, 50)
-      }, 200)
-    }
-
-    document.addEventListener("click", (e) => {
-      const btn = (e.target as Element).closest<HTMLElement>("[data-modal-id]")
-      if (!btn) return
-      const id = btn.dataset.modalId!
-      const title = btn.dataset.modalTitle!
-      const content = document.getElementById(id)
-      if (!content) return
-      modalTitle.textContent = title
-      modalBody.innerHTML = content.innerHTML
-      modal.showModal()
-    })
-
-    document
-      .getElementById("yusuke-modal-close")!
-      .addEventListener("click", closeModal)
-
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) closeModal()
     })
   </script>
 </BaseLayout>

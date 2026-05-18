@@ -1,0 +1,41 @@
+---
+export const prerender = true
+
+import { getCollection } from "astro:content"
+import BaseLayout from "../../../layouts/BaseLayout.astro"
+import { markdownToHtml } from "../../../yusuke/utils"
+
+export async function getStaticPaths() {
+  const entries = await getCollection("notes")
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }))
+}
+
+const { entry } = Astro.props
+const html = markdownToHtml(entry.body ?? "")
+---
+
+<BaseLayout
+  title={`${entry.data.title} | PHANTOM TYPE`}
+  description={entry.data.title}
+>
+  <main id="main-content" class="max-w-3xl mx-auto px-6 py-12">
+    <nav class="mb-8">
+      <a
+        href="/yusuke#notes"
+        class="text-sm text-text-secondary hover:text-foreground transition-colors"
+      >
+        ← notes
+      </a>
+    </nav>
+    <article>
+      <header class="mb-8">
+        <div class="text-sm text-text-secondary mb-2">{entry.data.date}</div>
+        <h1 class="text-3xl font-light text-foreground">{entry.data.title}</h1>
+      </header>
+      <div class="text-foreground" set:html={html} />
+    </article>
+  </main>
+</BaseLayout>

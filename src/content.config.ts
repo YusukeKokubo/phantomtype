@@ -17,7 +17,16 @@ const valuesCollection = defineCollection({
   schema: z.object({}),
 })
 
+const notesCollection = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/notes" }),
+  schema: z.object({
+    date: z.string(),
+    title: z.string(),
+  }),
+})
+
 export const collections = {
   career: careerCollection,
   values: valuesCollection,
+  notes: notesCollection,
 }
