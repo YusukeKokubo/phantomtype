@@ -1,7 +1,9 @@
 ---
 export const prerender = true
 
+import { Image } from "astro:assets"
 import type { City } from "../../@types/Photo"
+import heroImage from "../assets/kyoto.jpg"
 import picsData from "../../public/pics.json"
 import CityNav from "../components/CityNav.astro"
 import BaseLayout from "../layouts/BaseLayout.astro"
@@ -16,7 +18,15 @@ const cities = picsData as City[]
     role="presentation"
     aria-hidden="true"
   >
-    <img class="object-cover w-full h-full" alt="" src="/kyoto.jpg" />
+    <Image
+      src={heroImage}
+      alt=""
+      widths={[800, 1200, 1920]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="object-cover w-full h-full"
+    />
   </div>
   <section class="absolute w-screen h-screen flex flex-col-reverse justify-around">
     <main id="main-content" class="mx-8 lg:mx-16 grid grid-cols-1 gap-16">
