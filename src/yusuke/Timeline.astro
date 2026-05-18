@@ -170,10 +170,10 @@ const cardWrapperClass = "w-full max-w-[280px] sm:w-64 sm:max-w-none md:w-80 lg:
         {/* Year bubbles */}
         {yearsWithCards.map(({ year, row }) => (
           <div
-            class="z-10 w-12 h-12 md:w-16 md:h-16 rounded-full bg-white border-2 md:border-4 border-blue-400 flex items-center justify-center shadow-md"
+            class="z-10 w-12 h-12 md:w-16 md:h-16 rounded-full bg-background border-2 md:border-4 border-blue-400 flex items-center justify-center shadow-md"
             style={`grid-column:1/2;grid-row:${row};justify-self:center;align-self:center`}
           >
-            <span class="text-sm md:text-lg font-semibold text-gray-700">{year}</span>
+            <span class="text-sm md:text-lg font-semibold text-foreground">{year}</span>
           </div>
         ))}
 
@@ -190,7 +190,7 @@ const cardWrapperClass = "w-full max-w-[280px] sm:w-64 sm:max-w-none md:w-80 lg:
                   const cardInner = (
                     <div class="flex items-start gap-3">
                       {entry.image && (
-                        <div class="w-16 h-16 shrink-0 overflow-hidden bg-gray-100 rounded-md px-2">
+                        <div class="w-16 h-16 shrink-0 overflow-hidden bg-surface-variant rounded-md px-2">
                           <img
                             src={entry.image}
                             alt={entry.title}
@@ -203,9 +203,9 @@ const cardWrapperClass = "w-full max-w-[280px] sm:w-64 sm:max-w-none md:w-80 lg:
                         <div class="text-sm font-medium" style={`color:${entry.color.hex}`}>
                           {entry.yearRange}
                         </div>
-                        <div class="font-semibold text-gray-800 text-md">{entry.title}</div>
+                        <div class="font-semibold text-foreground text-md">{entry.title}</div>
                         {entry.description && (
-                          <div class="text-sm text-gray-600">{entry.description}</div>
+                          <div class="text-sm text-text-secondary">{entry.description}</div>
                         )}
                       </div>
                     </div>
@@ -213,7 +213,7 @@ const cardWrapperClass = "w-full max-w-[280px] sm:w-64 sm:max-w-none md:w-80 lg:
 
                   return (
                     <div
-                      class="bg-white rounded shadow-md p-2 sm:p-3 md:p-4 hover:shadow-lg transition-shadow relative"
+                      class="bg-surface border border-border rounded shadow-md p-2 sm:p-3 md:p-4 hover:shadow-lg transition-shadow relative"
                       style={hasColor ? `border-top-color:${entry.color.hex};border-top-width:8px` : ""}
                     >
                       {entry.modalId ? (

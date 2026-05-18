@@ -34,7 +34,7 @@ const items = await Promise.all(
         <a
           href={`/${c.city}`}
           class="relative focus-visible:outline-2 focus-visible:outline-offset-2"
-          aria-label={`${c.city}の写真を見る`}
+          aria-label={`${c.city.toUpperCase()} の写真を見る`}
         >
           <Image
             src={image}
