@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 /* stylelint-disable-next-line at-rule-no-unknown */
 @theme {

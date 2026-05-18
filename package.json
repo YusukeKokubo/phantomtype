@@ -18,6 +18,7 @@
     "lint:fix": "biome check --fix --unsafe"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.19",
     "tailwindcss": "^4.3.0"
   },
   "overrides": {

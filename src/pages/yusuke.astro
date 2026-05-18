@@ -1,7 +1,7 @@
 ---
 export const prerender = true
 
-import { getCollection } from "astro:content"
+import { getCollection, render } from "astro:content"
 import type { TimelineEntry } from "../../@types/About"
 import BaseLayout from "../layouts/BaseLayout.astro"
 import { blogEntries } from "../yusuke/blog/index"
@@ -42,7 +42,10 @@ const modalIds: Record<string, string> = Object.fromEntries(
 
 // Values content
 const valuesCollectionEntries = await getCollection("values")
-const valuesHtml = markdownToHtml(valuesCollectionEntries[0]?.body ?? "")
+const valuesEntry = valuesCollectionEntries[0]
+const { Content: ValuesContent } = valuesEntry
+  ? await render(valuesEntry)
+  : { Content: null }
 
 // Notes
 const notesCollectionEntries = await getCollection("notes")
@@ -181,10 +184,11 @@ const blogYearGroups = [...blogByYear.entries()]
         aria-labelledby="tab-values"
         hidden
       >
-        <div
-          class="p-6 text-foreground max-w-none"
-          set:html={valuesHtml}
-        />
+        {ValuesContent && (
+          <div class="p-6">
+            <ValuesContent class="prose dark:prose-invert max-w-none" />
+          </div>
+        )}
       </div>
 
       <!-- Blog tab -->

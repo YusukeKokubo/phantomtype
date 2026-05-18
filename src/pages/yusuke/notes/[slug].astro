@@ -1,9 +1,8 @@
 ---
 export const prerender = true
 
-import { getCollection } from "astro:content"
+import { getCollection, render } from "astro:content"
 import BaseLayout from "../../../layouts/BaseLayout.astro"
-import { markdownToHtml } from "../../../yusuke/utils"
 
 export async function getStaticPaths() {
   const entries = await getCollection("notes")
@@ -14,7 +13,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props
-const html = markdownToHtml(entry.body ?? "")
+const { Content } = await render(entry)
 ---
 
 <BaseLayout
@@ -35,7 +34,7 @@ const html = markdownToHtml(entry.body ?? "")
         <div class="text-sm text-text-secondary mb-2">{entry.data.date}</div>
         <h1 class="text-3xl font-light text-foreground">{entry.data.title}</h1>
       </header>
-      <div class="text-foreground" set:html={html} />
+      <Content class="prose dark:prose-invert max-w-none" />
     </article>
   </main>
 </BaseLayout>
