@@ -2,24 +2,58 @@
 export const prerender = true
 
 import { getCollection } from "astro:content"
-import BaseLayout from "../layouts/BaseLayout.astro"
-import { YusukeApp } from "../yusuke/client/YusukeApp"
 import type { TimelineEntry } from "../../@types/About"
+import BaseLayout from "../layouts/BaseLayout.astro"
+import { blogEntries } from "../yusuke/blog/index"
+import { personalEntries } from "../yusuke/personal-data"
+import Timeline from "../yusuke/Timeline.astro"
+import {
+  formatYearMonth,
+  getRelativeTime,
+  markdownToHtml,
+} from "../yusuke/utils"
 
 const careerCollectionEntries = await getCollection("career")
-const careerEntries: TimelineEntry[] = careerCollectionEntries
-  .sort((a, b) => b.data.date.localeCompare(a.data.date))
+const sorted = careerCollectionEntries.sort((a, b) =>
+  b.data.date.localeCompare(a.data.date),
+)
+
+const careerEntries: TimelineEntry[] = sorted.map((entry) => ({
+  date: entry.data.date,
+  endDate: entry.data.endDate,
+  title: entry.data.title,
+  image: entry.data.image,
+  color: entry.data.color,
+}))
+
+// Pre-render career detail markdown for modals
+const careerDetails = sorted
+  .filter((entry) => entry.body)
   .map((entry) => ({
-    date: entry.data.date,
-    endDate: entry.data.endDate,
+    modalId: `career-detail-${entry.data.date}`,
     title: entry.data.title,
-    image: entry.data.image,
-    color: entry.data.color,
-    detail: entry.body,
+    date: entry.data.date,
+    html: markdownToHtml(entry.body ?? ""),
   }))
 
+const modalIds: Record<string, string> = Object.fromEntries(
+  careerDetails.map((d) => [`${d.date}-${d.title}`, d.modalId]),
+)
+
+// Values content
 const valuesCollectionEntries = await getCollection("values")
-const valuesContent = valuesCollectionEntries[0]?.body ?? ""
+const valuesHtml = markdownToHtml(valuesCollectionEntries[0]?.body ?? "")
+
+// Blog entries grouped by year
+const blogByYear = new Map<string, typeof blogEntries>()
+for (const entry of blogEntries) {
+  const year = entry.date.substring(0, 4)
+  if (!blogByYear.has(year)) blogByYear.set(year, [])
+  blogByYear.get(year)!.push(entry)
+}
+const blogYearGroups = [...blogByYear.entries()]
+  .map(([year, entries]) => ({ year, entries }))
+  .sort((a, b) => b.year.localeCompare(a.year))
 ---
 
 <BaseLayout
@@ -40,11 +74,295 @@ const valuesContent = valuesCollectionEntries[0]?.body ?? ""
       <p>Love cats 🐈 and photography 📷.</p>
     </div>
 
-    <YusukeApp
-      client:load
-      defaultTab="career"
-      careerEntries={careerEntries}
-      valuesContent={valuesContent}
-    />
+    <!-- Tabs -->
+    <div class="w-full">
+      <div
+        class="flex border-b border-border mb-6"
+        role="tablist"
+        aria-label="コンテンツタブ"
+      >
+        {
+          (["career", "personal", "values", "blog"] as const).map((tab) => {
+            const isDefault = tab === "career"
+            return (
+              <button
+                type="button"
+                role="tab"
+                data-tab={tab}
+                aria-selected={isDefault ? "true" : "false"}
+                aria-controls={`tabpanel-${tab}`}
+                id={`tab-${tab}`}
+                class={`px-6 py-3 text-sm font-light border-b-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ${
+                  isDefault
+                    ? "border-foreground text-foreground"
+                    : "border-transparent text-text-secondary hover:text-foreground"
+                }`}
+              >
+                {tab}
+              </button>
+            )
+          })
+        }
+      </div>
+
+      <!-- Career tab -->
+      <div
+        id="tabpanel-career"
+        role="tabpanel"
+        aria-labelledby="tab-career"
+      >
+        <Timeline entries={careerEntries} modalIds={modalIds} />
+      </div>
+
+      <!-- Personal tab -->
+      <div
+        id="tabpanel-personal"
+        role="tabpanel"
+        aria-labelledby="tab-personal"
+        hidden
+      >
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+          {
+            personalEntries.map((entry) => {
+              const cardContent = (
+                <div class="flex flex-col h-full bg-surface border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                  {entry.image && (
+                    <div class="w-full aspect-video overflow-hidden bg-surface-secondary">
+                      <img
+                        src={entry.image}
+                        alt={entry.title}
+                        class="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+                  <div class="p-4 flex flex-col gap-2 flex-1">
+                    <div class="font-medium text-lg">{entry.title}</div>
+                    {entry.description && (
+                      <div class="text-sm text-text-secondary line-clamp-2">
+                        {entry.description}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )
+
+              return entry.url ? (
+                <a
+                  href={entry.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="block focus-visible:outline-2 focus-visible:outline-offset-2"
+                >
+                  {cardContent}
+                </a>
+              ) : (
+                <div>{cardContent}</div>
+              )
+            })
+          }
+        </div>
+      </div>
+
+      <!-- Values tab -->
+      <div
+        id="tabpanel-values"
+        role="tabpanel"
+        aria-labelledby="tab-values"
+        hidden
+      >
+        <div
+          class="p-6 text-foreground max-w-none"
+          set:html={valuesHtml}
+        />
+      </div>
+
+      <!-- Blog tab -->
+      <div
+        id="tabpanel-blog"
+        role="tabpanel"
+        aria-labelledby="tab-blog"
+        hidden
+      >
+        <div class="mx-auto max-w-3xl py-8 px-4 flex flex-col gap-8">
+          {
+            blogYearGroups.map(({ year, entries }) => (
+              <div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">{year}</h2>
+                <div class="relative">
+                  <div class="absolute left-4 top-0 bottom-0 w-0.5 border-l border-dashed border-gray-300" />
+                  <div class="space-y-8">
+                    {entries.map((entry) => (
+                      <div class="relative flex items-start gap-4">
+                        <div class="relative z-10 shrink-0">
+                          <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-md border-2 border-white p-1.5">
+                            <img
+                              src={entry.iconImage}
+                              alt={entry.platformName}
+                              class="w-full h-full"
+                            />
+                          </div>
+                        </div>
+                        <div class="flex-1 min-w-0 pt-1">
+                          {entry.platformName && (
+                            <div class="text-sm text-gray-600 mb-3">
+                              <span>
+                                <strong class="font-semibold">
+                                  {entry.platformName}
+                                </strong>{" "}
+                                に投稿しました {getRelativeTime(entry.date)}
+                              </span>
+                            </div>
+                          )}
+                          <div class="bg-white rounded shadow-md hover:shadow-lg transition-shadow max-w-md">
+                            <a
+                              href={entry.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="block p-4 hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2"
+                            >
+                              <div class="text-sm font-medium text-gray-500 mb-1">
+                                {formatYearMonth(entry.date)}
+                              </div>
+                              <div class="font-semibold text-gray-800">
+                                {entry.title}
+                              </div>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
   </main>
+
+  <!-- Pre-rendered career detail content for modals -->
+  {
+    careerDetails.map(({ modalId, html }) => (
+      <div id={modalId} hidden>
+        <div class="p-6 text-foreground" set:html={html} />
+      </div>
+    ))
+  }
+
+  <!-- Modal dialog -->
+  <dialog
+    id="yusuke-modal"
+    class="backdrop:bg-black/50 backdrop:backdrop-blur-sm rounded-lg shadow-lg bg-background border border-border p-2 w-[95%] md:w-2/3 m-auto"
+  >
+    <div class="flex flex-col h-full max-h-[90vh]">
+      <div class="flex items-center justify-between p-6 border-b border-border">
+        <h2
+          id="yusuke-modal-title"
+          class="text-2xl font-light text-foreground"
+        ></h2>
+        <button
+          id="yusuke-modal-close"
+          type="button"
+          class="text-text-secondary hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+          aria-label="閉じる"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div id="yusuke-modal-body" class="flex-1 overflow-y-auto h-max"></div>
+    </div>
+  </dialog>
+
+  <script>
+    type TabId = "career" | "personal" | "values" | "blog"
+    const VALID_TABS: TabId[] = ["career", "personal", "values", "blog"]
+
+    function isValidTab(s: string): s is TabId {
+      return (VALID_TABS as string[]).includes(s)
+    }
+
+    function activateTab(id: TabId) {
+      for (const btn of document.querySelectorAll<HTMLElement>("[data-tab]")) {
+        const isActive = btn.dataset.tab === id
+        btn.setAttribute("aria-selected", String(isActive))
+        btn.classList.toggle("border-foreground", isActive)
+        btn.classList.toggle("text-foreground", isActive)
+        btn.classList.toggle("border-transparent", !isActive)
+        btn.classList.toggle("text-text-secondary", !isActive)
+      }
+      for (const panel of document.querySelectorAll<HTMLElement>(
+        "[role='tabpanel']",
+      )) {
+        panel.hidden = panel.id !== `tabpanel-${id}`
+      }
+    }
+
+    const initialHash = location.hash.slice(1)
+    const initialTab: TabId = isValidTab(initialHash) ? initialHash : "career"
+    activateTab(initialTab)
+    if (!isValidTab(initialHash)) history.replaceState(null, "", "#career")
+
+    for (const btn of document.querySelectorAll<HTMLElement>("[data-tab]")) {
+      btn.addEventListener("click", () => {
+        const tab = btn.dataset.tab as TabId
+        activateTab(tab)
+        location.hash = tab
+      })
+    }
+
+    window.addEventListener("hashchange", () => {
+      const hash = location.hash.slice(1)
+      if (isValidTab(hash)) activateTab(hash)
+    })
+
+    // Modal
+    const modal = document.getElementById("yusuke-modal") as HTMLDialogElement
+    const modalTitle = document.getElementById("yusuke-modal-title")!
+    const modalBody = document.getElementById("yusuke-modal-body")!
+
+    function closeModal() {
+      modal.style.opacity = "0"
+      modal.style.transform = "scale(0.95)"
+      setTimeout(() => {
+        modal.close()
+        setTimeout(() => {
+          modal.style.opacity = ""
+          modal.style.transform = ""
+        }, 50)
+      }, 200)
+    }
+
+    document.addEventListener("click", (e) => {
+      const btn = (e.target as Element).closest<HTMLElement>("[data-modal-id]")
+      if (!btn) return
+      const id = btn.dataset.modalId!
+      const title = btn.dataset.modalTitle!
+      const content = document.getElementById(id)
+      if (!content) return
+      modalTitle.textContent = title
+      modalBody.innerHTML = content.innerHTML
+      modal.showModal()
+    })
+
+    document
+      .getElementById("yusuke-modal-close")!
+      .addEventListener("click", closeModal)
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal()
+    })
+  </script>
 </BaseLayout>

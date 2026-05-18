@@ -1,9 +1,7 @@
 import { defineConfig } from 'astro/config'
-import react from '@astrojs/react'
 import tailwindcss from '@tailwindcss/postcss'
 
 export default defineConfig({
-  integrations: [react()],
   output: 'static',
   trailingSlash: 'never',
   vite: {
@@ -13,7 +11,7 @@ export default defineConfig({
       },
     },
     optimizeDeps: {
-      entries: ["./src/**/*.{astro,tsx,ts,js}", "!./src/legacy/**/*"],
+      entries: ["./src/**/*.{astro,ts,js}", "!./src/legacy/**/*"],
     },
   },
 })

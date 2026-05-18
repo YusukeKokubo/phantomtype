@@ -24,16 +24,11 @@
     "vite": "^7"
   },
   "devDependencies": {
-    "@astrojs/react": "^5.0.5",
     "@biomejs/biome": "2.4.15",
     "@cloudflare/workers-types": "^4.20260517.1",
     "@tailwindcss/postcss": "^4.3.0",
     "@types/node": "25.8.0",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
     "astro": "^6.3.3",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3",
     "wrangler": "^4.92.0"

@@ -1,0 +1,250 @@
+---
+import type { TimelineEntry } from "../../@types/About"
+
+interface ColorInfo {
+  hex: string
+}
+
+function isHexColor(color: string): boolean {
+  return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(color)
+}
+
+function getColor(colorValue?: string): ColorInfo {
+  if (colorValue && isHexColor(colorValue)) return { hex: colorValue }
+  return { hex: "#6B7280" }
+}
+
+function formatYearRange(startDate: string, endDate?: string | "Now"): string {
+  const d = new Date(startDate)
+  const start = `${d.getFullYear()}年${d.getMonth() + 1}月`
+  if (!endDate || endDate === "Now") return `${start}-現在`
+  const de = new Date(endDate)
+  const end = `${de.getFullYear()}年${de.getMonth() + 1}月`
+  const sy = d.getFullYear(), sm = d.getMonth() + 1
+  const ey = de.getFullYear(), em = de.getMonth() + 1
+  if (sy === ey && sm === em) return start
+  return `${start}-${end}`
+}
+
+interface Props {
+  entries: TimelineEntry[]
+  // key: "${date}-${title}" → modal element id
+  modalIds?: Record<string, string>
+}
+
+const { entries, modalIds = {} } = Astro.props
+
+if (entries.length === 0) {
+  // rendered below as empty guard
+}
+
+const today = new Date().toISOString().split("T")[0]!
+
+const allDates = entries.flatMap((e) => {
+  const dates: string[] = [e.date]
+  dates.push(e.endDate ? (e.endDate === "Now" ? today : e.endDate) : today)
+  return dates
+})
+const sortedDates = allDates.sort((a, b) => a.localeCompare(b))
+const earliestDate = sortedDates[0]!
+const latestDate = sortedDates[sortedDates.length - 1]!
+
+const earliestYear = new Date(earliestDate).getFullYear()
+const startDate = new Date(`${earliestYear}-01-01`)
+const endDateObj = new Date(latestDate)
+const monthsDiff =
+  (endDateObj.getFullYear() - startDate.getFullYear()) * 12 +
+  (endDateObj.getMonth() - startDate.getMonth()) +
+  1
+const gridRows = Math.max(12, monthsDiff)
+
+const entriesWithGridPos = entries.map((entry) => {
+  const entryStart = new Date(entry.date)
+  const entryEnd = entry.endDate
+    ? entry.endDate === "Now"
+      ? new Date(today)
+      : new Date(entry.endDate)
+    : entryStart
+  const startRowRaw =
+    (entryStart.getFullYear() - startDate.getFullYear()) * 12 +
+    (entryStart.getMonth() - startDate.getMonth()) +
+    1
+  const endRowRaw =
+    (entryEnd.getFullYear() - startDate.getFullYear()) * 12 +
+    (entryEnd.getMonth() - startDate.getMonth()) +
+    1
+  const startRow = gridRows - startRowRaw + 1
+  const endRow = gridRows - endRowRaw + 1
+  const color = getColor(entry.color)
+  return { ...entry, startRow, endRow, color }
+})
+
+// Group by year (using end year, or start year if no endDate)
+const groupedByYear = new Map<number, typeof entriesWithGridPos>()
+for (const entry of entriesWithGridPos) {
+  const year = entry.endDate
+    ? entry.endDate === "Now"
+      ? new Date(today).getFullYear()
+      : new Date(entry.endDate).getFullYear()
+    : new Date(entry.date).getFullYear()
+  if (!groupedByYear.has(year)) groupedByYear.set(year, [])
+  groupedByYear.get(year)!.push(entry)
+}
+
+// Sort entries within each year by end date
+for (const [, yearEntries] of groupedByYear) {
+  yearEntries.sort((a, b) => {
+    const aDate = a.endDate === "Now" ? today : a.endDate === undefined ? a.date : a.endDate
+    const bDate = b.endDate === "Now" ? today : b.endDate === undefined ? b.date : b.endDate
+    return aDate.localeCompare(bDate)
+  })
+}
+
+const currentYear = new Date().getFullYear()
+const allYearsSet = new Set([currentYear, ...groupedByYear.keys()])
+const allYears = [...allYearsSet].sort((a, b) => b - a)
+
+const yearsWithCards = allYears.map((year) => {
+  const row =
+    year === currentYear
+      ? 1
+      : (() => {
+          const yearStart = new Date(`${year}-01-01`)
+          const rowRaw =
+            (yearStart.getFullYear() - startDate.getFullYear()) * 12 +
+            (yearStart.getMonth() - startDate.getMonth()) +
+            1
+          return gridRows - rowRaw + 1
+        })()
+
+  const yearEntries = groupedByYear.get(year) || []
+
+  const cardRowMap = new Map<number, typeof yearEntries>()
+  for (const entry of yearEntries) {
+    const cardRow = entry.endDate ? entry.endRow : entry.startRow
+    if (!cardRowMap.has(cardRow)) cardRowMap.set(cardRow, [])
+    cardRowMap.get(cardRow)!.push(entry)
+  }
+
+  const cardGroups = [...cardRowMap.entries()].map(([cardRow, rowEntries]) => ({
+    cardRow,
+    rowEntries: rowEntries.map((entry) => ({
+      ...entry,
+      yearRange: formatYearRange(entry.date, entry.endDate),
+      modalId: modalIds[`${entry.date}-${entry.title}`],
+    })),
+  }))
+
+  return { year, row, cardGroups }
+})
+
+const periodBars = entriesWithGridPos.filter((e) => e.endDate !== undefined)
+
+const targetTotalHeight = 1200
+const bottomPadding = 200
+const rowHeight = Math.max(2, (targetTotalHeight - bottomPadding) / gridRows)
+
+const gridStyle = `display:grid;grid-template-columns:auto 1fr;grid-template-rows:repeat(${gridRows},${rowHeight}px);gap:0`
+const lineStyle = `grid-column:1/2;grid-row:1/${gridRows + 1};justify-self:center`
+const cardWrapperClass = "w-full max-w-[280px] sm:w-64 sm:max-w-none md:w-80 lg:w-96 ml-4 sm:ml-8"
+---
+
+{
+  entries.length === 0 ? (
+    <p class="text-text-secondary">コンテンツを追加してください</p>
+  ) : (
+    <div class="py-8 px-4">
+      <div class="mx-auto max-w-5xl" style={gridStyle}>
+        {/* Base vertical line */}
+        <div class="bg-blue-400 w-0.5 hidden md:block" style={lineStyle} />
+        <div class="bg-blue-400 w-px md:hidden" style={lineStyle} />
+
+        {/* Period bars */}
+        {periodBars.map((entry) => (
+          <div
+            class="w-2 z-0"
+            style={`grid-column:1/2;grid-row:${entry.startRow}/${entry.endRow + 1};background-color:${entry.color.hex};justify-self:center`}
+          />
+        ))}
+
+        {/* Year bubbles */}
+        {yearsWithCards.map(({ year, row }) => (
+          <div
+            class="z-10 w-12 h-12 md:w-16 md:h-16 rounded-full bg-white border-2 md:border-4 border-blue-400 flex items-center justify-center shadow-md"
+            style={`grid-column:1/2;grid-row:${row};justify-self:center;align-self:center`}
+          >
+            <span class="text-sm md:text-lg font-semibold text-gray-700">{year}</span>
+          </div>
+        ))}
+
+        {/* Cards */}
+        {yearsWithCards.flatMap(({ cardGroups }) =>
+          cardGroups.map(({ cardRow, rowEntries }) => (
+            <div
+              class={cardWrapperClass}
+              style={`grid-column:2/3;grid-row:${cardRow};justify-self:start;align-self:center`}
+            >
+              <div class="flex flex-col gap-5">
+                {rowEntries.map((entry) => {
+                  const hasColor = !!entry.color
+                  const cardInner = (
+                    <div class="flex items-start gap-3">
+                      {entry.image && (
+                        <div class="w-16 h-16 shrink-0 overflow-hidden bg-gray-100 rounded-md px-2">
+                          <img
+                            src={entry.image}
+                            alt={entry.title}
+                            class="w-full h-full object-contain"
+                            loading="lazy"
+                          />
+                        </div>
+                      )}
+                      <div class="flex flex-col gap-2 flex-1 min-w-0">
+                        <div class="text-sm font-medium" style={`color:${entry.color.hex}`}>
+                          {entry.yearRange}
+                        </div>
+                        <div class="font-semibold text-gray-800 text-md">{entry.title}</div>
+                        {entry.description && (
+                          <div class="text-sm text-gray-600">{entry.description}</div>
+                        )}
+                      </div>
+                    </div>
+                  )
+
+                  return (
+                    <div
+                      class="bg-white rounded shadow-md p-2 sm:p-3 md:p-4 hover:shadow-lg transition-shadow relative"
+                      style={hasColor ? `border-top-color:${entry.color.hex};border-top-width:8px` : ""}
+                    >
+                      {entry.modalId ? (
+                        <button
+                          type="button"
+                          data-modal-title={entry.title}
+                          data-modal-id={entry.modalId}
+                          class="w-full text-left hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer"
+                        >
+                          {cardInner}
+                        </button>
+                      ) : entry.url ? (
+                        <a
+                          href={entry.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="block hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2"
+                        >
+                          {cardInner}
+                        </a>
+                      ) : (
+                        <div class="h-full">{cardInner}</div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )),
+        )}
+      </div>
+    </div>
+  )
+}

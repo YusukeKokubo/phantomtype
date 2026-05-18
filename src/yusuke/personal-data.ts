@@ -1,4 +1,4 @@
-import type { GalleryEntry } from "../../../../../@types/About"
+import type { GalleryEntry } from "../../@types/About"
 
 export const personalEntries: GalleryEntry[] = [
   {
@@ -9,7 +9,6 @@ export const personalEntries: GalleryEntry[] = [
   {
     title: "趣味で撮った写真を掲載するフォトサイト",
     url: "https://phantomtype.com/",
-    image: "/ogkyoto.jpg", // TODO: 適切な画像に置き換えてください
+    image: "/ogkyoto.jpg",
   },
 ]
-
