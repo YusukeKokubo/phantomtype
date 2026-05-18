@@ -1,15 +1,11 @@
 import { defineConfig } from 'astro/config'
-import tailwindcss from '@tailwindcss/postcss'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   output: 'static',
   trailingSlash: 'never',
   vite: {
-    css: {
-      postcss: {
-        plugins: [tailwindcss()],
-      },
-    },
+    plugins: [tailwindcss()],
     optimizeDeps: {
       entries: ["./src/**/*.{astro,ts,js}", "!./src/legacy/**/*"],
     },
