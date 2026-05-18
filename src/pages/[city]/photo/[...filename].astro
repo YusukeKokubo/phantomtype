@@ -11,24 +11,32 @@ export function getStaticPaths() {
   const cities = picsData as City[]
   return cities
     .filter((c) => c.city !== "yusuke")
-    .flatMap((cityData) =>
-      cityData.locations.flatMap((loc) =>
-        loc.pics
-          .filter((p) => p.exif)
-          .map((pic) => ({
-            params: { city: cityData.city, filename: pic.filename },
-            props: { photo: pic, cities },
-          })),
-      ),
-    )
+    .flatMap((cityData) => {
+      const allPics = cityData.locations
+        .flatMap((loc) => loc.pics.filter((p) => p.exif))
+        .sort((a, b) =>
+          a.exif!.DateTimeOriginal < b.exif!.DateTimeOriginal ? -1 : 1,
+        )
+      return allPics.map((pic, index) => ({
+        params: { city: cityData.city, filename: pic.filename },
+        props: {
+          photo: pic,
+          cities,
+          prevPhoto: index > 0 ? allPics[index - 1] : null,
+          nextPhoto: index < allPics.length - 1 ? allPics[index + 1] : null,
+        },
+      }))
+    })
 }
 
 interface Props {
   photo: Photo
   cities: City[]
+  prevPhoto: Photo | null
+  nextPhoto: Photo | null
 }
 
-const { photo, cities } = Astro.props
+const { photo, cities, prevPhoto, nextPhoto } = Astro.props
 const { city } = Astro.params
 
 const name = photo.filename.substring(0, photo.filename.indexOf("."))
@@ -51,13 +59,43 @@ const ogUrl = `${publicHost}/${city}/photo/${encodeURIComponent(photo.filename)}
   <a href="#main-content" class="skip-link">メインコンテンツへスキップ</a>
   <Header city={city} cities={cities} />
   <main id="main-content" class="px-4 py-8 flex flex-col gap-4">
-    <nav aria-label="パンくずリスト">
+    <nav aria-label="ナビゲーション" class="flex items-center justify-between">
       <a
         href={`/${city}`}
         class="text-text-secondary hover:text-foreground text-lg uppercase focus-visible:outline-2 focus-visible:outline-offset-2"
       >
         ← {city}
       </a>
+      <div class="flex gap-4">
+        {
+          prevPhoto ? (
+            <a
+              id="nav-prev"
+              href={`/${city}/photo/${encodeURIComponent(prevPhoto.filename)}`}
+              class="text-text-secondary hover:text-foreground text-lg focus-visible:outline-2 focus-visible:outline-offset-2"
+              aria-label="前の写真"
+            >
+              ←
+            </a>
+          ) : (
+            <span class="text-text-secondary/30 text-lg" aria-hidden="true">←</span>
+          )
+        }
+        {
+          nextPhoto ? (
+            <a
+              id="nav-next"
+              href={`/${city}/photo/${encodeURIComponent(nextPhoto.filename)}`}
+              class="text-text-secondary hover:text-foreground text-lg focus-visible:outline-2 focus-visible:outline-offset-2"
+              aria-label="次の写真"
+            >
+              →
+            </a>
+          ) : (
+            <span class="text-text-secondary/30 text-lg" aria-hidden="true">→</span>
+          )
+        }
+      </div>
     </nav>
 
     <article>
@@ -132,4 +170,22 @@ const ogUrl = `${publicHost}/${city}/photo/${encodeURIComponent(photo.filename)}
       }
     </article>
   </main>
+<script>
+  function setupKeyNav() {
+    const handler = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
+      if (e.key === "ArrowLeft") {
+        (document.getElementById("nav-prev") as HTMLAnchorElement | null)?.click()
+      } else if (e.key === "ArrowRight") {
+        (document.getElementById("nav-next") as HTMLAnchorElement | null)?.click()
+      }
+    }
+    document.addEventListener("keydown", handler)
+    document.addEventListener("astro:before-swap", () => {
+      document.removeEventListener("keydown", handler)
+    }, { once: true })
+  }
+  setupKeyNav()
+  document.addEventListener("astro:page-load", setupKeyNav)
+</script>
 </BaseLayout>
