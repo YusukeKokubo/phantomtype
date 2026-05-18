@@ -8,40 +8,66 @@ const fs = require("node:fs")
 const path = require("node:path")
 
 import * as ExifReader from "exifreader"
+import sharp from "sharp"
 import type { Exif, Photo } from "../@types/Photo"
 
-function picsDataGenerator() {
+async function generateLqip(filePath: string): Promise<string | undefined> {
+  try {
+    const buffer = await sharp(filePath)
+      .resize(20, undefined, { withoutEnlargement: true })
+      .blur(2)
+      .webp({ quality: 20 })
+      .toBuffer()
+    return `data:image/webp;base64,${buffer.toString("base64")}`
+  } catch (error) {
+    console.error(`LQIP failed for ${filePath}:`, error)
+    return undefined
+  }
+}
+
+async function picsDataGenerator() {
   const dirPath = path.join(__dirname, "../public/pics")
   const cityDirs = fs.readdirSync(dirPath)
   const cities = cityDirs.filter((d: string) =>
     fs.statSync(path.join(dirPath, d)).isDirectory(),
   )
-  const result = cities.map((cityName: string) => {
-    const cityDirPath = path.join(dirPath, cityName)
-    const cityLocationDirs = readDir(cityDirPath)
-    const cityPics = cityLocationDirs.map((cityLocationName: string) => {
-      const cityLocationDirPath = path.join(cityDirPath, cityLocationName)
-      const picsDir = fs.readdirSync(cityLocationDirPath)
-      console.log(picsDir)
+  const result = await Promise.all(
+    cities.map(async (cityName: string) => {
+      const cityDirPath = path.join(dirPath, cityName)
+      const cityLocationDirs = readDir(cityDirPath)
+      const cityPics = await Promise.all(
+        cityLocationDirs.map(async (cityLocationName: string) => {
+          const cityLocationDirPath = path.join(cityDirPath, cityLocationName)
+          const picsDir = fs.readdirSync(cityLocationDirPath)
+          console.log(picsDir)
 
-      const pics = picsDir
-        .filter((file: string) => file.toLowerCase().endsWith(".jpg"))
-        .map((filePath: string) => {
-          const exif = readExif(`${cityLocationDirPath}/${filePath}`)
-          const pic: Photo = {
-            filename: filePath,
-            city: cityName,
-            location: cityLocationName,
-            url: `/pics/${cityName}/${cityLocationName}/${filePath}`,
-            exif: exif,
-          }
-          console.log(pic)
-          return pic
-        })
-      return { location: cityLocationName, pics: pics }
-    })
-    return { city: cityName, locations: cityPics }
-  })
+          const pics = await Promise.all(
+            picsDir
+              .filter((file: string) => file.toLowerCase().endsWith(".jpg"))
+              .map(async (filePath: string) => {
+                const absolutePath = `${cityLocationDirPath}/${filePath}`
+                const [exif, lqip] = await Promise.all([
+                  Promise.resolve(readExif(absolutePath)),
+                  generateLqip(absolutePath),
+                ])
+                const pic: Photo = {
+                  filename: filePath,
+                  city: cityName,
+                  location: cityLocationName,
+                  url: `/pics/${cityName}/${cityLocationName}/${filePath}`,
+                  exif: exif,
+                  ...(lqip ? { lqip } : {}),
+                }
+                console.log(pic.filename, lqip ? "lqip ok" : "no lqip")
+                return pic
+              }),
+          )
+          return { location: cityLocationName, pics: pics }
+        }),
+      )
+      return { city: cityName, locations: cityPics }
+    }),
+  )
   const json = JSON.stringify(result)
   fs.writeFileSync(path.join(__dirname, "../public/pics.json"), json)
 }

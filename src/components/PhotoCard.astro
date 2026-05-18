@@ -20,18 +20,33 @@ const photoUrl = `/${city}/photo/${encodeURIComponent(photo.filename)}`
   href={photoUrl}
   class="block relative h-max cursor-pointer hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 break-inside-avoid mb-3"
   data-filename={photo.filename}
+  data-lqip={photo.lqip}
   aria-label={`${city} ${name}の写真を見る`}
   role="listitem"
 >
-  <img
-    src={encodeURI(photo.url)}
-    width={width}
-    height={height}
-    alt={`${city} ${name}の写真`}
-    transition:name={`photo-${photo.filename}`}
-    loading={priority ? "eager" : "lazy"}
-    fetchpriority={priority ? "high" : "auto"}
-  />
+  <div class="relative overflow-hidden">
+    {
+      photo.lqip && (
+        <div
+          class="absolute inset-0 bg-cover bg-center scale-110 blur-lg"
+          style={`background-image: url(${photo.lqip})`}
+          aria-hidden="true"
+        />
+      )
+    }
+    <img
+      src={encodeURI(photo.url)}
+      width={width}
+      height={height}
+      alt={`${city} ${name}の写真`}
+      transition:name={`photo-${photo.filename}`}
+      loading={priority ? "eager" : "lazy"}
+      fetchpriority={priority ? "high" : "auto"}
+      class="relative w-full h-auto block"
+      {...(photo.lqip ? { "data-lqip": "" } : {})}
+      onload={photo.lqip ? "this.dataset.lqipLoaded = ''" : undefined}
+    />
+  </div>
   <div class="p-2 text-xs font-light text-foreground absolute bottom-0 bg-surface-overlay">
     <div class="flex flex-col justify-start">
       <span class="uppercase tracking-wider text-foreground/70 mb-0.5">{photo.location}</span>

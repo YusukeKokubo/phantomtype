@@ -41,6 +41,8 @@ const allPics = cityData.locations
   .flatMap((loc) => loc.pics)
   .filter((p) => p.exif)
   .sort(byDatetime)
+
+const dialogPhotos = allPics.map(({ lqip: _, ...photo }) => photo)
 ---
 
 <BaseLayout
@@ -63,7 +65,7 @@ const allPics = cityData.locations
     <CityNav city={city} cities={cities} />
   </div>
 
-  <div id="gallery-data" hidden set:text={JSON.stringify({ city, photos: allPics })} />
+  <div id="gallery-data" hidden set:text={JSON.stringify({ city, photos: dialogPhotos })} />
 </BaseLayout>
 
 <script>
@@ -72,7 +74,14 @@ const allPics = cityData.locations
 
   let instance: PhotoDialog | null = null
 
+  function markCachedLqipImages() {
+    document.querySelectorAll<HTMLImageElement>("img[data-lqip]:not([data-lqip-loaded])").forEach((img) => {
+      if (img.complete) img.dataset.lqipLoaded = ""
+    })
+  }
+
   document.addEventListener("astro:page-load", () => {
+    markCachedLqipImages()
     instance?.destroy()
     const el = document.getElementById("gallery-data")
     if (!el?.textContent) return

@@ -8,6 +8,7 @@ type State =
 export class PhotoDialog {
   private state: State = { type: "closed" }
   private readonly dialog: HTMLDialogElement
+  private readonly lqipBgEl: HTMLDivElement
   private readonly imgEl: HTMLImageElement
   private readonly exifTbody: HTMLTableSectionElement
   private readonly prevBtn: HTMLButtonElement
@@ -30,11 +31,15 @@ export class PhotoDialog {
           </div>
         </nav>
         <div class="flex-1 overflow-y-auto px-4 pb-4 flex flex-col gap-3">
-          <img data-role="photo" src="" alt="" class="w-auto h-auto max-w-full max-h-[calc(100svh-11rem)] mx-auto block" />
+          <div data-role="photo-wrap" class="relative overflow-hidden mx-auto w-max max-w-full">
+            <div data-role="lqip-bg" class="absolute inset-0 bg-cover bg-center scale-110 blur-lg hidden" aria-hidden="true"></div>
+            <img data-role="photo" src="" alt="" class="relative w-auto h-auto max-w-full max-h-[calc(100svh-11rem)] mx-auto block" />
+          </div>
           <table class="w-full"><tbody data-role="exif"></tbody></table>
         </div>
       </div>`
 
+    this.lqipBgEl = this.dialog.querySelector<HTMLDivElement>("[data-role='lqip-bg']")!
     this.imgEl = this.dialog.querySelector<HTMLImageElement>("[data-role='photo']")!
     this.exifTbody = this.dialog.querySelector<HTMLTableSectionElement>("[data-role='exif']")!
     this.prevBtn = this.dialog.querySelector<HTMLButtonElement>("[data-action='prev']")!
@@ -85,15 +90,49 @@ export class PhotoDialog {
     }
   }
 
+  private getLqipFromDom(filename: string): string | undefined {
+    const link = document.querySelector<HTMLAnchorElement>(
+      `[data-filename="${CSS.escape(filename)}"]`,
+    )
+    return link?.dataset.lqip
+  }
+
+  private applyLqip(filename: string): void {
+    const lqip = this.getLqipFromDom(filename)
+
+    this.imgEl.removeAttribute("data-lqip")
+    delete this.imgEl.dataset.lqipLoaded
+    this.lqipBgEl.classList.add("hidden")
+    this.lqipBgEl.style.backgroundImage = ""
+
+    if (!lqip) return
+
+    this.lqipBgEl.style.backgroundImage = `url(${lqip})`
+    this.lqipBgEl.classList.remove("hidden")
+    this.imgEl.setAttribute("data-lqip", "")
+  }
+
   private render(index: number): void {
     const photo = this.photos[index]
     const exif = photo.exif!
     const { width, height } = calcSize(exif, 1920, 1080)
 
+    this.applyLqip(photo.filename)
+
+    this.imgEl.onload = () => {
+      if (this.state.type === "open" && this.photos[this.state.index]?.filename === photo.filename) {
+        this.imgEl.dataset.lqipLoaded = ""
+      }
+    }
+
     this.imgEl.src = encodeURI(photo.url)
     this.imgEl.width = width
     this.imgEl.height = height
     this.imgEl.alt = `${this.city} ${photo.location}の写真`
+
+    if (this.imgEl.hasAttribute("data-lqip") && this.imgEl.complete) {
+      this.imgEl.dataset.lqipLoaded = ""
+    }
 
     this.prevBtn.disabled = index === 0
     this.nextBtn.disabled = index === this.photos.length - 1

@@ -3,6 +3,7 @@ export type Photo = {
   city: string
   location: string
   url: string
+  lqip?: string
   exif: Exif | null
 }
 

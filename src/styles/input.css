@@ -111,6 +111,16 @@ a:focus-visible {
   scrollbar-color: var(--color-border) var(--color-surface);
 }
 
+/* LQIP fade-in */
+img[data-lqip]:not([data-lqip-loaded]) {
+  opacity: 0;
+}
+
+img[data-lqip-loaded] {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
 /* Modal Dialog Animations */
 dialog {
   opacity: 0;

@@ -99,14 +99,27 @@ const ogUrl = `${publicHost}/${city}/photo/${encodeURIComponent(photo.filename)}
     </nav>
 
     <article>
-      <img
-        src={encodeURI(photo.url)}
-        width={width}
-        height={height}
-        alt={`${city} ${name}の写真`}
-        class="w-auto h-auto max-w-full max-h-[calc(100svh-11rem)] mx-auto block"
-        transition:name={`photo-${photo.filename}`}
-      />
+      <div class="relative overflow-hidden mx-auto w-max max-w-full">
+        {
+          photo.lqip && (
+            <div
+              class="absolute inset-0 bg-cover bg-center scale-110 blur-lg"
+              style={`background-image: url(${photo.lqip})`}
+              aria-hidden="true"
+            />
+          )
+        }
+        <img
+          src={encodeURI(photo.url)}
+          width={width}
+          height={height}
+          alt={`${city} ${name}の写真`}
+          class="relative w-auto h-auto max-w-full max-h-[calc(100svh-11rem)] mx-auto block"
+          transition:name={`photo-${photo.filename}`}
+          {...(photo.lqip ? { "data-lqip": "" } : {})}
+          onload={photo.lqip ? "this.dataset.lqipLoaded = ''" : undefined}
+        />
+      </div>
 
       {
         exif && (
@@ -187,5 +200,13 @@ const ogUrl = `${publicHost}/${city}/photo/${encodeURIComponent(photo.filename)}
   }
   setupKeyNav()
   document.addEventListener("astro:page-load", setupKeyNav)
+
+  function markCachedLqipImages() {
+    document.querySelectorAll<HTMLImageElement>("img[data-lqip]:not([data-lqip-loaded])").forEach((img) => {
+      if (img.complete) img.dataset.lqipLoaded = ""
+    })
+  }
+  markCachedLqipImages()
+  document.addEventListener("astro:page-load", markCachedLqipImages)
 </script>
 </BaseLayout>
