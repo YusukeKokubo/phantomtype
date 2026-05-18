@@ -47,25 +47,46 @@ const { Content: ValuesContent } = valuesEntry
   ? await render(valuesEntry)
   : { Content: null }
 
-// Notes
-const notesCollectionEntries = await getCollection("notes")
-const sortedNotes = notesCollectionEntries
-  .sort((a, b) => b.data.date.localeCompare(a.data.date))
-  .map((entry) => ({
-    slug: entry.id,
-    title: entry.data.title,
-    date: entry.data.date,
-  }))
+// Writing: blog (external) + notes (internal) unified timeline
+type WritingItem =
+  | { kind: "note"; date: string; title: string; slug: string }
+  | {
+      kind: "blog"
+      date: string
+      title: string
+      url: string
+      platformName: string
+      iconImage: string
+    }
 
-// Blog entries grouped by year
-const blogByYear = new Map<string, typeof blogEntries>()
-for (const entry of blogEntries) {
-  const year = entry.date.substring(0, 4)
-  if (!blogByYear.has(year)) blogByYear.set(year, [])
-  blogByYear.get(year)!.push(entry)
+const notesCollectionEntries = await getCollection("notes")
+const noteItems: WritingItem[] = notesCollectionEntries.map((entry) => ({
+  kind: "note",
+  date: entry.data.date,
+  title: entry.data.title,
+  slug: entry.id,
+}))
+
+const blogItems: WritingItem[] = blogEntries.map((entry) => ({
+  kind: "blog",
+  date: entry.date,
+  title: entry.title,
+  url: entry.url,
+  platformName: entry.platformName,
+  iconImage: entry.iconImage,
+}))
+
+const writingByYear = new Map<string, WritingItem[]>()
+for (const item of [...noteItems, ...blogItems]) {
+  const year = item.date.substring(0, 4)
+  if (!writingByYear.has(year)) writingByYear.set(year, [])
+  writingByYear.get(year)!.push(item)
 }
-const blogYearGroups = [...blogByYear.entries()]
-  .map(([year, entries]) => ({ year, entries }))
+const writingYearGroups = [...writingByYear.entries()]
+  .map(([year, items]) => ({
+    year,
+    items: items.sort((a, b) => b.date.localeCompare(a.date)),
+  }))
   .sort((a, b) => b.year.localeCompare(a.year))
 ---
 
@@ -95,7 +116,7 @@ const blogYearGroups = [...blogByYear.entries()]
         aria-label="コンテンツタブ"
       >
         {
-          (["career", "personal", "values", "blog", "notes"] as const).map((tab) => {
+          (["career", "personal", "values", "blog"] as const).map((tab) => {
             const isDefault = tab === "career"
             return (
               <button
@@ -200,48 +221,80 @@ const blogYearGroups = [...blogByYear.entries()]
       >
         <div class="mx-auto max-w-3xl py-8 px-4 flex flex-col gap-8">
           {
-            blogYearGroups.map(({ year, entries }) => (
+            writingYearGroups.map(({ year, items }) => (
               <div>
                 <h2 class="text-2xl font-bold text-foreground mb-6">{year}</h2>
                 <div class="relative">
                   <div class="absolute left-4 top-0 bottom-0 w-0.5 border-l border-dashed border-border" />
                   <div class="space-y-8">
-                    {entries.map((entry) => (
+                    {items.map((item) => (
                       <div class="relative flex items-start gap-4">
                         <div class="relative z-10 shrink-0">
                           <div class="w-8 h-8 rounded-full bg-background flex items-center justify-center shadow-md border-2 border-background p-1.5">
-                            <img
-                              src={entry.iconImage}
-                              alt={entry.platformName}
-                              class="w-full h-full"
-                            />
+                            {item.kind === "blog" ? (
+                              <img
+                                src={item.iconImage}
+                                alt={item.platformName}
+                                class="w-full h-full"
+                              />
+                            ) : (
+                              <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                class="w-full h-full text-text-secondary"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"
+                                />
+                              </svg>
+                            )}
                           </div>
                         </div>
                         <div class="flex-1 min-w-0 pt-1">
-                          {entry.platformName && (
-                            <div class="text-sm text-text-secondary mb-3">
+                          <div class="text-sm text-text-secondary mb-3">
+                            {item.kind === "blog" ? (
                               <span>
                                 <strong class="font-semibold">
-                                  {entry.platformName}
+                                  {item.platformName}
                                 </strong>{" "}
-                                に投稿しました {getRelativeTime(entry.date)}
+                                に投稿しました {getRelativeTime(item.date)}
                               </span>
-                            </div>
-                          )}
+                            ) : (
+                              <span>メモ {getRelativeTime(item.date)}</span>
+                            )}
+                          </div>
                           <div class="bg-surface border border-border rounded shadow-md hover:shadow-lg transition-shadow max-w-md">
-                            <a
-                              href={entry.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              class="block p-4 hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2"
-                            >
-                              <div class="text-sm font-medium text-text-muted mb-1">
-                                {formatYearMonth(entry.date)}
-                              </div>
-                              <div class="font-semibold text-foreground">
-                                {entry.title}
-                              </div>
-                            </a>
+                            {item.kind === "blog" ? (
+                              <a
+                                href={item.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="block p-4 hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2"
+                              >
+                                <div class="text-sm font-medium text-text-muted mb-1">
+                                  {formatYearMonth(item.date)}
+                                </div>
+                                <div class="font-semibold text-foreground">
+                                  {item.title}
+                                </div>
+                              </a>
+                            ) : (
+                              <a
+                                href={`/yusuke/notes/${item.slug}`}
+                                class="block p-4 hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2"
+                              >
+                                <div class="text-sm font-medium text-text-muted mb-1">
+                                  {formatYearMonth(item.date)}
+                                </div>
+                                <div class="font-semibold text-foreground">
+                                  {item.title}
+                                </div>
+                              </a>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -249,28 +302,6 @@ const blogYearGroups = [...blogByYear.entries()]
                   </div>
                 </div>
               </div>
-            ))
-          }
-        </div>
-      </div>
-
-      <!-- Notes tab -->
-      <div
-        id="tabpanel-notes"
-        role="tabpanel"
-        aria-labelledby="tab-notes"
-        hidden
-      >
-        <div class="mx-auto max-w-3xl py-8 px-4 flex flex-col gap-4">
-          {
-            sortedNotes.map(({ slug, title, date }) => (
-              <a
-                href={`/yusuke/notes/${slug}`}
-                class="block bg-surface border border-border rounded-lg p-4 hover:shadow-md transition-shadow focus-visible:outline-2 focus-visible:outline-offset-2"
-              >
-                <div class="text-xs text-text-secondary mb-1">{date}</div>
-                <div class="font-medium text-foreground">{title}</div>
-              </a>
             ))
           }
         </div>
@@ -323,8 +354,8 @@ const blogYearGroups = [...blogByYear.entries()]
   </dialog>
 
   <script>
-    type TabId = "career" | "personal" | "values" | "blog" | "notes"
-    const VALID_TABS: TabId[] = ["career", "personal", "values", "blog", "notes"]
+    type TabId = "career" | "personal" | "values" | "blog"
+    const VALID_TABS: TabId[] = ["career", "personal", "values", "blog"]
 
     function isValidTab(s: string): s is TabId {
       return (VALID_TABS as string[]).includes(s)
