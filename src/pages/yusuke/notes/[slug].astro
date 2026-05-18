@@ -34,7 +34,9 @@ const { Content } = await render(entry)
         <div class="text-sm text-text-secondary mb-2">{entry.data.date}</div>
         <h1 class="text-3xl font-light text-foreground">{entry.data.title}</h1>
       </header>
-      <Content class="prose dark:prose-invert max-w-none" />
+      <div class="prose dark:prose-invert max-w-none">
+        <Content />
+      </div>
     </article>
   </main>
 </BaseLayout>

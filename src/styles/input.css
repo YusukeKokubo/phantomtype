@@ -112,6 +112,12 @@ a:focus-visible {
   scrollbar-color: var(--color-border) var(--color-surface);
 }
 
+/* prose inline code: remove default backtick pseudo-elements */
+.prose code::before,
+.prose code::after {
+  content: none;
+}
+
 /* LQIP fade-in */
 img[data-lqip]:not([data-lqip-loaded]) {
   opacity: 0;
