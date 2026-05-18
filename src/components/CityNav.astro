@@ -1,5 +1,7 @@
 ---
+import { Image } from "astro:assets"
 import type { City } from "../../@types/Photo"
+import { loadImage } from "../lib/images"
 
 interface Props {
   city?: string
@@ -7,6 +9,17 @@ interface Props {
 }
 
 const { city, cities } = Astro.props
+
+const items = await Promise.all(
+  cities
+    .filter((c) => c.city !== city)
+    .map(async (c) => {
+      const examplePic = c.locations[0]?.pics[0]
+      if (!examplePic) return null
+      const image = await loadImage(examplePic.url)
+      return { c, image }
+    }),
+)
 ---
 
 <nav
@@ -14,28 +27,26 @@ const { city, cities } = Astro.props
   aria-label="都市選択ナビゲーション"
 >
   {
-    cities
-      .filter((c) => c.city !== city)
-      .map((c) => {
-        const examplePic = c.locations[0]?.pics[0]
-        if (!examplePic) return null
-        return (
-          <a
-            href={`/${c.city}`}
-            class="relative focus-visible:outline-2 focus-visible:outline-offset-2"
-            aria-label={`${c.city}の写真を見る`}
-          >
-            <img
-              src={encodeURI(examplePic.url)}
-              width={200}
-              class="w-12 md:w-32"
-              alt={`${c.city}のサムネイル画像`}
-            />
-            <span class="top-0 absolute bg-surface-overlay px-4 text-lg uppercase text-foreground hover:underline">
-              {c.city}
-            </span>
-          </a>
-        )
-      })
+    items.map((item) => {
+      if (!item) return null
+      const { c, image } = item
+      return (
+        <a
+          href={`/${c.city}`}
+          class="relative focus-visible:outline-2 focus-visible:outline-offset-2"
+          aria-label={`${c.city}の写真を見る`}
+        >
+          <Image
+            src={image}
+            width={200}
+            class="w-12 md:w-32"
+            alt={`${c.city}のサムネイル画像`}
+          />
+          <span class="top-0 absolute bg-surface-overlay px-4 text-lg uppercase text-foreground hover:underline">
+            {c.city}
+          </span>
+        </a>
+      )
+    })
   }
 </nav>
