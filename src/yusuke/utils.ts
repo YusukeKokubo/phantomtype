@@ -24,16 +24,27 @@ export function markdownToHtml(markdown: string): string {
   html = html.replace(/^---$/gim, '<hr class="my-6 border-border" />')
   html = html.replace(
     /^### (.*)$/gim,
-    '<h3 class="text-lg font-light mb-2 mt-4 text-foreground">### $1</h3>',
+    '<h3 class="text-lg font-light mb-2 mt-4 text-foreground">$1</h3>',
   )
   html = html.replace(
     /^## (.*)$/gim,
-    '<h2 class="text-xl font-light mb-3 mt-8 text-foreground border-b border-border pb-2">## $1</h2>',
+    '<h2 class="text-xl font-light mb-3 mt-8 text-foreground border-b border-border pb-2">$1</h2>',
   )
   html = html.replace(
     /^# (.*)$/gim,
-    '<h1 class="text-2xl font-light mb-4 mt-8 text-foreground"># $1</h1>',
+    '<h1 class="text-2xl font-light mb-4 mt-8 text-foreground">$1</h1>',
   )
+
+  html = html.replace(/^(\d+\. .*(\n\d+\. .*)*)/gim, (match) => {
+    const items = match
+      .split(/\n\d+\. /)
+      .map((item, index) => {
+        const text = index === 0 ? item.replace(/^\d+\. /, "") : item.trim()
+        return `<li class="ml-4 mb-1 text-foreground">${text}</li>`
+      })
+      .join("")
+    return `<ol class="list-decimal mb-4 text-foreground">${items}</ol>`
+  })
 
   html = html.replace(/^(- .*(\n- .*)*)/gim, (match) => {
     const items = match
