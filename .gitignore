@@ -18,7 +18,7 @@ public/kyoto
 public/nagoya
 public/matsushima
 public/kanazawa
-public/pics
+src/assets/pics/
 
 # Cloudflare
 .wrangler/

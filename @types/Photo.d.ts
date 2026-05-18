@@ -2,6 +2,7 @@ export type Photo = {
   filename: string
   city: string
   location: string
+  /** Astro glob key: /src/assets/pics/{city}/{location}/{filename} */
   url: string
   lqip?: string
   exif: Exif | null

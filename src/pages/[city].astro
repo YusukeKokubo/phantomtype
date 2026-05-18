@@ -1,12 +1,15 @@
 ---
 export const prerender = true
 
+import { getImage } from "astro:assets"
 import type { City, Photo } from "../../@types/Photo"
 import picsData from "../../public/pics.json"
 import CityNav from "../components/CityNav.astro"
 import Header from "../components/Header.astro"
 import PhotoCard from "../components/PhotoCard.astro"
 import BaseLayout from "../layouts/BaseLayout.astro"
+import { OGP_WIDTH } from "../lib/image-config"
+import { loadImage } from "../lib/images"
 
 export function getStaticPaths() {
   const cities = picsData as City[]
@@ -28,9 +31,16 @@ const { city } = Astro.params
 
 const publicHost = import.meta.env.PUBLIC_HOST || ""
 const examplePic = cityData.locations[0]?.pics[0]
-const ogImage = examplePic
-  ? `${publicHost}${encodeURI(examplePic.url)}`
-  : undefined
+let ogImage: string | undefined
+if (examplePic) {
+  const exampleImage = await loadImage(examplePic.url)
+  const og = await getImage({
+    src: exampleImage,
+    width: OGP_WIDTH,
+    format: "webp",
+  })
+  ogImage = `${publicHost}${og.src}`
+}
 const ogUrl = `${publicHost}/${city}`
 
 function byDatetime(a: Photo, b: Photo): number {

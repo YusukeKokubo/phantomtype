@@ -1,6 +1,9 @@
 ---
+import { Image } from "astro:assets"
 import type { Photo } from "../../@types/Photo"
 import { calcSize } from "../lib/calc-size"
+import { GALLERY_WIDTHS } from "../lib/image-config"
+import { loadImage } from "../lib/images"
 
 interface Props {
   photo: Photo
@@ -14,6 +17,7 @@ const name = photo.filename.substring(0, photo.filename.indexOf("."))
 const e = photo.exif!
 const { width, height } = calcSize(e, 1000, 1000)
 const photoUrl = `/${city}/photo/${encodeURIComponent(photo.filename)}`
+const image = await loadImage(photo.url)
 ---
 
 <a
@@ -34,8 +38,10 @@ const photoUrl = `/${city}/photo/${encodeURIComponent(photo.filename)}`
         />
       )
     }
-    <img
-      src={encodeURI(photo.url)}
+    <Image
+      src={image}
+      widths={[...GALLERY_WIDTHS]}
+      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
       width={width}
       height={height}
       alt={`${city} ${name}の写真`}

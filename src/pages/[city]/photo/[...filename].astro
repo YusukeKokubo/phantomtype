@@ -1,11 +1,14 @@
 ---
 export const prerender = true
 
+import { getImage, Image } from "astro:assets"
 import type { City, Photo } from "../../../../@types/Photo"
 import picsData from "../../../../public/pics.json"
 import Header from "../../../components/Header.astro"
 import BaseLayout from "../../../layouts/BaseLayout.astro"
 import { calcSize } from "../../../lib/calc-size"
+import { DETAIL_WIDTHS, OGP_WIDTH } from "../../../lib/image-config"
+import { loadImage } from "../../../lib/images"
 
 export function getStaticPaths() {
   const cities = picsData as City[]
@@ -44,7 +47,9 @@ const exif = photo.exif
 const { width, height } = calcSize(exif, 1920, 1080)
 
 const publicHost = import.meta.env.PUBLIC_HOST || ""
-const ogImage = `${publicHost}${encodeURI(photo.url)}`
+const image = await loadImage(photo.url)
+const og = await getImage({ src: image, width: OGP_WIDTH, format: "webp" })
+const ogImage = `${publicHost}${og.src}`
 const ogUrl = `${publicHost}/${city}/photo/${encodeURIComponent(photo.filename)}`
 ---
 
@@ -109,8 +114,10 @@ const ogUrl = `${publicHost}/${city}/photo/${encodeURIComponent(photo.filename)}
             />
           )
         }
-        <img
-          src={encodeURI(photo.url)}
+        <Image
+          src={image}
+          widths={[...DETAIL_WIDTHS]}
+          sizes="(max-width: 1920px) 100vw, 1920px"
           width={width}
           height={height}
           alt={`${city} ${name}の写真`}

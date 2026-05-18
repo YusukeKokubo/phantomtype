@@ -42,8 +42,8 @@ npm run deploy       # ビルド → Cloudflare へデプロイ（wrangler deplo
       - `content/blog/` - ブログのデータ・UI（TS 配列のまま）
   - `legacy/` - 旧 Hono 実装の退避先（型チェック対象外）
 - `@types/` - TypeScript 型定義
+- `src/assets/pics/` - 写真ファイル（都市/ロケーション/ファイル名の階層構造、gitignore 対象）
 - `public/` - 静的アセット
-  - `pics/` - 写真ファイル（都市/ロケーション/ファイル名の階層構造）
   - `pics.json` - 自動生成される写真メタデータ（コミット対象）
 - `astro.config.mjs` - Astro 設定ファイル
 - `wrangler.jsonc` - Wrangler 設定（`assets.directory: ./dist`）
@@ -64,13 +64,13 @@ Astro のファイルベースルーティング（`src/pages/`）:
 
 ### データフロー
 
-1. 写真ファイルを `public/pics/[city]/[location]/[filename].jpg` に配置
+1. 写真ファイルを `src/assets/pics/[city]/[location]/[filename].jpg` に配置
 2. `generatePics/` スクリプトで `public/pics.json` を生成（詳細は `generatePics/CLAUDE.md` を参照）
-3. `[city].astro` / `[city]/photo/[...filename].astro` が `getStaticPaths()` 内で `pics.json` を読み込んでページを静的生成
-4. `npm run build` で Astro ビルドを実行し、`dist/` に HTML + アセットを出力
+3. `[city].astro` / `[city]/photo/[...filename].astro` が `getStaticPaths()` 内で `pics.json` を読み込み、`<Image>` で WebP/AVIF をビルド時生成
+4. `npm run build` で Astro ビルドを実行し、`dist/` に HTML + 最適化画像を出力
 5. `wrangler deploy` で Cloudflare Workers Assets にアップロード
 
-**注意**: macOS は日本語ファイル名を NFD 形式で保存する場合がある。Cloudflare Workers Assets は NFC の URL でマッチングするため、NFD ファイル名は本番環境で 500 エラーになる。写真追加後はデプロイ前に NFC を確認: `python3 -c "import os,unicodedata; [print(n) for r,d,f in os.walk('public/pics') for n in d+f if n != unicodedata.normalize('NFC',n)]"` (出力なしなら OK)
+**注意**: macOS は日本語ファイル名を NFD 形式で保存する場合がある。Cloudflare Workers Assets は NFC の URL でマッチングするため、NFD ファイル名は本番環境で 500 エラーになる。写真追加後はデプロイ前に NFC を確認: `python3 -c "import os,unicodedata; [print(n) for r,d,f in os.walk('src/assets/pics') for n in d+f if n != unicodedata.normalize('NFC',n)]"` (出力なしなら OK)
 
 ### Content Collections（career / values）
 

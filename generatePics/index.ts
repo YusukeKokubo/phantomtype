@@ -1,7 +1,6 @@
-// public/pics配下から画像の一覧を取得して、public/pics.jsonを生成する
-// 画像の一覧は、public/pics配下のディレクトリ名とファイル名を元に生成する
-// 例: public/pics/kyoto/kyoto1.jpg -> public/pics.json -> ["kyoto/kyoto1.jpg"]
-// 例: public/pics/kyoto/kyoto2.jpg -> public/pics.json -> ["kyoto/kyoto1.jpg", "kyoto/kyoto2.jpg"]
+// src/assets/pics配下から画像の一覧を取得して、public/pics.jsonを生成する
+// 画像の一覧は、src/assets/pics配下のディレクトリ名とファイル名を元に生成する
+// 例: src/assets/pics/kyoto/kyoto1.jpg -> public/pics.json -> url: "/src/assets/pics/kyoto/..."
 // 画像を読み込んだときにexifを解析してメタ情報としてjsonを生成する
 
 const fs = require("node:fs")
@@ -26,7 +25,7 @@ async function generateLqip(filePath: string): Promise<string | undefined> {
 }
 
 async function picsDataGenerator() {
-  const dirPath = path.join(__dirname, "../public/pics")
+  const dirPath = path.join(__dirname, "../src/assets/pics")
   const cityDirs = fs.readdirSync(dirPath)
   const cities = cityDirs.filter((d: string) =>
     fs.statSync(path.join(dirPath, d)).isDirectory(),
@@ -43,7 +42,7 @@ async function picsDataGenerator() {
 
           const pics = await Promise.all(
             picsDir
-              .filter((file: string) => file.toLowerCase().endsWith(".jpg"))
+              .filter((file: string) => /\.(jpe?g)$/i.test(file))
               .map(async (filePath: string) => {
                 const absolutePath = `${cityLocationDirPath}/${filePath}`
                 const [exif, lqip] = await Promise.all([
@@ -54,7 +53,7 @@ async function picsDataGenerator() {
                   filename: filePath,
                   city: cityName,
                   location: cityLocationName,
-                  url: `/pics/${cityName}/${cityLocationName}/${filePath}`,
+                  url: `/src/assets/pics/${cityName}/${cityLocationName}/${filePath}`,
                   exif: exif,
                   ...(lqip ? { lqip } : {}),
                 }

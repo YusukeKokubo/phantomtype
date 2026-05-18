@@ -90,11 +90,19 @@ export class PhotoDialog {
     }
   }
 
-  private getLqipFromDom(filename: string): string | undefined {
-    const link = document.querySelector<HTMLAnchorElement>(
+  private getCardLink(filename: string): HTMLAnchorElement | null {
+    return document.querySelector<HTMLAnchorElement>(
       `[data-filename="${CSS.escape(filename)}"]`,
     )
-    return link?.dataset.lqip
+  }
+
+  private getLqipFromDom(filename: string): string | undefined {
+    return this.getCardLink(filename)?.dataset.lqip
+  }
+
+  private getImageSrcFromDom(filename: string): string | undefined {
+    const img = this.getCardLink(filename)?.querySelector("img")
+    return img?.currentSrc || img?.src || undefined
   }
 
   private applyLqip(filename: string): void {
@@ -125,7 +133,9 @@ export class PhotoDialog {
       }
     }
 
-    this.imgEl.src = encodeURI(photo.url)
+    const src = this.getImageSrcFromDom(photo.filename)
+    if (!src) throw new Error(`Missing optimized src in DOM for ${photo.filename}`)
+    this.imgEl.src = src
     this.imgEl.width = width
     this.imgEl.height = height
     this.imgEl.alt = `${this.city} ${photo.location}の写真`
