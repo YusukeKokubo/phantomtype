@@ -37,10 +37,10 @@ function byDatetime(a: Photo, b: Photo): number {
   return b.exif!.DateTimeOriginal < a.exif!.DateTimeOriginal ? 1 : -1
 }
 
-const sortedLocations = cityData.locations.map((loc) => ({
-  ...loc,
-  pics: loc.pics.filter((p) => p.exif).sort(byDatetime),
-}))
+const allPics = cityData.locations
+  .flatMap((loc) => loc.pics)
+  .filter((p) => p.exif)
+  .sort(byDatetime)
 ---
 
 <BaseLayout
@@ -52,24 +52,13 @@ const sortedLocations = cityData.locations.map((loc) => ({
   <a href="#main-content" class="skip-link">メインコンテンツへスキップ</a>
   <div class="flex flex-col gap-8 mb-8">
     <Header city={city} cities={cities} />
-    <main id="main-content">
-      <h1 class="text-4xl text-center uppercase">{city}</h1>
-      {
-        sortedLocations.map((loc, locIndex) => (
-          <section class="py-8 px-1 flex flex-col gap-2">
-            <h2 class="text-center text-3xl uppercase">{loc.location}</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1" role="list">
-              {loc.pics.map((p, picIndex) => (
-                <PhotoCard
-                  photo={p}
-                  city={city}
-                  priority={locIndex === 0 && picIndex === 0}
-                />
-              ))}
-            </div>
-          </section>
-        ))
-      }
+    <main id="main-content" class="px-1 py-4">
+      <h1 class="text-4xl text-center uppercase mb-6">{city}</h1>
+      <div class="columns-1 md:columns-2 lg:columns-3 gap-3" role="list">
+        {allPics.map((p, index) => (
+          <PhotoCard photo={p} city={city} priority={index === 0} />
+        ))}
+      </div>
     </main>
     <CityNav city={city} cities={cities} />
   </div>

@@ -18,7 +18,7 @@ const photoUrl = `/${city}/photo/${encodeURIComponent(photo.filename)}`
 
 <a
   href={photoUrl}
-  class="block relative h-max cursor-pointer hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2"
+  class="block relative h-max cursor-pointer hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 break-inside-avoid mb-3"
   aria-label={`${city} ${name}の写真を見る`}
   role="listitem"
 >
@@ -33,6 +33,7 @@ const photoUrl = `/${city}/photo/${encodeURIComponent(photo.filename)}`
   />
   <div class="p-2 text-xs font-light text-foreground absolute bottom-0 bg-surface-overlay">
     <div class="flex flex-col justify-start">
+      <span class="uppercase tracking-wider text-foreground/70 mb-0.5">{photo.location}</span>
       <span class="mb-0">{e.DateTimeOriginal}</span>
       <div class="flex gap-2">
         <span>{e.Make} {e.Model}</span>
