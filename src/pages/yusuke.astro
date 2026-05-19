@@ -166,7 +166,7 @@ const writingYearGroups = [...writingByYear.entries()]
       <div class="max-w-3xl mx-auto py-2 px-4 flex flex-col gap-8">
         {writingYearGroups.map(({ year, items, isRecent }) => (
           <details open={isRecent} class="group">
-            <summary class="flex items-center justify-between cursor-pointer list-none mb-6 [&::-webkit-details-marker]:hidden">
+            <summary class="flex items-center gap-2 cursor-pointer list-none mb-6 [&::-webkit-details-marker]:hidden">
               <h3 class="text-2xl font-bold text-foreground">{year}</h3>
               <svg class="w-5 h-5 text-text-secondary transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
