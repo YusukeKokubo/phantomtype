@@ -1,7 +1,7 @@
 ---
 export const prerender = true
 
-import { getCollection, render } from "astro:content"
+import { getCollection } from "astro:content"
 import type { TimelineEntry } from "../../@types/About"
 import BaseLayout from "../layouts/BaseLayout.astro"
 import { blogEntries } from "../yusuke/blog/index"
@@ -12,6 +12,8 @@ import {
   getRelativeTime,
   markdownToHtml,
 } from "../yusuke/utils"
+
+const today = new Date()
 
 const careerCollectionEntries = await getCollection("career")
 const sorted = careerCollectionEntries.sort((a, b) =>
@@ -39,13 +41,6 @@ const careerDetails = sorted
 const modalIds: Record<string, string> = Object.fromEntries(
   careerDetails.map((d) => [`${d.date}-${d.title}`, d.modalId]),
 )
-
-// Values content
-const valuesCollectionEntries = await getCollection("values")
-const valuesEntry = valuesCollectionEntries[0]
-const { Content: ValuesContent } = valuesEntry
-  ? await render(valuesEntry)
-  : { Content: null }
 
 // Writing: blog (external) + notes (internal) unified timeline
 type WritingItem =
@@ -85,6 +80,7 @@ for (const item of [...noteItems, ...blogItems]) {
 const writingYearGroups = [...writingByYear.entries()]
   .map(([year, items]) => ({
     year,
+    isRecent: parseInt(year) >= today.getFullYear() - 3,
     items: items.sort((a, b) => b.date.localeCompare(a.date)),
   }))
   .sort((a, b) => b.year.localeCompare(a.year))
@@ -94,8 +90,9 @@ const writingYearGroups = [...writingByYear.entries()]
   title="Yusuke Kokubo | PHANTOM TYPE"
   description="Yusuke Kokubo - Software Engineer in Nagoya, Japan"
 >
-  <main id="main-content" class="max-w-3xl mx-auto">
-    <div class="p-16">
+  <main id="main-content">
+    <!-- Profile -->
+    <div class="max-w-3xl mx-auto px-8 pt-16 pb-8">
       <p>
         <img
           src="/yusuke/jikokuten.png"
@@ -108,215 +105,127 @@ const writingYearGroups = [...writingByYear.entries()]
       <p>Love cats 🐈 and photography 📷.</p>
     </div>
 
-    <!-- Tabs -->
-    <div class="w-full">
-      <div
-        class="flex border-b border-border mb-6"
-        role="tablist"
-        aria-label="コンテンツタブ"
-      >
-        {
-          (["career", "personal", "values", "blog"] as const).map((tab) => {
-            const isDefault = tab === "career"
-            return (
-              <button
-                type="button"
-                role="tab"
-                data-tab={tab}
-                aria-selected={isDefault ? "true" : "false"}
-                aria-controls={`tabpanel-${tab}`}
-                id={`tab-${tab}`}
-                class={`px-6 py-3 text-sm font-light border-b-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ${
-                  isDefault
-                    ? "border-foreground text-foreground"
-                    : "border-transparent text-text-secondary hover:text-foreground"
-                }`}
+    <!-- Career -->
+    <section class="py-8 border-t border-border">
+      <h2 class="max-w-3xl mx-auto px-8 text-xl font-semibold text-foreground mb-2">Career</h2>
+      <CareerStrip entries={careerEntries} modalIds={modalIds} />
+    </section>
+
+    <!-- Personal -->
+    <section class="py-8 border-t border-border">
+      <h2 class="max-w-3xl mx-auto px-8 text-xl font-semibold text-foreground mb-6">Personal</h2>
+      <div class="max-w-3xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {personalEntries.map((entry) => (
+            entry.url ? (
+              <a
+                href={entry.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="block focus-visible:outline-2 focus-visible:outline-offset-2"
               >
-                {tab}
-              </button>
-            )
-          })
-        }
-      </div>
-
-      <!-- Career tab -->
-      <div
-        id="tabpanel-career"
-        role="tabpanel"
-        aria-labelledby="tab-career"
-      >
-        <CareerStrip entries={careerEntries} modalIds={modalIds} />
-      </div>
-
-      <!-- Personal tab -->
-      <div
-        id="tabpanel-personal"
-        role="tabpanel"
-        aria-labelledby="tab-personal"
-        hidden
-      >
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-          {
-            personalEntries.map((entry) => {
-              const cardContent = (
                 <div class="flex flex-col h-full bg-surface border border-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
                   {entry.image && (
                     <div class="w-full aspect-video overflow-hidden bg-surface-variant">
-                      <img
-                        src={entry.image}
-                        alt={entry.title}
-                        class="w-full h-full object-cover"
-                        loading="lazy"
-                      />
+                      <img src={entry.image} alt={entry.title} class="w-full h-full object-cover" loading="lazy" />
                     </div>
                   )}
                   <div class="p-4 flex flex-col gap-2 flex-1">
                     <div class="font-medium text-lg">{entry.title}</div>
                     {entry.description && (
-                      <div class="text-sm text-text-secondary line-clamp-2">
-                        {entry.description}
-                      </div>
+                      <div class="text-sm text-text-secondary line-clamp-2">{entry.description}</div>
                     )}
                   </div>
                 </div>
-              )
-
-              return entry.url ? (
-                <a
-                  href={entry.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="block focus-visible:outline-2 focus-visible:outline-offset-2"
-                >
-                  {cardContent}
-                </a>
-              ) : (
-                <div>{cardContent}</div>
-              )
-            })
-          }
-        </div>
-      </div>
-
-      <!-- Values tab -->
-      <div
-        id="tabpanel-values"
-        role="tabpanel"
-        aria-labelledby="tab-values"
-        hidden
-      >
-        {ValuesContent && (
-          <div class="p-6">
-            <ValuesContent class="prose dark:prose-invert max-w-none" />
-          </div>
-        )}
-      </div>
-
-      <!-- Blog tab -->
-      <div
-        id="tabpanel-blog"
-        role="tabpanel"
-        aria-labelledby="tab-blog"
-        hidden
-      >
-        <div class="mx-auto max-w-3xl py-8 px-4 flex flex-col gap-8">
-          {
-            writingYearGroups.map(({ year, items }) => (
+              </a>
+            ) : (
               <div>
-                <h2 class="text-2xl font-bold text-foreground mb-6">{year}</h2>
-                <div class="relative">
-                  <div class="absolute left-4 top-0 bottom-0 w-0.5 border-l border-dashed border-border" />
-                  <div class="space-y-8">
-                    {items.map((item) => (
-                      <div class="relative flex items-start gap-4">
-                        <div class="relative z-10 shrink-0">
-                          <div class="w-8 h-8 rounded-full bg-background flex items-center justify-center shadow-md border-2 border-background p-1.5">
-                            {item.kind === "blog" ? (
-                              <img
-                                src={item.iconImage}
-                                alt={item.platformName}
-                                class="w-full h-full"
-                              />
-                            ) : (
-                              <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                class="w-full h-full text-text-secondary"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"
-                                />
-                              </svg>
-                            )}
-                          </div>
-                        </div>
-                        <div class="flex-1 min-w-0 pt-1">
-                          <div class="text-sm text-text-secondary mb-3">
-                            {item.kind === "blog" ? (
-                              <span>
-                                <strong class="font-semibold">
-                                  {item.platformName}
-                                </strong>{" "}
-                                に投稿しました {getRelativeTime(item.date)}
-                              </span>
-                            ) : (
-                              <span>メモ {getRelativeTime(item.date)}</span>
-                            )}
-                          </div>
-                          <div class="bg-surface border border-border rounded shadow-md hover:shadow-lg transition-shadow max-w-md">
-                            {item.kind === "blog" ? (
-                              <a
-                                href={item.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="block p-4 hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2"
-                              >
-                                <div class="text-sm font-medium text-text-muted mb-1">
-                                  {formatYearMonth(item.date)}
-                                </div>
-                                <div class="font-semibold text-foreground">
-                                  {item.title}
-                                </div>
-                              </a>
-                            ) : (
-                              <a
-                                href={`/yusuke/notes/${item.slug}`}
-                                class="block p-4 hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2"
-                              >
-                                <div class="text-sm font-medium text-text-muted mb-1">
-                                  {formatYearMonth(item.date)}
-                                </div>
-                                <div class="font-semibold text-foreground">
-                                  {item.title}
-                                </div>
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                <div class="flex flex-col h-full bg-surface border border-border rounded-lg overflow-hidden">
+                  {entry.image && (
+                    <div class="w-full aspect-video overflow-hidden bg-surface-variant">
+                      <img src={entry.image} alt={entry.title} class="w-full h-full object-cover" loading="lazy" />
+                    </div>
+                  )}
+                  <div class="p-4 flex flex-col gap-2 flex-1">
+                    <div class="font-medium text-lg">{entry.title}</div>
+                    {entry.description && (
+                      <div class="text-sm text-text-secondary line-clamp-2">{entry.description}</div>
+                    )}
                   </div>
                 </div>
               </div>
-            ))
-          }
+            )
+          ))}
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Blog / Writing -->
+    <section class="py-8 border-t border-border">
+      <h2 class="max-w-3xl mx-auto px-8 text-xl font-semibold text-foreground mb-6">Writing</h2>
+      <div class="max-w-3xl mx-auto py-2 px-4 flex flex-col gap-8">
+        {writingYearGroups.map(({ year, items, isRecent }) => (
+          <details open={isRecent} class="group">
+            <summary class="flex items-center justify-between cursor-pointer list-none mb-6 [&::-webkit-details-marker]:hidden">
+              <h3 class="text-2xl font-bold text-foreground">{year}</h3>
+              <svg class="w-5 h-5 text-text-secondary transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </summary>
+            <div class="relative">
+              <div class="absolute left-4 top-0 bottom-0 w-0.5 border-l border-dashed border-border" />
+              <div class="space-y-8">
+                {items.map((item) => (
+                  <div class="relative flex items-start gap-4">
+                    <div class="relative z-10 shrink-0">
+                      <div class="w-8 h-8 rounded-full bg-background flex items-center justify-center shadow-md border-2 border-background p-1.5">
+                        {item.kind === "blog" ? (
+                          <img src={item.iconImage} alt={item.platformName} class="w-full h-full" />
+                        ) : (
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full text-text-secondary">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+                    <div class="flex-1 min-w-0 pt-1">
+                      <div class="text-sm text-text-secondary mb-3">
+                        {item.kind === "blog" ? (
+                          <span><strong class="font-semibold">{item.platformName}</strong>{" "}に投稿しました {getRelativeTime(item.date)}</span>
+                        ) : (
+                          <span>メモ {getRelativeTime(item.date)}</span>
+                        )}
+                      </div>
+                      <div class="bg-surface border border-border rounded shadow-md hover:shadow-lg transition-shadow max-w-md">
+                        {item.kind === "blog" ? (
+                          <a href={item.url} target="_blank" rel="noopener noreferrer" class="block p-4 hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2">
+                            <div class="text-sm font-medium text-text-muted mb-1">{formatYearMonth(item.date)}</div>
+                            <div class="font-semibold text-foreground">{item.title}</div>
+                          </a>
+                        ) : (
+                          <a href={`/yusuke/notes/${item.slug}`} class="block p-4 hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2">
+                            <div class="text-sm font-medium text-text-muted mb-1">{formatYearMonth(item.date)}</div>
+                            <div class="font-semibold text-foreground">{item.title}</div>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
   </main>
 
   <!-- Pre-rendered career detail content for modals -->
-  {
-    careerDetails.map(({ modalId, html }) => (
-      <div id={modalId} hidden>
-        <div class="p-6 text-foreground" set:html={html} />
-      </div>
-    ))
-  }
+  {careerDetails.map(({ modalId, html }) => (
+    <div id={modalId} hidden>
+      <div class="p-6 text-foreground" set:html={html} />
+    </div>
+  ))}
 
   <!-- Modal dialog -->
   <dialog
@@ -325,27 +234,15 @@ const writingYearGroups = [...writingByYear.entries()]
   >
     <div class="flex flex-col h-full max-h-[90vh]">
       <div class="flex items-center justify-between p-6 border-b border-border">
-        <h2
-          id="yusuke-modal-title"
-          class="text-2xl font-light text-foreground"
-        ></h2>
+        <h2 id="yusuke-modal-title" class="text-2xl font-light text-foreground"></h2>
         <button
           id="yusuke-modal-close"
           type="button"
           class="text-text-secondary hover:text-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
           aria-label="閉じる"
         >
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"></path>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
         </button>
       </div>
@@ -354,44 +251,7 @@ const writingYearGroups = [...writingByYear.entries()]
   </dialog>
 
   <script>
-    type TabId = "career" | "personal" | "values" | "blog"
-    const VALID_TABS: TabId[] = ["career", "personal", "values", "blog"]
-
-    function isValidTab(s: string): s is TabId {
-      return (VALID_TABS as string[]).includes(s)
-    }
-
-    function activateTab(id: TabId) {
-      for (const btn of document.querySelectorAll<HTMLElement>("[data-tab]")) {
-        const isActive = btn.dataset.tab === id
-        btn.setAttribute("aria-selected", String(isActive))
-        btn.classList.toggle("border-foreground", isActive)
-        btn.classList.toggle("text-foreground", isActive)
-        btn.classList.toggle("border-transparent", !isActive)
-        btn.classList.toggle("text-text-secondary", !isActive)
-      }
-      for (const panel of document.querySelectorAll<HTMLElement>(
-        "[role='tabpanel']",
-      )) {
-        panel.hidden = panel.id !== `tabpanel-${id}`
-      }
-    }
-
     function init() {
-      const initialHash = location.hash.slice(1)
-      const initialTab: TabId = isValidTab(initialHash) ? initialHash : "career"
-      activateTab(initialTab)
-      if (!isValidTab(initialHash)) history.replaceState(null, "", "#career")
-
-      for (const btn of document.querySelectorAll<HTMLElement>("[data-tab]")) {
-        btn.addEventListener("click", () => {
-          const tab = btn.dataset.tab as TabId
-          activateTab(tab)
-          location.hash = tab
-        })
-      }
-
-      // Modal
       const modal = document.getElementById("yusuke-modal") as HTMLDialogElement
       if (!modal) return
       const modalTitle = document.getElementById("yusuke-modal-title")!
@@ -421,9 +281,7 @@ const writingYearGroups = [...writingByYear.entries()]
         modal.showModal()
       })
 
-      document
-        .getElementById("yusuke-modal-close")!
-        .addEventListener("click", closeModal)
+      document.getElementById("yusuke-modal-close")!.addEventListener("click", closeModal)
 
       modal.addEventListener("click", (e) => {
         if (e.target === modal) closeModal()
@@ -431,10 +289,5 @@ const writingYearGroups = [...writingByYear.entries()]
     }
 
     document.addEventListener("astro:page-load", init)
-
-    window.addEventListener("hashchange", () => {
-      const hash = location.hash.slice(1)
-      if (isValidTab(hash)) activateTab(hash)
-    })
   </script>
 </BaseLayout>
