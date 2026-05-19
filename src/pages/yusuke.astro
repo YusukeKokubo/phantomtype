@@ -6,7 +6,7 @@ import type { TimelineEntry } from "../../@types/About"
 import BaseLayout from "../layouts/BaseLayout.astro"
 import { blogEntries } from "../yusuke/blog/index"
 import { personalEntries } from "../yusuke/personal-data"
-import Timeline from "../yusuke/Timeline.astro"
+import CareerStrip from "../yusuke/CareerStrip.astro"
 import {
   formatYearMonth,
   getRelativeTime,
@@ -145,7 +145,7 @@ const writingYearGroups = [...writingByYear.entries()]
         role="tabpanel"
         aria-labelledby="tab-career"
       >
-        <Timeline entries={careerEntries} modalIds={modalIds} />
+        <CareerStrip entries={careerEntries} modalIds={modalIds} />
       </div>
 
       <!-- Personal tab -->
