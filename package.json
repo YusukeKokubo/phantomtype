@@ -18,20 +18,20 @@
     "lint:fix": "biome check --fix --unsafe"
   },
   "dependencies": {
-    "@tailwindcss/typography": "^0.5.19",
-    "tailwindcss": "^4.3.0"
+    "@tailwindcss/typography": "^0.5.20",
+    "tailwindcss": "^4.3.1"
   },
   "overrides": {
     "vite": "^7"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.15",
-    "@cloudflare/workers-types": "^4.20260517.1",
-    "@tailwindcss/vite": "^4.3.0",
-    "@types/node": "25.8.0",
-    "astro": "^6.3.3",
+    "@biomejs/biome": "2.5.0",
+    "@cloudflare/workers-types": "^4.20260619.1",
+    "@tailwindcss/vite": "^4.3.1",
+    "@types/node": "26.0.0",
+    "astro": "^6.4.8",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3",
-    "wrangler": "^4.92.0"
+    "wrangler": "^4.103.0"
   }
 }
