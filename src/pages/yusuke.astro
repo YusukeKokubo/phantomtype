@@ -5,8 +5,8 @@ import { getCollection } from "astro:content"
 import type { TimelineEntry } from "../../@types/About"
 import BaseLayout from "../layouts/BaseLayout.astro"
 import { blogEntries } from "../yusuke/blog/index"
-import { personalEntries } from "../yusuke/personal-data"
 import CareerStrip from "../yusuke/CareerStrip.astro"
+import { personalEntries } from "../yusuke/personal-data"
 import {
   formatYearMonth,
   getRelativeTime,
@@ -80,7 +80,7 @@ for (const item of [...noteItems, ...blogItems]) {
 const writingYearGroups = [...writingByYear.entries()]
   .map(([year, items]) => ({
     year,
-    isRecent: parseInt(year) >= today.getFullYear() - 3,
+    isRecent: parseInt(year, 10) >= today.getFullYear() - 3,
     items: items.sort((a, b) => b.date.localeCompare(a.date)),
   }))
   .sort((a, b) => b.year.localeCompare(a.year))

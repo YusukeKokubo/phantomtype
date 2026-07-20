@@ -1,14 +1,14 @@
 ---
-export const prerender = true;
+export const prerender = true
 
-import { Image } from "astro:assets";
-import type { City } from "../../@types/Photo";
-import heroImage from "../assets/kyoto.jpg";
-import picsData from "../../public/pics.json";
-import CityNav from "../components/CityNav.astro";
-import BaseLayout from "../layouts/BaseLayout.astro";
+import { Image } from "astro:assets"
+import type { City } from "../../@types/Photo"
+import picsData from "../../public/pics.json"
+import heroImage from "../assets/kyoto.jpg"
+import CityNav from "../components/CityNav.astro"
+import BaseLayout from "../layouts/BaseLayout.astro"
 
-const cities = picsData as City[];
+const cities = picsData as City[]
 ---
 
 <BaseLayout>
